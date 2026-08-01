@@ -1,0 +1,50 @@
+---
+import { getCollection } from 'astro:content';
+import Layout from '../../layouts/Layout.astro';
+
+const posts = (await getCollection('zh', (entry) => !entry.data.draft)).sort(
+  (a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf()
+);
+---
+
+<Layout
+  title="首页"
+  description="福音、护教、释经与神学文章"
+  lang="zh"
+  path="/zh/"
+>
+  <h1>最新文章</h1>
+  <ul class="post-list">
+    {posts.map((post) => (
+      <li>
+        <a href={`/zh/${post.id}/`}>{post.data.title}</a>
+        <p class="meta">
+          {post.data.pubDate.toLocaleDateString('zh-CN', { year: 'numeric', month: 'long', day: 'numeric' })}
+          {post.data.tags.length > 0 && ` · ${post.data.tags.join('、')}`}
+        </p>
+        <p>{post.data.description}</p>
+      </li>
+    ))}
+  </ul>
+</Layout>
+
+<style>
+  .post-list {
+    list-style: none;
+    padding: 0;
+  }
+  .post-list li {
+    margin-bottom: 2rem;
+  }
+  .post-list a {
+    font-size: 1.25rem;
+    font-weight: 600;
+    text-decoration: none;
+    color: inherit;
+  }
+  .meta {
+    opacity: 0.6;
+    font-size: 0.875rem;
+    margin: 0.25rem 0 0.5rem;
+  }
+</style>

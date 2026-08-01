@@ -1,0 +1,119 @@
+---
+import { LABELS, type Lang } from '../lib/i18n';
+
+interface Alternate {
+  lang: Lang;
+  href: string;
+}
+
+interface Props {
+  title: string;
+  description: string;
+  lang: Lang;
+  /** 当前页面的完整路径，例如 '/zh/mary-anointing/' */
+  path: string;
+  /** 由 getAlternateLinks() 算出来的"这篇文章的其他语言版本"，没有就传 [] */
+  alternates?: Alternate[];
+}
+
+const { title, description, lang, path, alternates = [] } = Astro.props;
+
+// Astro.site 来自 astro.config.mjs 里的 `site` 字段
+const siteUrl = Astro.site?.toString().replace(/\/$/, '') ?? '';
+const canonical = `${siteUrl}${path}`;
+
+// x-default 指向默认语言（英文通常更适合当 x-default，因为它面向更广泛的读者；
+// 如果你更希望不确定语言的访客默认落到中文页，把下面这行改成 'zh' 对应的 href）
+const defaultAlternate = alternates.find((a) => a.lang === 'en') ?? alternates[0];
+---
+
+<!doctype html>
+<html lang={lang === 'zh' ? 'zh-Hans' : 'en'}>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>{title} · {LABELS[lang].siteName}</title>
+    <meta name="description" content={description} />
+
+    <link rel="canonical" href={canonical} />
+
+    <!--
+      hreflang 标签：只有当这篇文章通过 translationId 找到了"确实互为译文"的
+      另一语言版本时，才会生成。没有配对译文的独立选题文章，这里不会输出任何标签，
+      这是有意为之——避免误标为互译内容反而损害 SEO（详见此前对话）。
+    -->
+    {alternates.map((alt) => (
+      <link
+        rel="alternate"
+        hreflang={alt.lang === 'zh' ? 'zh-Hans' : 'en'}
+        href={`${siteUrl}${alt.href}`}
+      />
+    ))}
+    {alternates.length > 0 && defaultAlternate && (
+      <link rel="alternate" hreflang="x-default" href={`${siteUrl}${defaultAlternate.href}`} />
+    )}
+
+    <link rel="alternate" type="application/rss+xml" title={`${LABELS[lang].siteName} RSS`} href={`/${lang}/rss.xml`} />
+  </head>
+  <body>
+    <header>
+      <nav class="site-nav">
+        <a href={`/${lang}/`} class="site-name">{LABELS[lang].siteName}</a>
+        <div class="lang-switch">
+          <a href="/zh/" aria-current={lang === 'zh' ? 'page' : undefined}>中文</a>
+          <span> · </span>
+          <a href="/en/" aria-current={lang === 'en' ? 'page' : undefined}>English</a>
+        </div>
+      </nav>
+    </header>
+
+    <main>
+      <slot />
+    </main>
+
+    <footer>
+      <p>&copy; {new Date().getFullYear()} {LABELS[lang].siteName}</p>
+    </footer>
+  </body>
+</html>
+
+<style>
+  :root {
+    color-scheme: light dark;
+  }
+  body {
+    font-family: -apple-system, 'Segoe UI', 'PingFang SC', 'Noto Sans SC', system-ui, sans-serif;
+    max-width: 42rem;
+    margin: 0 auto;
+    padding: 0 1.25rem;
+    line-height: 1.75;
+  }
+  .site-nav {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 1.5rem 0;
+    border-bottom: 1px solid #ddd;
+  }
+  .site-name {
+    font-weight: 600;
+    text-decoration: none;
+    color: inherit;
+  }
+  .lang-switch a {
+    text-decoration: none;
+    color: inherit;
+    opacity: 0.6;
+  }
+  .lang-switch a[aria-current='page'] {
+    opacity: 1;
+    font-weight: 600;
+  }
+  footer {
+    margin-top: 3rem;
+    padding: 1.5rem 0;
+    border-top: 1px solid #ddd;
+    opacity: 0.6;
+    font-size: 0.875rem;
+  }
+</style>

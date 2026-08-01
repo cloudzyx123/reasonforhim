@@ -1,0 +1,50 @@
+---
+import { getCollection } from 'astro:content';
+import Layout from '../../layouts/Layout.astro';
+
+const posts = (await getCollection('en', (entry) => !entry.data.draft)).sort(
+  (a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf()
+);
+---
+
+<Layout
+  title="Home"
+  description="Gospel, apologetics, exegesis, and theology"
+  lang="en"
+  path="/en/"
+>
+  <h1>Latest posts</h1>
+  <ul class="post-list">
+    {posts.map((post) => (
+      <li>
+        <a href={`/en/${post.id}/`}>{post.data.title}</a>
+        <p class="meta">
+          {post.data.pubDate.toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' })}
+          {post.data.tags.length > 0 && ` · ${post.data.tags.join(', ')}`}
+        </p>
+        <p>{post.data.description}</p>
+      </li>
+    ))}
+  </ul>
+</Layout>
+
+<style>
+  .post-list {
+    list-style: none;
+    padding: 0;
+  }
+  .post-list li {
+    margin-bottom: 2rem;
+  }
+  .post-list a {
+    font-size: 1.25rem;
+    font-weight: 600;
+    text-decoration: none;
+    color: inherit;
+  }
+  .meta {
+    opacity: 0.6;
+    font-size: 0.875rem;
+    margin: 0.25rem 0 0.5rem;
+  }
+</style>
