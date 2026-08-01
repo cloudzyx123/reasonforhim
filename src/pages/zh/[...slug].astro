@@ -26,7 +26,7 @@ const alternates = await getAlternateLinks('zh', post.data.translationId);
   <article>
     <h1>{post.data.title}</h1>
     <p class="meta">
-      {post.data.pubDate.toLocaleDateString('zh-CN', { year: 'numeric', month: 'long', day: 'numeric' })}
+      {post.data.pubDate.toLocaleDateString('zh-CN', { year: 'numeric', month: 'long', day: 'numeric', timeZone: 'UTC' })}
       {post.data.tags.length > 0 && ` · ${post.data.tags.join('、')}`}
     </p>
     <Content />

@@ -19,7 +19,7 @@ const posts = (await getCollection('zh', (entry) => !entry.data.draft)).sort(
       <li>
         <a href={`/zh/${post.id}/`}>{post.data.title}</a>
         <p class="meta">
-          {post.data.pubDate.toLocaleDateString('zh-CN', { year: 'numeric', month: 'long', day: 'numeric' })}
+          {post.data.pubDate.toLocaleDateString('zh-CN', { year: 'numeric', month: 'long', day: 'numeric', timeZone: 'UTC' })}
           {post.data.tags.length > 0 && ` · ${post.data.tags.join('、')}`}
         </p>
         <p>{post.data.description}</p>
