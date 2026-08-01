@@ -3,8 +3,8 @@ import { getCollection } from 'astro:content';
 export type Lang = 'zh' | 'en';
 
 export const LABELS: Record<Lang, { siteName: string; home: string }> = {
-  zh: { siteName: '你的博客名', home: '首页' },
-  en: { siteName: 'Your Blog Name', home: 'Home' },
+  zh: { siteName: '为何是祂', home: '首页' },
+  en: { siteName: 'Reason for Him', home: 'Home' },
 };
 
 /**

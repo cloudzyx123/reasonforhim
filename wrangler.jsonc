@@ -1,0 +1,10 @@
+{
+  // 项目名称，和你的 Cloudflare 项目名保持一致即可
+  "name": "reasonforhim",
+  // 这个日期不需要跟着改，保持即可，是 Cloudflare 内部的兼容性标记
+  "compatibility_date": "2026-08-01",
+  "assets": {
+    // 告诉 wrangler：构建完的静态文件在 dist 文件夹里
+    "directory": "dist"
+  }
+}
