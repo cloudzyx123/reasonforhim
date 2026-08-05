@@ -29,18 +29,18 @@ const { lang } = Astro.props;
  * 这个可以以后再说。
  */
 const GISCUS_REPO = 'cloudzyx123/ReasonForHim-Discussion'; // 例如 'yourname/reasonforhim-comments'
-const GISCUS_REPO_ID = 'R_kgXXXXXXXXXXXXXX'; // 从 giscus.app 配置页复制
+const GISCUS_REPO_ID = 'R_kgDOTuOE6A'; // 从 giscus.app 配置页复制
 const GISCUS_CATEGORY = 'Comments'; // 你在仓库 Discussions 里创建的分类名
-const GISCUS_CATEGORY_ID = 'DIC_kwXXXXXXXXXXXXXX'; // 从 giscus.app 配置页复制
+const GISCUS_CATEGORY_ID = 'DIC_kwDOTuOE6M4DCsQ2'; // 从 giscus.app 配置页复制
 ---
 
 <section class="comments">
   <script
     src="https://giscus.app/client.js"
-    data-repo={cloudzyx123/ReasonForHim-Discussion}
-    data-repo-id={R_kgDOTuOE6A}
-    data-category={Comments}
-    data-category-id={DIC_kwDOTuOE6M4DCsQ2}
+    data-repo={GISCUS_REPO}
+    data-repo-id={GISCUS_REPO_ID}
+    data-category={GISCUS_CATEGORY}
+    data-category-id={GISCUS_CATEGORY_ID}
     data-mapping="pathname"
     data-strict="0"
     data-reactions-enabled="1"
