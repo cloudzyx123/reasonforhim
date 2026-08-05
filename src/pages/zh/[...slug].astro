@@ -1,6 +1,7 @@
 ---
 import { getCollection, render } from 'astro:content';
 import Layout from '../../layouts/Layout.astro';
+import Comments from '../../components/Comments.astro';
 import { getAlternateLinks } from '../../lib/i18n';
 
 export async function getStaticPaths() {
@@ -22,15 +23,19 @@ const alternates = await getAlternateLinks('zh', post.data.translationId);
   lang="zh"
   path={`/zh/${post.id}/`}
   alternates={alternates}
+  pubDate={post.data.pubDate}
+  updatedDate={post.data.updatedDate}
 >
   <article>
     <h1>{post.data.title}</h1>
     <p class="meta">
       {post.data.pubDate.toLocaleDateString('zh-CN', { year: 'numeric', month: 'long', day: 'numeric', timeZone: 'UTC' })}
-      {post.data.tags.length > 0 && ` · ${post.data.tags.join('、')}`}
+      {post.data.tags.length > 0 && ` · ${post.data.tags.join(', ')}`}
     </p>
     <Content />
   </article>
+
+  <Comments lang="zh" />
 </Layout>
 
 <style>

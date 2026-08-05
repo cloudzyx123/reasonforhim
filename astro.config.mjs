@@ -1,11 +1,13 @@
 // @ts-check
 import { defineConfig } from 'astro/config';
+import sitemap from '@astrojs/sitemap';
 
 // https://astro.build/config
 export default defineConfig({
   // 把这里换成你自己买好的域名，例如 'https://your-domain.com'
   // hreflang / sitemap / RSS 里的绝对链接都依赖这个值
   site: 'https://reasonforhim.com',
+    integrations: [sitemap()],
 
   i18n: {
     locales: ['zh', 'en'],

@@ -1,0 +1,63 @@
+---
+import type { Lang } from '../lib/i18n';
+
+interface Props {
+  lang: Lang;
+}
+
+const { lang } = Astro.props;
+
+/**
+ * giscus 评论系统配置(基于 GitHub Discussions,免费、无需数据库)。
+ *
+ * 下面四个值必须替换成你自己的,否则评论区不会工作:
+ *   1. 找一个 public 的 GitHub 仓库(不需要是博客源码本身,专门建一个空仓库
+ *      装评论也可以,比如 reasonforhim-comments)
+ *   2. 该仓库 Settings → General → Features → 勾选 "Discussions"
+ *   3. 安装 giscus GitHub App: https://github.com/apps/giscus,授权给这个仓库
+ *   4. 打开 https://giscus.app,填入仓库名,页面会自动检测并生成下面四个值。
+ *      Discussion 分类建议新建一个专门的(比如 "Comments"),类型选
+ *      "Announcement"——这样访客只能回复、不能自己发起新 discussion,
+ *      更适合当评论区用,不容易被灌水。
+ *   5. 把 giscus.app 页面上生成的 data-repo / data-repo-id / data-category /
+ *      data-category-id 复制过来,替换下面四个占位符。
+ *
+ * 注意:giscus 要求访客用 GitHub 账号登录才能评论(或者直接去 GitHub
+ * Discussions 里回复)。对你的读者群体(不少是程序员/受过教育的护教/神学
+ * 读者)问题不大,但如果发现很多读者因为没有 GitHub 账号而不能留言,
+ * 以后可以考虑换成不要求 GitHub 登录的方案(比如 Disqus 或自建评论),
+ * 这个可以以后再说。
+ */
+const GISCUS_REPO = 'YOUR_GITHUB_USERNAME/YOUR_REPO'; // 例如 'yourname/reasonforhim-comments'
+const GISCUS_REPO_ID = 'R_kgXXXXXXXXXXXXXX'; // 从 giscus.app 配置页复制
+const GISCUS_CATEGORY = 'Comments'; // 你在仓库 Discussions 里创建的分类名
+const GISCUS_CATEGORY_ID = 'DIC_kwXXXXXXXXXXXXXX'; // 从 giscus.app 配置页复制
+---
+
+<section class="comments">
+  <script
+    src="https://giscus.app/client.js"
+    data-repo={cloudzyx123/ReasonForHim-Discussion}
+    data-repo-id={R_kgDOTuOE6A}
+    data-category={Comments}
+    data-category-id={DIC_kwDOTuOE6M4DCsQ2}
+    data-mapping="pathname"
+    data-strict="0"
+    data-reactions-enabled="1"
+    data-emit-metadata="0"
+    data-input-position="bottom"
+    data-theme="preferred_color_scheme"
+    data-lang={lang === 'zh' ? 'zh-CN' : 'en'}
+    data-loading="lazy"
+    crossorigin="anonymous"
+    async
+  ></script>
+</section>
+
+<style>
+  .comments {
+    margin-top: 3rem;
+    padding-top: 2rem;
+    border-top: 1px solid #ddd;
+  }
+</style>

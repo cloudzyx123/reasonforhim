@@ -1,6 +1,7 @@
 ---
 import { getCollection, render } from 'astro:content';
 import Layout from '../../layouts/Layout.astro';
+import Comments from '../../components/Comments.astro';
 import { getAlternateLinks } from '../../lib/i18n';
 
 export async function getStaticPaths() {
@@ -22,6 +23,8 @@ const alternates = await getAlternateLinks('en', post.data.translationId);
   lang="en"
   path={`/en/${post.id}/`}
   alternates={alternates}
+  pubDate={post.data.pubDate}
+  updatedDate={post.data.updatedDate}
 >
   <article>
     <h1>{post.data.title}</h1>
@@ -31,6 +34,8 @@ const alternates = await getAlternateLinks('en', post.data.translationId);
     </p>
     <Content />
   </article>
+
+  <Comments lang="en" />
 </Layout>
 
 <style>

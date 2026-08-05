@@ -5,8 +5,8 @@ import type { APIContext } from 'astro';
 export async function GET(context: APIContext) {
   const posts = await getCollection('en', (entry) => !entry.data.draft);
   return rss({
-    title: 'Your Blog Name',
-    description: 'Gospel, apologetics, exegesis, and theology',
+    title: 'Reason for Him',
+    description: 'Why Christ? A blog on apologetics, theology, and biblical studies',
     site: context.site!,
     items: posts.map((post) => ({
       title: post.data.title,

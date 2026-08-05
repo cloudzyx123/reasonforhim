@@ -5,7 +5,7 @@ import type { APIContext } from 'astro';
 export async function GET(context: APIContext) {
   const posts = await getCollection('zh', (entry) => !entry.data.draft);
   return rss({
-    title: '你的博客名',
+    title: '为何是祂',
     description: '福音、护教、释经与神学文章',
     site: context.site!,
     items: posts.map((post) => ({

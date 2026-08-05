@@ -14,13 +14,29 @@ interface Props {
   path: string;
   /** 由 getAlternateLinks() 算出来的"这篇文章的其他语言版本"，没有就传 [] */
   alternates?: Alternate[];
+  pubDate?: Date;
+  updatedDate?: Date;
 }
 
-const { title, description, lang, path, alternates = [] } = Astro.props;
+const { title, description, lang, path, alternates = [], pubDate, updatedDate } = Astro.props;
 
 // Astro.site 来自 astro.config.mjs 里的 `site` 字段
 const siteUrl = Astro.site?.toString().replace(/\/$/, '') ?? '';
 const canonical = `${siteUrl}${path}`;
+const jsonLd = pubDate ? {
+  "@context": "https://schema.org",
+  "@type": "BlogPosting",
+  headline: title,
+  description,
+  datePublished: pubDate.toISOString(),
+  dateModified: (updatedDate ?? pubDate).toISOString(),
+  inLanguage: lang === 'zh' ? 'zh-Hans' : 'en',
+  url: canonical,
+  publisher: {
+    "@type": "Organization",
+    name: lang === 'zh' ? '为何是祂' : 'Reason for Him',
+  },
+} : null;
 
 // x-default 指向默认语言（英文通常更适合当 x-default，因为它面向更广泛的读者；
 // 如果你更希望不确定语言的访客默认落到中文页，把下面这行改成 'zh' 对应的 href）
@@ -54,6 +70,7 @@ const defaultAlternate = alternates.find((a) => a.lang === 'en') ?? alternates[0
     )}
 
     <link rel="alternate" type="application/rss+xml" title={`${LABELS[lang].siteName} RSS`} href={`/${lang}/rss.xml`} />
+    {jsonLd && <script type="application/ld+json" set:html={JSON.stringify(jsonLd)} />}
   </head>
   <body>
     <header>
