@@ -34,7 +34,9 @@ const GISCUS_CATEGORY = 'Comments'; // 你在仓库 Discussions 里创建的分�
 const GISCUS_CATEGORY_ID = 'DIC_kwDOTuOE6M4DCsQ2'; // 从 giscus.app 配置页复制
 ---
 
-<section class="comments">
+<section class="comments" id="reader-comments" aria-labelledby="comments-heading">
+  <h2 id="comments-heading">{lang === 'zh' ? '读后交流' : 'Join the conversation'}</h2>
+  <p>{lang === 'zh' ? '欢迎留下你的思考。使用 GitHub 账号即可参与讨论。' : 'Share your thoughts. Sign in with GitHub to join the discussion.'} <a href={`https://github.com/${GISCUS_REPO}/discussions`}>{lang === 'zh' ? '前往讨论区 ↗' : 'Visit discussions ↗'}</a></p>
   <script
     src="https://giscus.app/client.js"
     data-repo={GISCUS_REPO}
@@ -46,7 +48,7 @@ const GISCUS_CATEGORY_ID = 'DIC_kwDOTuOE6M4DCsQ2'; // 从 giscus.app 配置页�
     data-reactions-enabled="1"
     data-emit-metadata="0"
     data-input-position="bottom"
-    data-theme="preferred_color_scheme"
+    data-theme="light"
     data-lang={lang === 'zh' ? 'zh-CN' : 'en'}
     data-loading="lazy"
     crossorigin="anonymous"
@@ -58,6 +60,11 @@ const GISCUS_CATEGORY_ID = 'DIC_kwDOTuOE6M4DCsQ2'; // 从 giscus.app 配置页�
   .comments {
     margin-top: 3rem;
     padding-top: 2rem;
-    border-top: 1px solid #ddd;
+    border-top: 1px solid var(--line);
+    scroll-margin-top: 24px;
   }
+  h2 { font-size: 25px; margin-bottom: 12px; }
+  p { color: var(--muted); font-size: 13px; line-height: 1.9; }
+  a { text-decoration: underline; text-underline-offset: 4px; }
+  @media print { .comments { display: none; } }
 </style>

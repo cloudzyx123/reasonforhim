@@ -1,5 +1,6 @@
 ---
 import { LABELS, type Lang } from '../lib/i18n';
+import '../styles/global.css';
 
 interface Alternate {
   lang: Lang;
@@ -16,13 +17,15 @@ interface Props {
   alternates?: Alternate[];
   pubDate?: Date;
   updatedDate?: Date;
+  shareImage?: string;
 }
 
-const { title, description, lang, path, alternates = [], pubDate, updatedDate } = Astro.props;
+const { title, description, lang, path, alternates = [], pubDate, updatedDate, shareImage = '/share/grace.jpg' } = Astro.props;
 
 // Astro.site 来自 astro.config.mjs 里的 `site` 字段
 const siteUrl = Astro.site?.toString().replace(/\/$/, '') ?? '';
 const canonical = `${siteUrl}${path}`;
+const imageUrl = `${siteUrl}${shareImage}`;
 const jsonLd = pubDate ? {
   "@context": "https://schema.org",
   "@type": "BlogPosting",
@@ -32,6 +35,7 @@ const jsonLd = pubDate ? {
   dateModified: (updatedDate ?? pubDate).toISOString(),
   inLanguage: lang === 'zh' ? 'zh-Hans' : 'en',
   url: canonical,
+  image: imageUrl,
   publisher: {
     "@type": "Organization",
     name: lang === 'zh' ? '为何是祂' : 'Reason for Him',
@@ -41,6 +45,8 @@ const jsonLd = pubDate ? {
 // x-default 指向默认语言（英文通常更适合当 x-default，因为它面向更广泛的读者；
 // 如果你更希望不确定语言的访客默认落到中文页，把下面这行改成 'zh' 对应的 href）
 const defaultAlternate = alternates.find((a) => a.lang === 'en') ?? alternates[0];
+const isZh = lang === 'zh';
+const languageHref = (target: Lang) => target === lang ? path : alternates.find((a) => a.lang === target)?.href ?? (path.endsWith('/archive/') ? `/${target}/archive/` : `/${target}/`);
 ---
 
 <!doctype html>
@@ -50,6 +56,26 @@ const defaultAlternate = alternates.find((a) => a.lang === 'en') ?? alternates[0
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>{title} · {LABELS[lang].siteName}</title>
     <meta name="description" content={description} />
+    <meta name="theme-color" content="#25483f" />
+    <meta property="og:title" content={`${title} · ${LABELS[lang].siteName}`} />
+    <meta property="og:description" content={description} />
+    <meta property="og:type" content={pubDate ? 'article' : 'website'} />
+    <meta property="og:url" content={canonical} />
+    <meta property="og:site_name" content={LABELS[lang].siteName} />
+    <meta property="og:locale" content={lang === 'zh' ? 'zh_CN' : 'en_US'} />
+    <meta property="og:image" content={imageUrl} />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:image:type" content="image/jpeg" />
+    <meta property="og:image:alt" content={lang === 'zh' ? '为何是祂：墨绿与米白色的书房版画' : 'Reason for Him: a forest-green reading-room engraving'} />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content={`${title} · ${LABELS[lang].siteName}`} />
+    <meta name="twitter:description" content={description} />
+    <meta name="twitter:image" content={imageUrl} />
+    <meta name="twitter:image:alt" content={lang === 'zh' ? '为何是祂书房版画' : 'Reason for Him reading-room engraving'} />
+    {pubDate && <meta property="article:published_time" content={pubDate.toISOString()} />}
+    {pubDate && <meta property="article:modified_time" content={(updatedDate ?? pubDate).toISOString()} />}
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
 
     <link rel="canonical" href={canonical} />
 
@@ -73,64 +99,74 @@ const defaultAlternate = alternates.find((a) => a.lang === 'en') ?? alternates[0
     {jsonLd && <script type="application/ld+json" set:html={JSON.stringify(jsonLd)} />}
   </head>
   <body>
-    <header>
-      <nav class="site-nav">
-        <a href={`/${lang}/`} class="site-name">{LABELS[lang].siteName}</a>
-        <div class="lang-switch">
-          <a href="/zh/" aria-current={lang === 'zh' ? 'page' : undefined}>中文</a>
-          <span> · </span>
-          <a href="/en/" aria-current={lang === 'en' ? 'page' : undefined}>English</a>
+    <a class="skip-link" href="#main-content">{isZh ? '跳至正文' : 'Skip to content'}</a>
+    <header class="site-header">
+      <div class="utility-bar">
+        <div class="container utility-inner">
+          <span>{isZh ? '信仰 · 理性 · 生活' : 'FAITH · REASON · LIFE'}</span>
+          <div class="utility-links">
+            <a href={`/${lang}/rss.xml`}>{isZh ? 'RSS 订阅' : 'RSS feed'} <span aria-hidden="true">↗</span></a>
+            <nav class="lang-switch" aria-label={isZh ? '选择语言' : 'Choose language'}>
+              <a href={languageHref('zh')} lang="zh" aria-current={lang === 'zh' ? 'page' : undefined}>中文</a>
+              <span aria-hidden="true">/</span>
+              <a href={languageHref('en')} lang="en" aria-current={lang === 'en' ? 'page' : undefined}>EN</a>
+            </nav>
+          </div>
         </div>
-      </nav>
+      </div>
+      <div class="container masthead">
+        <a href={`/${lang}/`} class="brand" aria-label={LABELS[lang].siteName}>
+          <svg class="brand-mark" viewBox="0 0 52 58" fill="none" aria-hidden="true"><path d="M2 2h48v39L26 56 2 41V2Z" stroke="currentColor" stroke-width="1.5"/><path d="M26 17v23m0-19c-5-5-11-5-16-4v17c6-1 11 0 16 4 5-4 10-5 16-4V17c-5-1-11-1-16 4Z" stroke="currentColor" stroke-width="1.4"/><path d="M26 7v7m-4-3h8" stroke="currentColor" stroke-width="1.4"/></svg>
+          <span><span class="brand-name">{LABELS[lang].siteName}</span><span class="brand-caption">{isZh ? 'REASON FOR HIM' : 'ESSAYS & REFLECTIONS'}</span></span>
+        </a>
+        <p class="masthead-note">{isZh ? '关于信仰的追问，关于真理的思考。' : 'Questions of faith. A pursuit of truth.'}</p>
+      </div>
+      <div class="navigation-bar" data-navigation>
+        <div class="container navigation-inner">
+          <button class="mobile-nav-toggle" type="button" data-nav-toggle aria-expanded="false" aria-controls="site-navigation" hidden>{isZh ? '菜单' : 'Menu'} <span aria-hidden="true">☰</span></button>
+          <nav id="site-navigation" class="primary-nav" aria-label={isZh ? '主导航' : 'Main navigation'}>
+            <a href={`/${lang}/`} aria-current={path === `/${lang}/` ? 'page' : undefined}>{isZh ? '首页' : 'Home'}</a>
+            <a href={`/${lang}/archive/`} aria-current={path === `/${lang}/archive/` ? 'page' : undefined}>{isZh ? '文章' : 'Essays'}</a>
+            <a href={`/${lang}/archive/#topics`}>{isZh ? '阅读栏目' : 'Sections'}</a>
+            <a href={`/${lang}/#about`}>{isZh ? '关于' : 'About'}</a>
+          </nav>
+          <form class="nav-search" action={`/${lang}/archive/#articles`} role="search">
+            <label class="sr-only" for="site-search">{isZh ? '搜索文章' : 'Search essays'}</label>
+            <input id="site-search" name="q" type="search" placeholder={isZh ? '搜索文章、关键词…' : 'Search essays…'} />
+            <button type="submit" aria-label={isZh ? '搜索' : 'Search'}><svg viewBox="0 0 24 24" width="19" height="19" fill="none" aria-hidden="true"><circle cx="10.5" cy="10.5" r="6.5" stroke="currentColor" stroke-width="1.6"/><path d="m16 16 5 5" stroke="currentColor" stroke-width="1.6"/></svg></button>
+          </form>
+        </div>
+      </div>
     </header>
 
-    <main>
+    <main id="main-content">
       <slot />
     </main>
 
-    <footer>
-      <p>&copy; {new Date().getFullYear()} {LABELS[lang].siteName}</p>
+    <footer class="site-footer">
+      <div class="container footer-top">
+        <div><a class="footer-name" href={`/${lang}/`}>{LABELS[lang].siteName}</a><p>{isZh ? '让信仰经得起追问，让思考走向更深处。' : 'Faith worth questioning. Ideas worth exploring.'}</p></div>
+        <nav aria-label={isZh ? '页脚导航' : 'Footer navigation'}><a href={`/${lang}/archive/`}>{isZh ? '全部文章' : 'All essays'}</a><a href={`/${lang}/#about`}>{isZh ? '关于本站' : 'About this blog'}</a><a href={`/${lang}/rss.xml`}>{isZh ? 'RSS 订阅 ↗' : 'RSS feed ↗'}</a></nav>
+      </div>
+      <div class="container footer-bottom"><span>&copy; {new Date().getFullYear()} {LABELS[lang].siteName}</span><span>REASON FOR HIM · {isZh ? '信仰与思想的文字空间' : 'A space for faith and thought'}</span></div>
     </footer>
   </body>
 </html>
 
-<style>
-  :root {
-    color-scheme: light dark;
+<script>
+  const navigation = document.querySelector<HTMLElement>('[data-navigation]');
+  const toggle = navigation?.querySelector<HTMLButtonElement>('[data-nav-toggle]');
+  if (navigation && toggle) {
+    const media = matchMedia('(max-width: 760px)');
+    const setOpen = (open: boolean) => {
+      navigation.toggleAttribute('data-open', open);
+      toggle.setAttribute('aria-expanded', String(open));
+    };
+    navigation.setAttribute('data-enhanced', '');
+    toggle.hidden = false;
+    toggle.addEventListener('click', () => setOpen(toggle.getAttribute('aria-expanded') !== 'true'));
+    navigation.querySelectorAll('.primary-nav a').forEach(link => link.addEventListener('click', () => setOpen(false)));
+    navigation.addEventListener('keydown', event => { if (event.key === 'Escape' && media.matches && toggle.getAttribute('aria-expanded') === 'true') { setOpen(false); toggle.focus(); } });
+    media.addEventListener('change', () => setOpen(false));
   }
-  body {
-    font-family: -apple-system, 'Segoe UI', 'PingFang SC', 'Noto Sans SC', system-ui, sans-serif;
-    max-width: 42rem;
-    margin: 0 auto;
-    padding: 0 1.25rem;
-    line-height: 1.75;
-  }
-  .site-nav {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding: 1.5rem 0;
-    border-bottom: 1px solid #ddd;
-  }
-  .site-name {
-    font-weight: 600;
-    text-decoration: none;
-    color: inherit;
-  }
-  .lang-switch a {
-    text-decoration: none;
-    color: inherit;
-    opacity: 0.6;
-  }
-  .lang-switch a[aria-current='page'] {
-    opacity: 1;
-    font-weight: 600;
-  }
-  footer {
-    margin-top: 3rem;
-    padding: 1.5rem 0;
-    border-top: 1px solid #ddd;
-    opacity: 0.6;
-    font-size: 0.875rem;
-  }
-</style>
+</script>

@@ -1,5 +1,6 @@
 import { defineCollection, z } from 'astro:content';
 import { glob } from 'astro/loaders';
+import { SECTION_IDS } from './lib/editorial';
 
 // 公共的文章 schema：中英文文章共用同一套字段
 const postSchema = z.object({
@@ -10,6 +11,8 @@ const postSchema = z.object({
   updatedDate: z.coerce.date().optional(),
   // 文章分类，方便你以后按"护教""释经""神学"等做归档
   tags: z.array(z.string()).default([]),
+  // 首页主要栏目；不填时现有文章使用 editorial.ts 中的分类。
+  section: z.enum(SECTION_IDS).optional(),
   // 草稿开关：设为 true 的文章不会出现在列表页和构建产物里
   draft: z.boolean().default(false),
   // ↓↓↓ 双语配对的关键字段 ↓↓↓

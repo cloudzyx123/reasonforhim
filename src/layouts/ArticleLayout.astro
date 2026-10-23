@@ -1,0 +1,479 @@
+---
+import { getCollection, type CollectionEntry } from 'astro:content';
+import Layout from './Layout.astro';
+import Comments from '../components/Comments.astro';
+import ReadingTools from '../components/ReadingTools.astro';
+import { getAlternateLinks, type Lang } from '../lib/i18n';
+import { getSection, getShareImage, SECTIONS } from '../lib/editorial';
+interface Props {
+  post: CollectionEntry<Lang>;
+  lang: Lang;
+  headings: { depth: number; slug: string; text: string }[];
+}
+const { post, lang, headings } = Astro.props;
+const zh = lang === 'zh';
+const section = getSection(post);
+const alternates = await getAlternateLinks(lang, post.data.translationId);
+const date = (value: Date) => value.toLocaleDateString(zh ? 'zh-CN' : 'en-GB', {year:'numeric',month:'long',day:'numeric',timeZone:'UTC'});
+const firstHeading = headings[0];
+const duplicateTitle = firstHeading?.depth === 1 && firstHeading.text.trim() === post.data.title.trim();
+const sectionHeadings = headings.filter((heading,i) => !(i === 0 && duplicateTitle));
+const minimumDepth = Math.min(...sectionHeadings.map(h => h.depth));
+const toc = sectionHeadings.filter(h => h.depth <= minimumDepth + 1);
+const plain = (post.body ?? '').replace(/!\[[^\]]*\]\([^)]*\)/g,'').replace(/<[^>]*>/g,'');
+const chineseCharacters = (plain.match(/[\u3400-\u9fff]/g) ?? []).length;
+const englishWords = (plain.match(/[a-zA-Z]+(?:['’-][a-zA-Z]+)*/g) ?? []).length;
+const minutes = Math.max(1,Math.ceil(chineseCharacters/400 + englishWords/220));
+const others = await getCollection(lang, entry => !entry.data.draft && entry.id !== post.id);
+const related = others.map(entry => ({
+  entry,
+  score: (getSection(entry) === section ? 3 : 0) + entry.data.tags.filter(tag => post.data.tags.includes(tag)).length,
+})).filter(item => item.score > 0).sort((a, b) => b.score - a.score || b.entry.data.pubDate.valueOf() - a.entry.data.pubDate.valueOf() || a.entry.id.localeCompare(b.entry.id)).slice(0, 3);
+const seriesIds = ['chapter-1-your-kingdom-come', 'zi-li-xuan-min-chapter-2', 'chapter-3-price-of-the-masses'];
+const seriesIndex = seriesIds.indexOf(post.id);
+const previousChapter = seriesIndex > 0 ? others.find(entry => entry.id === seriesIds[seriesIndex - 1]) : undefined;
+const nextChapter = seriesIndex >= 0 ? others.find(entry => entry.id === seriesIds[seriesIndex + 1]) : undefined;
+---
+<Layout title={post.data.title} description={post.data.description} lang={lang} path={`/${lang}/${post.id}/`} alternates={alternates} pubDate={post.data.pubDate} updatedDate={post.data.updatedDate} shareImage={getShareImage(post)}>
+  <div class="container article-container">
+    <nav class="breadcrumbs" aria-label={zh ? '当前位置' : 'Breadcrumb'}><a href={`/${lang}/`}>{zh ? '首页' : 'Home'}</a><span aria-hidden="true">/</span><a href={`/${lang}/archive/#articles`}>{zh ? '文章馆藏' : 'Essays'}</a><span aria-hidden="true">/</span><span>{zh ? '正文' : 'Reading'}</span></nav>
+    <header class="article-header">
+      <p class="eyebrow">{zh ? '随笔与思考' : 'ESSAYS & REFLECTIONS'} <span aria-hidden="true">/</span> <a href={`/${lang}/archive/?section=${section}#articles`}>{SECTIONS[section][lang].title}</a></p>
+      <h1>{post.data.title}</h1>
+      <p class="article-description">{post.data.description}</p>
+      <div class="article-meta"><time datetime={post.data.pubDate.toISOString()}>{date(post.data.pubDate)}</time><span aria-hidden="true">·</span><span>{zh ? `约 ${minutes} 分钟阅读` : `${minutes} min read`}</span>{post.data.updatedDate && <><span aria-hidden="true">·</span><span>{zh ? '更新于 ' : 'Updated '}{date(post.data.updatedDate)}</span></>}</div>
+      <ReadingTools lang={lang} title={post.data.title} description={post.data.description} image={getShareImage(post)} />
+    </header>
+    <div class="reading-layout">
+      <div class="reading-column">
+        <article class:list={['prose', { 'has-duplicate-title': duplicateTitle }]} lang={zh ? 'zh-Hans' : 'en'}><slot /></article>
+        {post.data.tags.length > 0 && <section class="article-topics mobile-topics"><h2>{zh ? '相关主题' : 'Topics'}</h2><div>{post.data.tags.map(tag => <a href={`/${lang}/archive/?topic=${encodeURIComponent(tag)}#articles`}>{tag}</a>)}</div></section>}
+        <div class="article-end"><span>REASON FOR HIM</span><a href={`/${lang}/archive/#articles`}>← {zh ? '返回全部文章' : 'Back to all essays'}</a></div>
+        {(previousChapter || nextChapter) && <nav class="chapter-navigation" aria-label={zh ? '章节导航' : 'Chapter navigation'}>
+          {previousChapter && <a href={`/${lang}/${previousChapter.id}/`}><small>{zh ? '← 上一章' : '← Previous chapter'}</small><span>{previousChapter.data.title}</span></a>}
+          {nextChapter && <a href={`/${lang}/${nextChapter.id}/`}><small>{zh ? '下一章 →' : 'Next chapter →'}</small><span>{nextChapter.data.title}</span></a>}
+        </nav>}
+        {related.length > 0 && <section class="related-reading" aria-labelledby="related-heading">
+          <p class="eyebrow">{zh ? '沿着这个问题，继续阅读' : 'Continue the exploration'}</p>
+          <h2 id="related-heading">{zh ? '你可能也想读' : 'Further reading'}</h2>
+          <div>{related.map(({ entry }) => <article><p>{SECTIONS[getSection(entry)][lang].title}</p><h3><a href={`/${lang}/${entry.id}/`}>{entry.data.title}</a></h3><p>{entry.data.description}</p></article>)}</div>
+        </section>}
+        <Comments lang={lang} />
+      </div>
+      <aside class="reading-sidebar">
+        <div class="reading-sidebar-inner">
+          {toc.length > 0 && <details class="contents" open><summary>{zh ? '本文目录' : 'On this page'}</summary><nav aria-label={zh ? '文章目录' : 'Table of contents'}>{toc.map(heading => <a class:list={{ nested: heading.depth > minimumDepth }} href={`#${heading.slug}`}>{heading.text}</a>)}</nav></details>}
+          {post.data.tags.length > 0 && <section class="article-topics"><h2>{zh ? '相关主题' : 'Topics'}</h2><div>{post.data.tags.map(tag => <a href={`/${lang}/archive/?topic=${encodeURIComponent(tag)}#articles`}>{tag}</a>)}</div></section>}
+          <section class="reading-note"><p class="eyebrow">{zh ? '继续探寻' : 'CONTINUE THE EXPLORATION'}</p><p>{zh ? '把阅读，留给值得思考的事。' : 'Make room for ideas worth thinking about.'}</p><a href={`/${lang}/rss.xml`}>{zh ? 'RSS 订阅' : 'RSS feed'} ↗</a></section>
+        </div>
+      </aside>
+    </div>
+  </div>
+</Layout>
+<style>
+  .breadcrumbs {
+    display:flex;
+    align-items:center;
+    gap:14px;
+    font-size:12px;
+    color:var(--muted);
+    padding-top:26px;
+    margin-bottom:34px
+  }
+
+  .breadcrumbs a {
+    color:var(--muted)
+  }
+
+  .article-header {
+    max-width:920px;
+    padding-bottom:31px
+  }
+
+  .article-header .eyebrow {
+    font-size:12px;
+    color:var(--accent);
+    letter-spacing:.11em;
+    margin-bottom:16px
+  }
+
+  .article-header .eyebrow span {
+    margin-inline:11px;
+    color:#abb3b8
+  }
+
+  .article-header h1 {
+    font-size:39px;
+    line-height:1.6;
+    letter-spacing:.025em;
+    margin-bottom:20px;
+    overflow-wrap:anywhere
+  }
+
+  .article-description {
+    max-width:760px;
+    font-size:16px;
+    line-height:1.95;
+    color:var(--muted);
+    margin-bottom:22px
+  }
+
+  .article-meta {
+    display:flex;
+    flex-wrap:wrap;
+    gap:12px;
+    font-size:12px;
+    color:var(--muted)
+  }
+
+  .reading-layout {
+    border-top:2px solid var(--forest);
+    display:grid;
+    grid-template-columns:minmax(0,780px) minmax(0,240px);
+    gap:70px;
+    padding-top:36px
+  }
+
+  .reading-column {
+    min-width:0
+  }
+
+  .prose {
+    font-size:var(--reading-size, 18px);
+    line-height:2;
+    overflow-wrap:anywhere;
+    color:#303d34
+  }
+
+  .prose :global(p) {
+    margin-block:0 1.5em
+  }
+
+  .prose :global(h1),.prose :global(h2),.prose :global(h3),.prose :global(h4),.prose :global(h5),.prose :global(h6) {
+    font-family:var(--serif);
+    font-weight:600;
+    color:var(--forest);
+    line-height:1.65;
+    margin-block:1.8em .8em;
+    scroll-margin-top:25px
+  }
+
+  .prose :global(h1) {
+    font-size:30px
+  }
+
+  .prose :global(h2) {
+    font-size:27px
+  }
+
+  .prose :global(h3) {
+    font-size:24px
+  }
+
+  .prose :global(h4) {
+    font-size:22px
+  }
+
+  .prose :global(h5),.prose :global(h6) {
+    font-size:20px
+  }
+
+  .prose.has-duplicate-title :global(>h1:first-child) {
+    display:none
+  }
+
+  .prose :global(a) {
+    text-decoration:underline;
+    text-underline-offset:4px;
+    text-decoration-color:#a5b3a1
+  }
+
+  .prose :global(blockquote) {
+    border-left:3px solid var(--accent);
+    background:var(--paper);
+    margin:28px 0;
+    padding:22px 27px;
+    color:#4c5e4e;
+    font-family:var(--serif)
+  }
+
+  .prose :global(blockquote>p:last-child) {
+    margin-bottom:0
+  }
+
+  .prose :global(img) {
+    display:block;
+    max-width:100%;
+    height:auto;
+    margin:28px auto
+  }
+
+  .prose :global(iframe),.prose :global(video) {
+    max-width:100%
+  }
+
+  .prose :global(hr) {
+    border:0;
+    border-top:1px solid var(--line);
+    margin-block:36px
+  }
+
+  .prose :global(ul),.prose :global(ol) {
+    padding-left:1.7em;
+    margin-bottom:1.5em
+  }
+
+  .prose :global(li) {
+    margin-bottom:.5em
+  }
+
+  .prose :global(pre) {
+    overflow-x:auto;
+    padding:20px;
+    font-size:14px;
+    line-height:1.7;
+    max-width:100%
+  }
+
+  .prose :global(:not(pre)>code) {
+    font-size:.85em;
+    background:var(--paper);
+    padding:2px 5px
+  }
+
+  .prose :global(table) {
+    display:block;
+    max-width:100%;
+    overflow-x:auto;
+    border-collapse:collapse;
+    font-size:15px;
+    margin-block:24px
+  }
+
+  .prose :global(th),.prose :global(td) {
+    padding:10px 14px;
+    border:1px solid var(--line)
+  }
+
+  .prose :global(th) {
+    background:var(--paper)
+  }
+
+  .reading-sidebar-inner {
+    position:sticky;
+    top:28px
+  }
+
+  .contents summary {
+    font-size:14px;
+    font-weight:600;
+    cursor:pointer;
+    padding-bottom:15px;
+    border-bottom:1px solid var(--line)
+  }
+
+  .contents nav {
+    display:flex;
+    flex-direction:column;
+    gap:13px;
+    padding-top:18px;
+    max-height:52vh;
+    overflow-y:auto;
+    scrollbar-width:thin
+  }
+
+  .contents nav a {
+    font-size:12px;
+    line-height:1.8;
+    color:var(--muted);
+    padding-right:8px
+  }
+
+  .contents nav a:hover {
+    color:var(--forest)
+  }
+
+  .contents nav a[aria-current='location'] { color: var(--accent); font-weight: 600; border-left: 2px solid var(--accent); padding-left: 10px; }
+  .article-container[data-reading-size='large'] { --reading-size: 22px; }
+  .chapter-navigation { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 240px), 1fr)); gap: 20px; margin-top: 30px; }
+  .chapter-navigation a { display: flex; flex-direction: column; gap: 8px; border: 1px solid var(--line); padding: 18px; }
+  .chapter-navigation small { color: var(--muted); font-size: 12px; }
+  .chapter-navigation span { font: 18px/1.8 var(--serif); }
+  .related-reading { border-top: 1px solid var(--line); margin-top: 38px; padding-top: 30px; }
+  .related-reading > .eyebrow { color: var(--muted); font-size: 12px; letter-spacing: .03em; margin-bottom: 8px; }
+  .related-reading h2 { font-size: 25px; margin-bottom: 22px; }
+  .related-reading > div { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 24px; }
+  .related-reading article { min-width: 0; }
+  .related-reading article > p { font-size: 13px; color: var(--muted); line-height: 1.9; }
+  .related-reading article > p:first-child { color: var(--accent); font-size: 12px; margin-bottom: 10px; }
+  .related-reading h3 { font-size: 19px; line-height: 1.75; overflow-wrap: anywhere; margin-bottom: 12px; }
+
+  .contents nav a.nested {
+    padding-left:12px;
+    border-left:1px solid var(--line)
+  }
+
+  .article-topics {
+    padding-top:30px
+  }
+
+  .mobile-topics {
+    display:none
+  }
+
+  .article-topics h2 {
+    font:600 13px var(--sans);
+    margin-bottom:15px
+  }
+
+  .article-topics>div {
+    display:flex;
+    flex-wrap:wrap;
+    gap:8px
+  }
+
+  .article-topics a {
+    font-size:12px;
+    padding:3px 9px;
+    border:1px solid var(--line)
+  }
+
+  .reading-note {
+    border-top:1px solid var(--line);
+    padding-top:24px;
+    margin-top:30px
+  }
+
+  .reading-note .eyebrow {
+    font-size:11px;
+    color:var(--muted)
+  }
+
+  .reading-note p:not(.eyebrow) {
+    font:15px/1.9 var(--serif)
+  }
+
+  .reading-note a {
+    font-size:12px;
+    font-weight:600
+  }
+
+  .article-end {
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    gap:20px;
+    border-top:1px solid var(--line);
+    padding-top:26px;
+    margin-top:44px
+  }
+
+  .article-end>span {
+    font-size:11px;
+    letter-spacing:.15em;
+    color:var(--muted)
+  }
+
+  .article-end>a {
+    font-size:12px
+  }
+
+  @media(max-width:1000px) {
+    .reading-layout {
+      gap:35px;
+      grid-template-columns:minmax(0,1fr) 205px
+    }
+    .article-header h1 {
+      font-size:34px
+    }
+  }
+
+  @media(max-width:760px) {
+    .breadcrumbs {
+      padding-top:20px;
+      margin-bottom:26px
+    }
+    .article-header h1 {
+      font-size:28px;
+      line-height:1.65
+    }
+    .article-description {
+      font-size:14px
+    }
+    .article-header {
+      padding-bottom:26px
+    }
+    .reading-layout {
+      display:flex;
+      flex-direction:column;
+      gap:28px;
+      padding-top:24px
+    }
+    .reading-sidebar {
+      order:-1
+    }
+    .reading-sidebar-inner {
+      position:static
+    }
+    .reading-sidebar .article-topics,.reading-note {
+      display:none
+    }
+    .mobile-topics {
+      display:block
+    }
+    .contents {
+      background:var(--paper);
+      padding:15px 18px
+    }
+    .contents summary {
+      padding-bottom:0;
+      border-bottom:0
+    }
+    .contents nav {
+      max-height:160px;
+      padding-top:15px
+    }
+    .prose {
+      font-size:var(--reading-size, 16px);
+      line-height:1.95
+    }
+    .prose :global(h1) {
+      font-size:27px
+    }
+    .prose :global(h2) {
+      font-size:24px
+    }
+    .prose :global(h3) {
+      font-size:22px
+    }
+    .prose :global(blockquote) {
+      padding:18px;
+      margin-inline:0
+    }
+    .article-meta {
+      gap:8px
+    }
+    .article-end {
+      flex-wrap:wrap
+    }
+    .article-container[data-reading-size='large'] { --reading-size: 20px; }
+    .related-reading > div { grid-template-columns: 1fr; gap: 18px; }
+    .related-reading article + article { border-top: 1px solid var(--line); padding-top: 18px; }
+  }
+
+  @media print {
+    .breadcrumbs,.reading-sidebar,.article-end,.chapter-navigation,.related-reading,.mobile-topics {
+      display:none
+    }
+    .reading-layout {
+      display:block;
+      border:0
+    }
+    .article-header h1 {
+      font-size:28px
+    }
+    .prose {
+      font-size:12pt
+    }
+  }
+</style>

@@ -1,0 +1,124 @@
+---
+import type { Lang } from '../lib/i18n';
+interface Props { lang: Lang; title: string; description: string; image: string }
+const { lang, title, description, image } = Astro.props;
+const zh = lang === 'zh';
+---
+<div class="reading-progress" aria-hidden="true" hidden><span data-progress-fill></span></div>
+<div class="reading-tools" data-reading-tools data-lang={lang} hidden>
+  <div class="type-controls" role="group" aria-label={zh ? '正文字号' : 'Text size'}>
+    <span>{zh ? '正文字号' : 'Text size'}</span>
+    <button type="button" data-size="standard" aria-pressed="true">{zh ? '标准' : 'Standard'}</button>
+    <button type="button" data-size="large" aria-pressed="false">{zh ? '大字' : 'Large'}</button>
+  </div>
+  <div class="reading-actions">
+    <button type="button" data-copy-link>{zh ? '复制链接' : 'Copy link'}</button>
+    <button type="button" data-native-share hidden>{zh ? '分享' : 'Share'}</button>
+    <button type="button" data-print>{zh ? '打印' : 'Print'}</button>
+    <a href="#reader-comments">{zh ? '留言 ↓' : 'Discuss ↓'}</a>
+  </div>
+  <p class="tool-status" data-tool-status role="status"></p>
+  <input class="copy-fallback" data-copy-fallback readonly aria-label={zh ? '请手动复制文章链接' : 'Copy this article link manually'} hidden />
+  <details class="share-preview">
+    <summary>{zh ? '查看分享展示' : 'Preview shared article'}</summary>
+    <article><img src={image} width="1200" height="630" alt="" loading="lazy" /><div><p class="share-site">{zh ? '为何是祂 · 信仰与思想' : 'Reason for Him · Faith & thought'}</p><h2>{title}</h2><p>{description}</p></div></article>
+  </details>
+</div>
+
+<script>
+  const tools = document.querySelector<HTMLElement>('[data-reading-tools]');
+  const reader = document.querySelector<HTMLElement>('.article-container');
+  const prose = document.querySelector<HTMLElement>('.prose');
+  if (tools && reader && prose) {
+    const zh = tools.dataset.lang === 'zh';
+    const status = tools.querySelector<HTMLElement>('[data-tool-status]')!;
+    const sizeButtons = [...tools.querySelectorAll<HTMLButtonElement>('[data-size]')];
+    function setSize(size: string) {
+      const selected = size === 'large' ? 'large' : 'standard';
+      reader!.dataset.readingSize = selected;
+      sizeButtons.forEach(button => button.setAttribute('aria-pressed', String(button.dataset.size === selected)));
+      try { localStorage.setItem('rfh-reading-size', selected); } catch { /* Reading works without storage. */ }
+    }
+    try { setSize(localStorage.getItem('rfh-reading-size') ?? 'standard'); } catch { setSize('standard'); }
+    sizeButtons.forEach(button => button.addEventListener('click', () => setSize(button.dataset.size!)));
+    tools.querySelector('[data-print]')?.addEventListener('click', () => window.print());
+    const share = tools.querySelector<HTMLButtonElement>('[data-native-share]')!;
+    if (typeof navigator.share === 'function') {
+      share.hidden = false;
+      share.addEventListener('click', async () => {
+        const url = new URL(location.href); url.hash = ''; url.search = '';
+        try { await navigator.share({ title: document.querySelector('h1')?.textContent ?? document.title, url: url.href }); }
+        catch (error) { if (!(error instanceof DOMException && error.name === 'AbortError')) status.textContent = zh ? '暂时无法打开分享，请使用复制链接。' : 'Sharing is unavailable. Please copy the link instead.'; }
+      });
+    }
+    tools.querySelector('[data-copy-link]')?.addEventListener('click', async () => {
+      const url = new URL(location.href);
+      url.hash = '';
+      url.search = '';
+      const fallback = tools.querySelector<HTMLInputElement>('[data-copy-fallback]')!;
+      try {
+        await navigator.clipboard.writeText(url.href);
+        fallback.hidden = true;
+        status.textContent = zh ? '文章链接已复制。' : 'Article link copied.';
+      } catch {
+        fallback.value = url.href;
+        fallback.hidden = false;
+        fallback.focus();
+        fallback.select();
+        status.textContent = zh ? '请复制下方选中的链接。' : 'Please copy the selected link below.';
+      }
+    });
+    const bar = document.querySelector<HTMLElement>('.reading-progress')!;
+    const fill = bar.querySelector<HTMLElement>('[data-progress-fill]')!;
+    const links = [...document.querySelectorAll<HTMLAnchorElement>('.contents a')];
+    const sections = links.map(link => ({ link, heading: document.getElementById(decodeURIComponent(link.hash.slice(1))) })).filter(item => item.heading);
+    let scheduled = false;
+    function update() {
+      scheduled = false;
+      const rect = prose!.getBoundingClientRect();
+      const distance = Math.max(1, rect.height - window.innerHeight + 100);
+      const progress = Math.max(0, Math.min(1, (100 - rect.top) / distance));
+      fill.style.transform = `scaleX(${progress})`;
+      let active = sections[0];
+      for (const item of sections) {
+        if (item.heading!.getBoundingClientRect().top <= 160) active = item;
+      }
+      for (const item of sections) {
+        if (item === active) item.link.setAttribute('aria-current', 'location');
+        else item.link.removeAttribute('aria-current');
+      }
+    }
+    function schedule() { if (!scheduled) { scheduled = true; requestAnimationFrame(update); } }
+    window.addEventListener('scroll', schedule, { passive: true });
+    window.addEventListener('resize', schedule);
+    new ResizeObserver(schedule).observe(prose);
+    tools.hidden = false;
+    bar.hidden = false;
+    update();
+  }
+</script>
+
+<style>
+  [hidden] { display: none !important; }
+  .reading-progress { position: fixed; inset: 0 0 auto; height: 3px; z-index: 20; pointer-events: none; }
+  .reading-progress span { display: block; height: 100%; background: var(--accent); transform: scaleX(0); transform-origin: left; }
+  .reading-tools { display: flex; flex-wrap: wrap; gap: 10px 24px; align-items: center; justify-content: space-between; max-width: 780px; margin-top: 24px; font-size: 12px; }
+  .type-controls, .reading-actions { display: flex; flex-wrap: wrap; align-items: center; gap: 8px; }
+  .type-controls > span { color: var(--muted); margin-right: 7px; }
+  button, .reading-actions a { border: 1px solid var(--line); background: transparent; color: var(--forest); padding: 6px 11px; min-height: 36px; font-size: 12px; }
+  button[aria-pressed='true'] { background: var(--forest); color: #f6f2e9; border-color: var(--forest); }
+  .reading-actions a { display: inline-flex; align-items: center; }
+  .tool-status { flex-basis: 100%; margin: 0; color: var(--muted); }
+  .tool-status:empty { display: none; }
+  .copy-fallback { width: 100%; padding: 8px; border: 1px solid var(--line); background: var(--paper); color: var(--forest); font-size: 12px; }
+  .share-preview { flex-basis: 100%; color: var(--muted); }
+  .share-preview summary { cursor: pointer; padding-block: 7px; width: fit-content; min-height: 36px; }
+  .share-preview article { border: 1px solid var(--line); max-width: 480px; margin-top: 12px; background: var(--paper); }
+  .share-preview img { display: block; width: 100%; height: auto; }
+  .share-preview article > div { padding: 17px 20px; }
+  .share-preview h2 { font: 21px/1.7 var(--serif); color: var(--forest); margin: 8px 0; }
+  .share-preview article p { font-size: 13px; line-height: 1.85; margin: 0; }
+  .share-preview .share-site { font-size: 11px; color: var(--accent); }
+  @media (max-width: 760px) { .reading-tools { gap: 12px; } button, .reading-actions a, .share-preview summary { min-height: 44px; } .copy-fallback { font-size: 16px; } }
+  @media print { .reading-tools, .reading-progress { display: none !important; } }
+</style>

@@ -122,3 +122,10 @@ src/
     │   └── rss.xml.ts         ← 中文 RSS
     └── en/                     ← 英文对应结构
 ```
+
+
+## 首页栏目与选读封面
+
+可在文章 frontmatter 中选填 `section`：`faith`（护教与理性）、`scripture`（圣经与神学）、`literature`（文学与想象）、`life`（见证与生活）。现有文章由 `src/lib/editorial.ts` 分类；未指定的新文章默认进入护教与理性。细标签 `tags` 继续用于文章页和搜索。
+
+首页按日期选取最新三篇，采用一篇主推、两篇次推的布局。封面映射位于 `src/lib/editorial.ts`；同系列版画素材与生成提示词见 `docs/editorial-art.md`。
