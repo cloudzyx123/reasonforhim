@@ -208,6 +208,23 @@ const nextChapter = seriesIndex >= 0 ? others.find(entry => entry.id === seriesI
     margin:28px auto
   }
 
+  .prose :global(figure.article-figure) {
+    margin:36px 0
+  }
+
+  .prose :global(figure.article-figure img) {
+    margin:0 auto;
+    border:1px solid color-mix(in srgb,var(--line) 72%,transparent)
+  }
+
+  .prose :global(figure.article-figure figcaption) {
+    margin-top:11px;
+    color:var(--muted);
+    font-size:13px;
+    line-height:1.75;
+    text-align:center
+  }
+
   .prose :global(iframe),.prose :global(video) {
     max-width:100%
   }

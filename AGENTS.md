@@ -12,6 +12,11 @@ Manage the background server with `astro dev stop`, `astro dev status`, and `ast
 
 Full documentation: https://docs.astro.build
 
+## Content naming
+
+- Use concise English kebab-case for article filenames and URL slugs, including articles written in Chinese.
+- Do not use pinyin for article filenames or URL slugs.
+
 Consult these guides before working on related tasks:
 
 - [Adding pages, dynamic routes, or middleware](https://docs.astro.build/en/guides/routing/)
