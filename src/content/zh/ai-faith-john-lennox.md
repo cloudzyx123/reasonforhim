@@ -8,6 +8,7 @@ tags:
   - 科学与信仰
   - 约翰·伦诺克斯
   - 人的价值
+  - 《2084》
 section: faith
 draft: false
 ---
