@@ -1,4 +1,6 @@
 ---
+urlName: god-is-dead-chesterton-vs-nietzsche
+section: faith
 title: 上帝已死：切斯特顿 vs. 尼采
 description: "整理\"上帝已死：切斯特顿 vs. 尼采\"节目内容，呈现切斯特顿如何以常识拆解尼采的虚无主义逻辑。"
 pubDate: '2025-05-16'

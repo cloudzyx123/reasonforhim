@@ -1,4 +1,6 @@
 ---
+urlName: confidence-behind-rationality-science-atheism-faith-issue
+section: faith
 title: 理性背后的信心：科学与无神论逃不掉的信仰问题 (中英对照)
 description: "约翰·伦诺克斯（中英对照）反思\"科学不需要信心\"这一流行说法，指出理性与无神论同样无法摆脱信仰问题。"
 pubDate: '2025-04-19'

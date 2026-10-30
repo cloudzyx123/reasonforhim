@@ -1,4 +1,6 @@
 ---
+urlName: a-painful-letter-of-recovery-rethinking-church-liberalization-and-lgbt-movement
+section: scripture
 title: 一封沉痛的挽回书信 —— 再思教会自由化和LGBT运动
 description: "一封致教会的公开信，反思宗派在性伦理议题上的自由化转向，重申圣经对婚姻与圣洁的教导。"
 pubDate: '2024-08-15'

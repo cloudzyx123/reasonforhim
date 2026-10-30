@@ -1,4 +1,6 @@
 ---
+urlName: free-grace
+section: scripture
 title: Free Grace 自由之恩典
 description: "探讨保罗所传\"自由恩典\"福音的三层含义：出于神的主权、借信心白白领受、使人从内在辖制中得释放。"
 pubDate: '2025-03-10'

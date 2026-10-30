@@ -1,4 +1,6 @@
 ---
+urlName: laurence-a-martyr-died-from-telling-jokes
+section: life
 title: 劳伦斯：一位死于讲笑话的殉道者
 description: "纪念三世纪殉道者劳伦斯，讲述他把穷人瘸子盲人呈给罗马皇帝、称他们为\"教会的宝藏\"的故事。"
 pubDate: '2025-03-10'

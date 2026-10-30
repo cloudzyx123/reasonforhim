@@ -1,0 +1,212 @@
+# Pages CMS reads this file from the selected GitHub branch.
+settings:
+  content:
+    merge: true
+  commit:
+    templates:
+      create: "新增博文或图片：{path}（Pages CMS）"
+      update: "更新博文或图片：{path}（Pages CMS）"
+      delete: "删除内容：{path}（Pages CMS）"
+      rename: "重命名：{oldPath} → {newPath}（Pages CMS）"
+
+media:
+  - name: article_images
+    label: 博文图片
+    input: public/images
+    output: /images
+    extensions: [webp, jpg, jpeg, png, gif, avif]
+    rename: random
+
+components:
+  url_name:
+    type: string
+    label: 英文网址名（创建后请勿修改）
+    description: "例如 ai-faith-john-lennox；只用英文单词、数字和连字符，不用拼音。已发布文章保持原值。"
+    required: true
+    pattern:
+      regex: '^[a-z0-9]+(-[a-z0-9]+)*$'
+      message: 请用小写英文字母或数字，以单个连字符分隔。
+    options:
+      maxlength: 120
+  article_title:
+    type: string
+    label: 文章标题
+    required: true
+  article_description:
+    type: text
+    label: 一句话摘要
+    description: 建议约 40–60 字，用于文章列表、搜索和分享。
+    required: true
+  publication_date:
+    type: date
+    label: 发布日期
+    description: 用于网页显示和排序；选择未来日期不会自动预约发布。
+    required: true
+    options:
+      format: yyyy-MM-dd
+  updated_date:
+    type: date
+    label: 最后修订日期（可留空）
+    default: ""
+    options:
+      format: yyyy-MM-dd
+  article_section:
+    type: select
+    label: 所属栏目
+    required: true
+    options:
+      values:
+        - name: faith
+          label: 护教与理性
+        - name: scripture
+          label: 圣经与神学
+        - name: literature
+          label: 文学与想象
+        - name: life
+          label: 见证与生活
+  article_tags:
+    type: string
+    label: 主题标签
+    description: 建议填写 3–5 个，每项一个标签。
+    list: true
+  article_draft:
+    type: boolean
+    label: 草稿（开启＝不公开；关闭并保存＝发布）
+    description: 新文章默认开启。已发布文章修改后保存会直接更新网站；保存不是仅保存在本机。
+    default: true
+  translation_id:
+    type: string
+    label: 译文配对编号（通常留空）
+    description: 仅当中英文确实互为译文时，两篇填写相同编号。
+  visual_body:
+    type: rich-text
+    label: 正文
+    description: 可粘贴文字、设置标题、插入链接和图片。图片下方请保留图注、来源及许可说明。
+    required: true
+    options:
+      format: markdown
+      media: article_images
+      rename: random
+      switcher: true
+
+content:
+  - name: chinese_articles
+    label: 中文文章（新建与编辑）
+    type: collection
+    path: src/content/zh
+    format: yaml-frontmatter
+    subfolders: false
+    filename:
+      template: "{fields.urlName}.md"
+      field: false
+    exclude: [ai-faith-john-lennox.md]
+    operations:
+      rename: false
+      delete: false
+    view:
+      primary: title
+      fields: [title, draft, pubDate]
+      sort: [pubDate, title]
+      search: [title, description, tags, urlName]
+      default:
+        sort: pubDate
+        order: desc
+    fields:
+      - name: urlName
+        component: url_name
+      - name: title
+        component: article_title
+      - name: description
+        component: article_description
+      - name: pubDate
+        component: publication_date
+      - name: updatedDate
+        component: updated_date
+      - name: section
+        component: article_section
+      - name: tags
+        component: article_tags
+      - name: draft
+        component: article_draft
+      - name: translationId
+        component: translation_id
+      - name: body
+        component: visual_body
+
+  - name: lennox_article
+    label: AI 与伦诺克斯（精排保护）
+    type: file
+    path: src/content/zh/ai-faith-john-lennox.md
+    format: yaml-frontmatter
+    operations:
+      create: false
+      rename: false
+      delete: false
+    fields:
+      - name: urlName
+        component: url_name
+        readonly: true
+      - name: title
+        component: article_title
+      - name: description
+        component: article_description
+      - name: pubDate
+        component: publication_date
+      - name: updatedDate
+        component: updated_date
+      - name: section
+        component: article_section
+      - name: tags
+        component: article_tags
+      - name: draft
+        component: article_draft
+      - name: translationId
+        component: translation_id
+      - name: body
+        type: code
+        label: 正文（精排保护）
+        description: 此文含自定义图注排版，正文在此只读。需修订正文时请交给桌面博文发布助手；本页可调整摘要、标签及草稿状态。
+        readonly: true
+        options:
+          format: markdown
+
+  - name: english_articles
+    label: 英文文章
+    type: collection
+    path: src/content/en
+    format: yaml-frontmatter
+    subfolders: false
+    filename:
+      template: "{fields.urlName}.md"
+      field: false
+    operations:
+      rename: false
+      delete: false
+    view:
+      primary: title
+      fields: [title, draft, pubDate]
+      sort: [pubDate, title]
+      default:
+        sort: pubDate
+        order: desc
+    fields:
+      - name: urlName
+        component: url_name
+      - name: title
+        component: article_title
+      - name: description
+        component: article_description
+      - name: pubDate
+        component: publication_date
+      - name: updatedDate
+        component: updated_date
+      - name: section
+        component: article_section
+      - name: tags
+        component: article_tags
+      - name: draft
+        component: article_draft
+      - name: translationId
+        component: translation_id
+      - name: body
+        component: visual_body

@@ -1,5 +1,7 @@
 # 这是什么
 
+日常写作与发布请先阅读 [博文发布指南](./博文发布指南.md)。在 ChatGPT Desktop 打开本项目，使用“准备发布”“生成预览”“批准发布”等中文指令即可。
+
 这是一个已经配好的 Astro 双语博客骨架，包含：
 
 - 中文（`/zh/`）与英文（`/en/`）两套完全独立的文章目录
@@ -20,8 +22,7 @@ src/content/zh/   ← 中文文章放这里
 src/content/en/   ← 英文文章放这里
 ```
 
-新建一篇文章，复制一个现有文件改名即可，比如复制
-`src/content/zh/mary-de-gao-you.md`，改名为 `恩典与律法.md`。
+新文章使用英文 kebab-case 文件名，例如 `grace-and-law.md`。中文标题写在文章信息中；文件名和网址不要使用中文或拼音。
 
 每篇文章最上面有一段用 `---` 包起来的信息（叫 frontmatter），格式固定：
 
@@ -66,40 +67,26 @@ translationId: "imago-dei"
 
 ---
 
-## 发布前必须改的一个地方
+## 域名配置（已完成，日常发布无需修改）
 
-打开根目录的 `astro.config.mjs`，把这一行：
-
-```js
-site: 'https://example.com',
-```
-
-换成你自己买好的真实域名，比如：
+当前 `astro.config.mjs` 已设置：
 
 ```js
-site: 'https://richardzhang.com',
+site: 'https://reasonforhim.com',
 ```
 
-这个值会被用在 hreflang 标签、RSS 订阅链接这些地方，不改的话上线后这些功能是错的。
-
-你也可以在 `src/lib/i18n.ts` 里把 `LABELS` 对象中的
-`你的博客名` / `Your Blog Name` 换成你实际的博客名称。
+这个值用于网站绝对链接、RSS 和 sitemap。只有更换域名时才需要修改。
 
 ---
 
 ## 日常发布流程（回顾）
 
-1. 在 `src/content/zh/` 或 `src/content/en/` 里新建/编辑 `.md` 文件
-2. 本地预览：终端里运行 `npm run dev`，浏览器打开 `http://localhost:4321`
-3. 确认没问题后：
+1. 在本项目聊天中提供终稿，说“准备发布，先给我预览”。
+2. 助手整理文章与图片、检查并给出预览；修改到满意为止。
+3. 说“批准发布这篇文章”，助手只提交本次相关文件，再推送并检查部署。
+4. 以正式网页核验结果为准；Cloudflare 构建失败或仍在更新时会明确说明。
 
-   ```bash
-   git add .
-   git commit -m "发布新文章：文章标题"
-   git push
-   ```
-
-4. Cloudflare Pages 会自动检测更新并重新构建，1-2 分钟后网站更新
+详细约定和可直接使用的例句见 [博文发布指南](./博文发布指南.md)。
 
 ---
 

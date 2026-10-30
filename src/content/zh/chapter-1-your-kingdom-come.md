@@ -1,4 +1,6 @@
 ---
+urlName: chapter-1-your-kingdom-come
+section: scripture
 title: 《子里的选民》第一章：愿你的国降临
 description: "《子里的选民》第一章，探讨神的主权如何在动荡时代中托住信徒，历史朝着\"你的国降临\"这一既定终局前行。"
 pubDate: '2025-03-10'

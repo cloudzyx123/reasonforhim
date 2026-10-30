@@ -1,4 +1,6 @@
 ---
+urlName: yang-xiaokai-3-processes-of-knowing-christianity
+section: life
 title: 杨小凯：我认识基督教的三个过程
 description: "华人经济学家杨小凯的信仰见证，回顾他从监狱经历到理性主义反思，最终认识基督教的三个阶段。"
 pubDate: '2025-03-10'

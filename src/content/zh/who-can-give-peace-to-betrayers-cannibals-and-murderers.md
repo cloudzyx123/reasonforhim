@@ -1,4 +1,6 @@
 ---
+urlName: who-can-give-peace-to-betrayers-cannibals-and-murderers
+section: life
 title: 谁能给背叛成性、吃人虐尸的人以和平？
 description: "讲述宣教士在巴布亚沙威部落（以背叛为乐、曾有食人习俗）中传福音的故事，及\"和平之子\"如何触动他们的心。"
 pubDate: '2025-03-10'

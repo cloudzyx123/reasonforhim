@@ -1,4 +1,6 @@
 ---
+urlName: lewis-and-tolkien-debate-myths-and-lies
+section: literature
 title: 从神话到真理：托尔金与C.S.路易斯觉醒时刻的对谈
 description: "重现1931年托尔金与C.S.路易斯那场促成路易斯归信的著名夜谈，探讨神话究竟是谎言还是承载真理的载体。"
 pubDate: '2024-08-02'

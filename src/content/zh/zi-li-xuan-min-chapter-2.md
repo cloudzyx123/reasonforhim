@@ -1,4 +1,6 @@
 ---
+urlName: zi-li-xuan-min-chapter-2
+section: scripture
 title: 《子里的选民》第二章：子里的选民
 description: "《子里的选民》第二章，翻译罗伯特·香客对拣选与预定论的探讨，呈现神愿万人得救这一立场下的圣经论证。"
 pubDate: '2025-03-10'

@@ -1,4 +1,6 @@
 ---
+urlName: if-i-were-paralyzed-a-poems-gospel-reflection
+section: literature
 title: 如果我是瘫子｜一首诗的福音默想
 description: "一首以《马可福音》瘫子蒙赦罪故事为灵感的诗歌，默想神赦罪之恩如何临到不能自救的人（附中英对照）。"
 pubDate: '2025-08-02'

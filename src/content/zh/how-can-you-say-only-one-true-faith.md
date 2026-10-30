@@ -1,4 +1,6 @@
 ---
+urlName: how-can-you-say-only-one-true-faith
+section: faith
 title: 你怎么能说唯有一个真信仰？
 description: "借一位伊朗归信者的故事与乳腺癌诊断的类比，回应\"你怎能说只有一个真信仰\"这一常见质疑。"
 pubDate: '2024-03-26'

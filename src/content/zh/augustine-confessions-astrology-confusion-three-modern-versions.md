@@ -1,4 +1,6 @@
 ---
+urlName: augustine-confessions-astrology-confusion-three-modern-versions
+section: faith
 title: '[奥古斯丁《忏悔录》之随想] 占星术之惑，及其三种现代版本'
 description: "借奥古斯丁对占星术的反思，剖析达尔文主义、马克思主义与弗洛伊德主义如何延续\"洗脱人的罪责\"这一古老诱惑。"
 pubDate: '2025-03-10'

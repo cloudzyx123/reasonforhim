@@ -1,4 +1,6 @@
 ---
+urlName: neglected-fairy-tale-master-and-removed-easter-eggs
+section: literature
 title: 被忽视的童话大师，和删去的彩蛋
 description: "介绍被忽视的童话大师乔治·麦克唐纳，及精读《公主与哥布林》原著时发现的两个版本间的删改\"彩蛋\"。"
 pubDate: '2025-03-10'

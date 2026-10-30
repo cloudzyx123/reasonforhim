@@ -1,0 +1,4 @@
+interface:
+  display_name: "博文发布助手"
+  short_description: "从终稿和配图生成博客预览与发布清单，作者批准后提交并验证上线"
+  default_prompt: "使用 $blog-publish 帮我将这篇终稿准备为博客文章，生成预览，等我批准后再发布。"

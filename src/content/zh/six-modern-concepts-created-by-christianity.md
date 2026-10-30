@@ -1,4 +1,6 @@
 ---
+urlName: six-modern-concepts-created-by-christianity
+section: faith
 title: 基督教缔造的六个现代观念
 description: "梳理基督教如何塑造了\"世界有规律\"\"个人有自由\"等六项现代世界观的核心观念。"
 pubDate: '2024-05-11'

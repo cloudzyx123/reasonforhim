@@ -1,4 +1,6 @@
 ---
+urlName: three-objections-to-fairy-tales-and-cs-lewiss-response
+section: literature
 title: 对童话的三种异议，以及C.S.路易斯的回应
 description: "整理C.S.路易斯对\"童话故事不适合儿童\"这一常见异议的三点回应，为童话文学正名。"
 pubDate: '2025-03-10'

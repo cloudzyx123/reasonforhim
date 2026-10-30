@@ -1,4 +1,6 @@
 ---
+urlName: a-kid-asks-if-my-parents-dont-believe-in-jesus-can-they-go-to-heaven
+section: faith
 title: 一个孩子问：如果我的父母不信耶稣，能去天堂吗？
 description: "从一个初中生的提问出发，探讨\"未信主的父母能否得救\"，阐明天堂与地狱的本质，以及神的爱如何尊重人的自由选择。"
 pubDate: '2025-03-10'

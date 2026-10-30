@@ -4,11 +4,13 @@ import { SECTION_IDS } from './lib/editorial';
 
 // 公共的文章 schema：中英文文章共用同一套字段
 const postSchema = z.object({
+  // CMS 的英文文件名输入；不用 Astro 保留的 slug 字段，以免覆盖现有路由。
+  urlName: z.string().regex(/^[a-z0-9]+(?:-[a-z0-9]+)*$/).optional(),
   title: z.string(),
   description: z.string(),
   // 发布日期，写成 2026-07-31 这样的格式即可，Astro 会自动解析
   pubDate: z.coerce.date(),
-  updatedDate: z.coerce.date().optional(),
+  updatedDate: z.preprocess(value => value == null || value === '' ? undefined : value, z.coerce.date().optional()),
   // 文章分类，方便你以后按"护教""释经""神学"等做归档
   tags: z.array(z.string()).default([]),
   // 首页主要栏目；不填时现有文章使用 editorial.ts 中的分类。

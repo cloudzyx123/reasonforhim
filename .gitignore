@@ -1,5 +1,7 @@
 # build output
 dist/
+# Author drafts, generated previews, and publishing reports
+output/
 # generated types
 .astro/
 
