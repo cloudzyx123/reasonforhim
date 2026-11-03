@@ -129,6 +129,7 @@ const languageHref = (target: Lang) => target === lang ? path : alternates.find(
             <a href={`/${lang}/archive/`} aria-current={path === `/${lang}/archive/` ? 'page' : undefined}>{isZh ? '文章' : 'Essays'}</a>
             <a href={`/${lang}/archive/#topics`}>{isZh ? '阅读栏目' : 'Sections'}</a>
             <a href={`/${lang}/#about`}>{isZh ? '关于' : 'About'}</a>
+            <a href="/subscribe/" aria-current={path === '/subscribe/' ? 'page' : undefined}>{isZh ? '订阅' : 'Subscribe'}</a>
           </nav>
           <form class="nav-search" action={`/${lang}/archive/#articles`} role="search">
             <label class="sr-only" for="site-search">{isZh ? '搜索文章' : 'Search essays'}</label>

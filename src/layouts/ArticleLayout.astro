@@ -48,7 +48,7 @@ const nextChapter = seriesIndex >= 0 ? others.find(entry => entry.id === seriesI
       <div class="reading-column">
         <article class:list={['prose', { 'has-duplicate-title': duplicateTitle }]} lang={zh ? 'zh-Hans' : 'en'}><slot /></article>
         {post.data.tags.length > 0 && <section class="article-topics mobile-topics"><h2>{zh ? '相关主题' : 'Topics'}</h2><div>{post.data.tags.map(tag => <a href={`/${lang}/archive/?topic=${encodeURIComponent(tag)}#articles`}>{tag}</a>)}</div></section>}
-        <div class="article-end"><span>REASON FOR HIM</span><a href={`/${lang}/archive/#articles`}>← {zh ? '返回全部文章' : 'Back to all essays'}</a></div>
+        <div class="article-end"><a href="/subscribe/">{zh ? '订阅后续文章 →' : 'Subscribe to new essays →'}</a><a href={`/${lang}/archive/#articles`}>← {zh ? '返回全部文章' : 'Back to all essays'}</a></div>
         {(previousChapter || nextChapter) && <nav class="chapter-navigation" aria-label={zh ? '章节导航' : 'Chapter navigation'}>
           {previousChapter && <a href={`/${lang}/${previousChapter.id}/`}><small>{zh ? '← 上一章' : '← Previous chapter'}</small><span>{previousChapter.data.title}</span></a>}
           {nextChapter && <a href={`/${lang}/${nextChapter.id}/`}><small>{zh ? '下一章 →' : 'Next chapter →'}</small><span>{nextChapter.data.title}</span></a>}

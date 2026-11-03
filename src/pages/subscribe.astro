@@ -1,0 +1,79 @@
+---
+import Layout from '../layouts/Layout.astro';
+import { getEmailFormUrl } from '../config/subscriptions';
+const formUrl = getEmailFormUrl();
+---
+
+<Layout title="订阅更新" description="通过邮件、RSS 或微信公众号，继续阅读为何是祂的文章。" lang="zh" path="/subscribe/">
+  <div class="container subscription-page">
+    <header>
+      <p class="eyebrow">REASON FOR HIM · 保持联系</p>
+      <h1>让下一篇文章，与你相遇。</h1>
+      <p class="intro">选择适合你的阅读方式。关于信仰、理性与生活的思考，我们慢慢读。</p>
+    </header>
+
+    <section aria-labelledby="email-heading">
+      <p class="eyebrow">01 / EMAIL</p>
+      <h2 id="email-heading">邮件订阅</h2>
+      {formUrl ? <>
+        <p>收到新文章通知，在方便的时候阅读。提交后，请到邮箱点击确认链接；每封通知都提供退订入口。</p>
+        <p class="note">表单由 Brevo 提供，邮箱及订阅记录由其管理，本站不保存邮箱。仅用于文章更新通知。</p>
+        <iframe src={formUrl} title="邮件订阅表单（Brevo）" loading="lazy" referrerpolicy="no-referrer"></iframe>
+        <p class="note">表单未能显示？<a href={formUrl} target="_blank" rel="noopener noreferrer">在新窗口打开订阅表单 ↗</a>，或使用下方的 RSS 与微信。</p>
+      </> : <>
+        <p>邮件订阅尚未开放。你可以先通过 RSS 或微信公众号关注更新。</p>
+        <p class="note">开放后，需通过邮件确认订阅，并可随时退订。</p>
+      </>}
+    </section>
+
+    <section aria-labelledby="rss-heading">
+      <p class="eyebrow">02 / RSS</p>
+      <h2 id="rss-heading">在你的阅读器里相见</h2>
+      <p>将订阅链接添加到你常用的 RSS 阅读器，即可查看新文章，无需留下邮箱。</p>
+      <div class="channel-links"><a href="/zh/rss.xml">中文 RSS ↗</a><a href="/en/rss.xml" lang="en">English RSS ↗</a></div>
+    </section>
+
+    <section aria-labelledby="wechat-heading">
+      <p class="eyebrow">03 / WECHAT</p>
+      <h2 id="wechat-heading">微信公众号：为何是他</h2>
+      <p>在微信中搜索公众号名称，或使用下方的公众号 ID。</p>
+      <div class="wechat-id"><span>公众号 ID：<strong id="wechat-id">ReasonForHim</strong></span><button type="button" id="copy-wechat" hidden>复制公众号 ID</button></div>
+      <p id="copy-status" class="note copy-status" role="status" aria-live="polite"></p>
+    </section>
+  </div>
+</Layout>
+
+<script>
+  const button = document.querySelector<HTMLButtonElement>('#copy-wechat');
+  const status = document.querySelector<HTMLElement>('#copy-status');
+  if (button && status) {
+    button.hidden = false;
+    button.addEventListener('click', async () => {
+      try {
+        await navigator.clipboard.writeText('ReasonForHim');
+        status.textContent = '已复制：ReasonForHim。打开微信搜索即可。';
+      } catch {
+        status.textContent = '未能自动复制，请长按或选中公众号 ID：ReasonForHim 手动复制。';
+      }
+    });
+  }
+</script>
+
+<style>
+  .subscription-page { max-width: 800px; padding-block: 64px 80px; }
+  header { margin-bottom: 40px; }
+  h1 { font-size: clamp(28px, 5vw, 40px); margin-bottom: 18px; }
+  h2 { font-size: 25px; }
+  .intro { color: var(--muted); font-size: 17px; }
+  section { border-top: 1px solid var(--line); padding-block: 30px; }
+  section .eyebrow { color: var(--muted); }
+  .note { font-size: 14px; color: var(--muted); }
+  .channel-links, .wechat-id { display: flex; flex-wrap: wrap; gap: 16px 28px; align-items: center; }
+  .channel-links a, .note a { text-decoration: underline; text-underline-offset: 4px; }
+  button { border: 1px solid var(--forest); background: transparent; color: var(--forest); border-radius: 2px; padding: 9px 16px; min-height: 44px; }
+  button:hover { background: var(--paper); }
+  strong { user-select: all; overflow-wrap: anywhere; }
+  .copy-status { min-height: 1.7em; margin: 14px 0 0; }
+  iframe { display: block; width: 100%; height: 650px; border: 0; background: white; margin-block: 20px; }
+  @media (max-width: 760px) { .subscription-page { padding-block: 36px 48px; } }
+</style>

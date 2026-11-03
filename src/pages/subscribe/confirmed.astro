@@ -1,0 +1,28 @@
+---
+import Layout from '../../layouts/Layout.astro';
+---
+
+<Layout
+  title="订阅成功"
+  description="你已成功订阅为何是祂的文章更新。"
+  lang="zh"
+  path="/subscribe/confirmed/"
+>
+  <main class="confirmation-page">
+    <p class="eyebrow">邮件订阅</p>
+    <h1>订阅成功</h1>
+    <p>你的邮箱已经确认。以后有新文章时，我们会通过邮件通知你。</p>
+    <p class="note">你可以随时使用邮件底部的退订链接取消订阅。</p>
+    <a class="back-link" href="/zh/">返回“为何是祂”</a>
+  </main>
+</Layout>
+
+<style>
+  .confirmation-page { max-width: 680px; margin-inline: auto; padding: 96px 24px 120px; }
+  h1 { font-size: clamp(30px, 6vw, 44px); margin-bottom: 20px; }
+  p { font-size: 17px; line-height: 1.8; }
+  .eyebrow, .note { color: var(--muted); }
+  .eyebrow { font-size: 13px; letter-spacing: .12em; text-transform: uppercase; }
+  .note { font-size: 14px; }
+  .back-link { display: inline-block; margin-top: 24px; text-decoration: underline; text-underline-offset: 4px; }
+</style>

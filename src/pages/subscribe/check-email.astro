@@ -1,0 +1,28 @@
+---
+import Layout from '../../layouts/Layout.astro';
+---
+
+<Layout
+  title="请检查邮箱"
+  description="请前往邮箱确认订阅为何是祂的文章更新。"
+  lang="zh"
+  path="/subscribe/check-email/"
+>
+  <main class="confirmation-page">
+    <p class="eyebrow">邮件订阅</p>
+    <h1>请检查你的邮箱</h1>
+    <p>我们刚刚发送了一封确认邮件。请点击邮件中的确认链接，完成订阅。</p>
+    <p class="note">如果几分钟后仍未收到，请检查垃圾邮件文件夹，或返回订阅页面确认邮箱地址是否填写正确。</p>
+    <a class="back-link" href="/subscribe/">返回订阅页面</a>
+  </main>
+</Layout>
+
+<style>
+  .confirmation-page { max-width: 680px; margin-inline: auto; padding: 96px 24px 120px; }
+  h1 { font-size: clamp(30px, 6vw, 44px); margin-bottom: 20px; }
+  p { font-size: 17px; line-height: 1.8; }
+  .eyebrow, .note { color: var(--muted); }
+  .eyebrow { font-size: 13px; letter-spacing: .12em; text-transform: uppercase; }
+  .note { font-size: 14px; }
+  .back-link { display: inline-block; margin-top: 24px; text-decoration: underline; text-underline-offset: 4px; }
+</style>
