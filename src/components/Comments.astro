@@ -36,6 +36,7 @@ const GISCUS_CATEGORY_ID = 'DIC_kwDOTuOE6M4DCsQ2'; // 从 giscus.app 配置页�
 
 <section class="comments" id="reader-comments" aria-labelledby="comments-heading">
   <h2 id="comments-heading">{lang === 'zh' ? '读后交流' : 'Join the conversation'}</h2>
+  {lang === 'zh' && <p>也欢迎在微信公众号 <strong>为何是他</strong>（ID：<strong>ReasonForHim</strong>）给我留言。<a href="/subscribe/#wechat-heading">查看公众号信息 ↗</a></p>}
   <p>{lang === 'zh' ? '欢迎留下你的思考。使用 GitHub 账号即可参与讨论。' : 'Share your thoughts. Sign in with GitHub to join the discussion.'} <a href={`https://github.com/${GISCUS_REPO}/discussions`}>{lang === 'zh' ? '前往讨论区 ↗' : 'Visit discussions ↗'}</a></p>
   <script
     src="https://giscus.app/client.js"
