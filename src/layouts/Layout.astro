@@ -147,7 +147,7 @@ const languageHref = (target: Lang) => target === lang ? path : alternates.find(
     <footer class="site-footer">
       <div class="container footer-top">
         <div><a class="footer-name" href={`/${lang}/`}>{LABELS[lang].siteName}</a><p>{isZh ? '让信仰经得起追问，让思考走向更深处。' : 'Faith worth questioning. Ideas worth exploring.'}</p></div>
-        <nav aria-label={isZh ? '页脚导航' : 'Footer navigation'}><a href={`/${lang}/archive/`}>{isZh ? '全部文章' : 'All essays'}</a><a href={`/${lang}/#about`}>{isZh ? '关于本站' : 'About this blog'}</a><a href="https://www.youtube.com/@ReasonForHim" target="_blank" rel="noopener noreferrer">YouTube ↗</a><a href={`/${lang}/rss.xml`}>{isZh ? 'RSS 订阅 ↗' : 'RSS feed ↗'}</a></nav>
+        <nav aria-label={isZh ? '页脚导航' : 'Footer navigation'}><a href={`/${lang}/archive/`}>{isZh ? '全部文章' : 'All essays'}</a><a href={`/${lang}/#about`}>{isZh ? '关于本站' : 'About this blog'}</a><a href="https://www.youtube.com/@ReasonForHim" target="_blank" rel="noopener noreferrer">YouTube ↗</a><a href="https://space.bilibili.com/53749288" target="_blank" rel="noopener noreferrer">{isZh ? 'B 站 ↗' : 'Bilibili ↗'}</a><a href={`/${lang}/rss.xml`}>{isZh ? 'RSS 订阅 ↗' : 'RSS feed ↗'}</a></nav>
       </div>
       <div class="container footer-bottom"><span>&copy; {new Date().getFullYear()} {LABELS[lang].siteName}</span><span>REASON FOR HIM · {isZh ? '信仰与思想的文字空间' : 'A space for faith and thought'}</span></div>
     </footer>
