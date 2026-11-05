@@ -8,7 +8,7 @@ tags: []
 draft: false
 ---
 
-# 《子里的选民》第一章：愿你的国降临
+## 《子里的选民》第一章：愿你的国降临
 
 ![](../../assets/images/chapter-1-your-kingdom-come/dz8wa4y8n.webp)
 

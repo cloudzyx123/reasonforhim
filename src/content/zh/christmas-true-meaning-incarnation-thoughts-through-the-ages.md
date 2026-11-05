@@ -8,7 +8,7 @@ tags: []
 draft: false
 ---
 
-# [圣诞真义] - 关于道成肉身的历代撷思
+## [圣诞真义] - 关于道成肉身的历代撷思
 
 ![](../../assets/images/christmas-true-meaning-incarnation-thoughts-through-the-ages/87kpc4g5x.webp)
 

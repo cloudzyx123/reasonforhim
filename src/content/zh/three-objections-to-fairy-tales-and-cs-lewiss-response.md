@@ -8,7 +8,7 @@ tags: []
 draft: false
 ---
 
-# 对童话的三种异议，以及C.S.路易斯的回应
+## 对童话的三种异议，以及C.S.路易斯的回应
 
 路易斯喜欢童话故事。他完全相信“有时童话故事最能表达需要讲的话”（他一篇随笔的标题）。而且，正如 [我们所见](http://www.desiringgod.org/blog/posts/are-fairy-tales-just-for-children)，路易斯反对现代人将童话仅和儿童联系在一起。成年人能够且应该享受童话故事。
 

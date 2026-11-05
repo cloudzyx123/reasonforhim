@@ -18,9 +18,10 @@ interface Props {
   pubDate?: Date;
   updatedDate?: Date;
   shareImage?: string;
+  noindex?: boolean;
 }
 
-const { title, description, lang, path, alternates = [], pubDate, updatedDate, shareImage = '/share/grace.jpg' } = Astro.props;
+const { title, description, lang, path, alternates = [], pubDate, updatedDate, shareImage = '/share/grace.jpg', noindex = false } = Astro.props;
 
 // Astro.site 来自 astro.config.mjs 里的 `site` 字段
 const siteUrl = Astro.site?.toString().replace(/\/$/, '') ?? '';
@@ -56,6 +57,7 @@ const languageHref = (target: Lang) => target === lang ? path : alternates.find(
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>{title} · {LABELS[lang].siteName}</title>
     <meta name="description" content={description} />
+    {noindex && <meta name="robots" content="noindex,follow" />}
     <meta name="theme-color" content="#25483f" />
     <meta property="og:title" content={`${title} · ${LABELS[lang].siteName}`} />
     <meta property="og:description" content={description} />
