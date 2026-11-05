@@ -8,7 +8,7 @@ tags: []
 draft: false
 ---
 
-# 讽刺诗《（现代人的）信条》 - 史蒂夫·特纳
+## 讽刺诗《（现代人的）信条》 - 史蒂夫·特纳
 
 ![](../../assets/images/satirical-poem-modern-people-creed-steve-turner/z40dumldg.webp)
 

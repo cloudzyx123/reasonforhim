@@ -12,7 +12,7 @@ tags:
 draft: false
 ---
 
-# 你怎么能说唯有一个真信仰？
+## 你怎么能说唯有一个真信仰？
 
 ![](../../assets/images/how-can-you-say-only-one-true-faith/m8mduzdo.webp)
 

@@ -7,7 +7,9 @@ export default defineConfig({
   // 把这里换成你自己买好的域名，例如 'https://your-domain.com'
   // hreflang / sitemap / RSS 里的绝对链接都依赖这个值
   site: 'https://reasonforhim.com',
-    integrations: [sitemap()],
+    integrations: [sitemap({
+      filter: (page) => !page.includes('/subscribe/confirmed/') && !page.includes('/subscribe/check-email/'),
+    })],
 
   i18n: {
     locales: ['zh', 'en'],
@@ -19,6 +21,6 @@ export default defineConfig({
 
   // 访问裸域名根路径时，跳转到中文首页（读者可以再用页面里的语言切换）
   redirects: {
-    '/': '/zh',
+    '/': '/zh/',
   },
 });

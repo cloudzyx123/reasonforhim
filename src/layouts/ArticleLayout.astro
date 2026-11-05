@@ -16,7 +16,11 @@ const section = getSection(post);
 const alternates = await getAlternateLinks(lang, post.data.translationId);
 const date = (value: Date) => value.toLocaleDateString(zh ? 'zh-CN' : 'en-GB', {year:'numeric',month:'long',day:'numeric',timeZone:'UTC'});
 const firstHeading = headings[0];
-const duplicateTitle = firstHeading?.depth === 1 && firstHeading.text.trim() === post.data.title.trim();
+const repeatedLennoxTitle = post.id === 'ai-faith-john-lennox'
+  && firstHeading?.text.includes('伦诺克斯谈 AI 时代的信仰之问');
+const duplicateTitle = firstHeading?.depth === 2 && (
+  firstHeading.text.trim() === post.data.title.trim() || repeatedLennoxTitle
+);
 const sectionHeadings = headings.filter((heading,i) => !(i === 0 && duplicateTitle));
 const minimumDepth = Math.min(...sectionHeadings.map(h => h.depth));
 const toc = sectionHeadings.filter(h => h.depth <= minimumDepth + 1);
@@ -178,7 +182,7 @@ const nextChapter = seriesIndex >= 0 ? others.find(entry => entry.id === seriesI
     font-size:20px
   }
 
-  .prose.has-duplicate-title :global(>h1:first-child) {
+  .prose.has-duplicate-title :global(>h2:first-child) {
     display:none
   }
 

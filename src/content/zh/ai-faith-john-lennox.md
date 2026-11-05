@@ -12,7 +12,7 @@ tags:
 section: faith
 draft: false
 ---
-# 人成为神，还是神成为人？——伦诺克斯谈 AI 时代的信仰之问
+## 人成为神，还是神成为人？——伦诺克斯谈 AI 时代的信仰之问
 
 ## 引子：服务器里的神
 
@@ -23,7 +23,7 @@ draft: false
 半个多世纪过去，宗教没有消失，人对终极答案的渴望也没有消失。一些人开始寻找新的神，而这一次，他们把目光投向了服务器。打开电脑，你几乎可以向人工智能提出任何问题：如何教育孩子，如何经营婚姻，如何面对死亡，甚至人为什么活着。在一些技术愿景里，AI 不仅能回答问题，还将帮助人类消除疾病、贫穷、衰老，乃至死亡。
 
 <figure class="article-figure">
-  <img src="/images/ai-faith-john-lennox/ai-is-god.webp" alt="未来科技景观中央的机器人神像，画面上写着 IS AI GOD?" loading="lazy" />
+  <img src="/images/ai-faith-john-lennox/ai-is-god.webp" width="1659" height="948" alt="未来科技景观中央的机器人神像，画面上写着 IS AI GOD?" loading="lazy" />
   <figcaption>“IS AI GOD?”（AI 是神吗？），概念插画（AI 辅助制作）</figcaption>
 </figure>
 
@@ -50,7 +50,7 @@ draft: false
 罪最深的层面并不是做错了哪件事，而是关系的颠倒。人不再愿意承认自己是被造的、有限的、需要向神负责，转而相信自己有权决定什么是真、什么是善、生命该怎样活。所以，当今天有人许诺用 AI 帮助人类成为更高等的生命，伦诺克斯听见的是一个古老故事的回声。
 
 <figure class="article-figure">
-  <img src="/images/ai-faith-john-lennox/thomas-cole-expulsion-from-eden.webp" alt="托马斯·科尔画作《逐出伊甸园》，左侧阴暗荒芜，右侧明亮繁茂" loading="lazy" />
+  <img src="/images/ai-faith-john-lennox/thomas-cole-expulsion-from-eden.webp" width="1800" height="1211" alt="托马斯·科尔画作《逐出伊甸园》，左侧阴暗荒芜，右侧明亮繁茂" loading="lazy" />
   <figcaption>托马斯·科尔《逐出伊甸园》（1828 年，波士顿美术馆藏）。<a href="https://collections.mfa.org/objects/33060/expulsion-from-the-garden-of-eden">作品资料</a></figcaption>
 </figure>
 
@@ -75,7 +75,7 @@ draft: false
 这段经文并非在说上帝不喜欢人盖高楼。故事的关键，在建造者自己的宣告里：“来吧！我们要建造一座城和一座塔，塔顶通天，为要传扬我们的名。”（创 11:4）
 
 <figure class="article-figure">
-  <img src="/images/ai-faith-john-lennox/bruegel-tower-of-babel.webp" alt="老彼得·勃鲁盖尔画作《巴别塔》，巨塔在城市上方层层升起" loading="lazy" />
+  <img src="/images/ai-faith-john-lennox/bruegel-tower-of-babel.webp" width="1800" height="1317" alt="老彼得·勃鲁盖尔画作《巴别塔》，巨塔在城市上方层层升起" loading="lazy" />
   <figcaption>老彼得·勃鲁盖尔《巴别塔》（1563 年，维也纳艺术史博物馆藏）。<a href="https://commons.wikimedia.org/wiki/File:Pieter_Bruegel_the_Elder_-_The_Tower_of_Babel_(Vienna)_-_Google_Art_Project.jpg">图像来源</a></figcaption>
 </figure>
 
@@ -126,7 +126,7 @@ IBM 的“深蓝”击败了国际象棋世界冠军卡斯帕罗夫，AlphaGo �
 我们对此太过习惯，以至于忘了惊讶：几行写在纸上的公式，为什么能预测几亿公里外行星的运行？牛顿的几个方程，为什么既能解释苹果落地，也能解释月亮绕地？爱因斯坦在书桌前的推导，为什么会被天文观测一次次证实？爱因斯坦自己在 1936 年写道：世界永远不可理解之处，正在于它的可理解性。
 
 <figure class="article-figure">
-  <img src="/images/ai-faith-john-lennox/webb-cosmic-cliffs.webp" alt="韦布空间望远镜拍摄的船底座星云宇宙悬崖，群星散布在云气之上" loading="lazy" />
+  <img src="/images/ai-faith-john-lennox/webb-cosmic-cliffs.webp" width="2000" height="693" alt="韦布空间望远镜拍摄的船底座星云宇宙悬崖，群星散布在云气之上" loading="lazy" />
   <figcaption>韦布望远镜“宇宙悬崖”（NGC 3324），NIRCam 与 MIRI 红外合成影像。图像署名：NASA、ESA、CSA、STScI 与 ESA/Webb。<a href="https://esawebb.org/images/weic2205b/">原图</a>；<a href="https://creativecommons.org/licenses/by/4.0/">CC BY 4.0</a></figcaption>
 </figure>
 
@@ -149,7 +149,7 @@ IBM 的“深蓝”击败了国际象棋世界冠军卡斯帕罗夫，AlphaGo �
 这是伦诺克斯被问得最多的问题，也是他从不轻描淡写的问题。在一次访谈里，他一方面承认，十字架并没有把苦难的问题说尽；另一方面他说：“如果基督真是他自己所宣称的神，那么这就是神在受苦。”至少，这告诉他，神“没有远远站在人的苦难之外，而是亲自成为其中的一部分”。正是这一点，让人有理由把无法解释的苦难交托给他。
 
 <figure class="article-figure">
-  <img src="/images/ai-faith-john-lennox/caravaggio-entombment-of-christ.webp" alt="卡拉瓦乔画作《基督下葬》，众人将基督的身体安放入墓" loading="lazy" />
+  <img src="/images/ai-faith-john-lennox/caravaggio-entombment-of-christ.webp" width="1800" height="2674" alt="卡拉瓦乔画作《基督下葬》，众人将基督的身体安放入墓" loading="lazy" />
   <figcaption>卡拉瓦乔《基督下葬》（约 1602—1604 年，梵蒂冈绘画馆藏）。<a href="https://commons.wikimedia.org/wiki/File:The_Entombment_of_Christ-Caravaggio_(c.1602-3).jpg">图像来源</a></figcaption>
 </figure>
 

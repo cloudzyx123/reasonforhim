@@ -8,7 +8,7 @@ tags: []
 draft: false
 ---
 
-# Free Grace 自由之恩典
+## Free Grace 自由之恩典
 
 “Paul’s pre-eminent contribution to the
 world has been his presentation of the good news of free grace—as he himself

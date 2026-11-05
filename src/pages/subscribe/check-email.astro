@@ -7,14 +7,15 @@ import Layout from '../../layouts/Layout.astro';
   description="请前往邮箱确认订阅为何是祂的文章更新。"
   lang="zh"
   path="/subscribe/check-email/"
+  noindex={true}
 >
-  <main class="confirmation-page">
+  <section class="confirmation-page" aria-labelledby="confirmation-heading">
     <p class="eyebrow">邮件订阅</p>
-    <h1>请检查你的邮箱</h1>
+    <h1 id="confirmation-heading">请检查你的邮箱</h1>
     <p>我们刚刚发送了一封确认邮件。请点击邮件中的确认链接，完成订阅。</p>
     <p class="note">如果几分钟后仍未收到，请检查垃圾邮件文件夹，或返回订阅页面确认邮箱地址是否填写正确。</p>
     <a class="back-link" href="/subscribe/">返回订阅页面</a>
-  </main>
+  </section>
 </Layout>
 
 <style>

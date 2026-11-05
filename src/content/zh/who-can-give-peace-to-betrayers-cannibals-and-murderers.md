@@ -8,7 +8,7 @@ tags: []
 draft: false
 ---
 
-# 谁能给背叛成性、吃人虐尸的人以和平？
+## 谁能给背叛成性、吃人虐尸的人以和平？
 
 ![](../../assets/images/who-can-give-peace-to-betrayers-cannibals-and-murderers/7g5lhv6l8.webp)
 
