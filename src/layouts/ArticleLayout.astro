@@ -66,7 +66,7 @@ const nextChapter = seriesIndex >= 0 ? others.find(entry => entry.id === seriesI
       </div>
       <aside class="reading-sidebar">
         <div class="reading-sidebar-inner">
-          {toc.length > 0 && <details class="contents" open><summary>{zh ? '本文目录' : 'On this page'}</summary><nav aria-label={zh ? '文章目录' : 'Table of contents'}>{toc.map(heading => <a class:list={{ nested: heading.depth > minimumDepth }} href={`#${heading.slug}`}>{heading.text}</a>)}</nav></details>}
+          {toc.length > 0 && <details class="contents"><summary><span class="toc-closed">{zh ? '展开目录' : 'Show contents'}</span><span class="toc-open">{zh ? '收起目录' : 'Hide contents'}</span></summary><nav aria-label={zh ? '文章目录' : 'Table of contents'}>{toc.map(heading => <a class:list={{ nested: heading.depth > minimumDepth }} href={`#${heading.slug}`}>{heading.text}</a>)}</nav></details>}
           {post.data.tags.length > 0 && <section class="article-topics"><h2>{zh ? '相关主题' : 'Topics'}</h2><div>{post.data.tags.map(tag => <a href={`/${lang}/archive/?topic=${encodeURIComponent(tag)}#articles`}>{tag}</a>)}</div></section>}
           <section class="reading-note"><p class="eyebrow">{zh ? '继续探寻' : 'CONTINUE THE EXPLORATION'}</p><p>{zh ? '把阅读，留给值得思考的事。' : 'Make room for ideas worth thinking about.'}</p><a href={`/${lang}/rss.xml`}>{zh ? 'RSS 订阅' : 'RSS feed'} ↗</a></section>
         </div>
@@ -159,7 +159,7 @@ const nextChapter = seriesIndex >= 0 ? others.find(entry => entry.id === seriesI
     color:var(--forest);
     line-height:1.65;
     margin-block:1.8em .8em;
-    scroll-margin-top:25px
+    scroll-margin-top:32px
   }
 
   .prose :global(h1) {
@@ -289,9 +289,16 @@ const nextChapter = seriesIndex >= 0 ? others.find(entry => entry.id === seriesI
     font-size:14px;
     font-weight:600;
     cursor:pointer;
+    display:list-item;
+    min-height:44px;
     padding-bottom:15px;
     border-bottom:1px solid var(--line)
   }
+
+  .contents summary .toc-open { display:none; }
+  .contents[open] summary .toc-open { display:inline; }
+  .contents[open] summary .toc-closed { display:none; }
+  .contents summary::marker { color:var(--accent); }
 
   .contents nav {
     display:flex;
@@ -409,6 +416,17 @@ const nextChapter = seriesIndex >= 0 ? others.find(entry => entry.id === seriesI
     }
   }
 
+  @media(max-width:850px) {
+    .reading-layout {
+      display:flex;
+      flex-direction:column;
+      gap:28px;
+      padding-top:24px
+    }
+    .reading-sidebar { order:-1; }
+    .reading-sidebar-inner { position:static; }
+  }
+
   @media(max-width:760px) {
     .breadcrumbs {
       padding-top:20px;
@@ -423,18 +441,6 @@ const nextChapter = seriesIndex >= 0 ? others.find(entry => entry.id === seriesI
     }
     .article-header {
       padding-bottom:26px
-    }
-    .reading-layout {
-      display:flex;
-      flex-direction:column;
-      gap:28px;
-      padding-top:24px
-    }
-    .reading-sidebar {
-      order:-1
-    }
-    .reading-sidebar-inner {
-      position:static
     }
     .reading-sidebar .article-topics,.reading-note {
       display:none
@@ -454,10 +460,13 @@ const nextChapter = seriesIndex >= 0 ? others.find(entry => entry.id === seriesI
       max-height:160px;
       padding-top:15px
     }
+    .contents nav a { display:flex; align-items:center; min-height:44px; }
     .prose {
       font-size:var(--reading-size, 16px);
-      line-height:1.95
+      line-height:1.95;
+      letter-spacing:.01em
     }
+    .prose :global(p) { margin-bottom:1.35em; }
     .prose :global(h1) {
       font-size:27px
     }
@@ -498,3 +507,13 @@ const nextChapter = seriesIndex >= 0 ? others.find(entry => entry.id === seriesI
     }
   }
 </style>
+
+<script>
+  const compactReading = matchMedia('(max-width: 760px)');
+  document.querySelectorAll<HTMLDetailsElement>('.contents').forEach(details => {
+    details.open = !compactReading.matches;
+    compactReading.addEventListener('change', () => {
+      details.open = !compactReading.matches;
+    });
+  });
+</script>
