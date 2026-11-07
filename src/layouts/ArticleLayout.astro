@@ -229,6 +229,33 @@ const nextChapter = seriesIndex >= 0 ? others.find(entry => entry.id === seriesI
     text-align:center
   }
 
+  /* Compact notes only inside an explicitly marked footnote section. */
+  .prose :global(.article-footnotes) {
+    font-size:15px;
+    line-height:1.8;
+    color:var(--muted)
+  }
+
+  .prose :global(.article-footnotes h5) {
+    font-size:16px;
+    line-height:1.6;
+    margin-block:1.2em .35em;
+    color:var(--forest)
+  }
+
+  .prose :global(.article-footnotes p) {
+    margin-bottom:.85em
+  }
+
+  .prose :global(.article-footnotes [id^="note-"]) {
+    scroll-margin-top:32px
+  }
+
+  @media(max-width:760px) {
+    .prose :global(.article-footnotes) { font-size:14px; }
+    .prose :global(.article-footnotes h5) { font-size:15px; }
+  }
+
   .prose :global(iframe),.prose :global(video) {
     max-width:100%
   }
