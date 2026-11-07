@@ -8,7 +8,7 @@ tags:
   - 萨姆·卡马莱森
   - 福音
   - 宣教
-section: faith
+section: life
 draft: false
 ---
 
@@ -107,6 +107,11 @@ draft: false
 结局是——你也成了得人的渔夫。
 
 ## 关于讲员
+
+![萨姆·卡马莱森牧师晚年肖像](https://prabook.com/web/show-photo.jpg?id=1516135)
+
+*萨姆·卡马莱森（Samuel Theodore Kamaleson，1930–2021）。肖像来源：[World Biographical Encyclopedia](https://prabook.com/web/samuel.kamaleson/283622)。*
+
 
 萨姆·卡马莱森（Samuel Theodore Kamaleson，1930–2021）生于印度韦洛尔（Vellore）。高中毕业那年，母亲带他到教堂，祷告感恩之后告诉他：她早已把他献给神作传道人，所以才给他取名撒母耳——正如哈拿把撒母耳献给耶和华（撒上 1:27–28）。他不服气地顶嘴，说若自己将来一事无成，再去当牧师吧。母亲回答：“你要小心，神在听。”
 
