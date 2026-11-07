@@ -24,7 +24,7 @@ draft: false
 
 故事要从更早说起。1950 年代，卡马莱森在马德拉斯读兽医。他生在世代基督徒的家庭，却注意到那位原是印度教徒的室友整个人都变了。他问室友发生了什么事，室友说自己成了基督徒，唯一能给的解释是：他遇见了耶稣。“人怎么可能遇见耶稣？”卡马莱森心里纳闷。他这才意识到，自己其实并不是真正的基督徒。
 
-![1945年印度马德拉斯街头的历史照片](https://upload.wikimedia.org/wikipedia/commons/4/4c/A_Madras_Street_Scene_%28BOND_0414%29.jpg)
+![1945年印度马德拉斯街头的历史照片](https://upload.wikimedia.org/wikipedia/commons/5/5d/A_Madras_Street_Scene_%28BOND_0414%29.jpg)
 
 *1945年的印度马德拉斯（今金奈）街景，非故事发生现场。摄影：Frank Bond；馆藏：Bond Photograph Library / Digital South Asia Library。来源：[Wikimedia Commons](https://commons.wikimedia.org/wiki/File:A_Madras_Street_Scene_(BOND_0414).jpg)（美国公有领域）。*
 
