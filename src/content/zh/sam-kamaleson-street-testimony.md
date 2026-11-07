@@ -8,10 +8,10 @@ tags:
   - 萨姆·卡马莱森
   - 福音
   - 宣教
+  - 街头布道
 section: life
 draft: false
 ---
-
 **萨姆·卡马莱森的信仰与蒙召见证**
 
 *编译：@Richard Zhang*
@@ -32,7 +32,7 @@ draft: false
 
 ## 一、你必须重生
 
-“你必须重生。”[¹](#note-1)如果这话适用于尼哥底母，那当然也适用于我。于是我们跪在一棵树下，开始祷告。当我站起来的时候，我已经邀请基督进入我的心。
+“你必须重生。”[¹](#note-1) 如果这话适用于尼哥底母，那当然也适用于我。于是我们跪在一棵树下，开始祷告。当我站起来的时候，我已经邀请基督进入我的心。
 
 从那天起，主一路与我同行。这条同行之路至今仍在继续，也一直在改变我。我的志向、我的目标，都不再是从前的样子。
 
@@ -106,12 +106,11 @@ draft: false
 
 结局是——你也成了得人的渔夫。
 
+
+
 ## 关于讲员
 
-![萨姆·卡马莱森牧师晚年肖像](https://prabook.com/web/show-photo.jpg?id=1516135)
-
-*萨姆·卡马莱森（Samuel Theodore Kamaleson，1930–2021）。肖像来源：[World Biographical Encyclopedia](https://prabook.com/web/samuel.kamaleson/283622)。*
-
+![ScreenShot_2026-11-06_203253_723.jpg](/images/mw5syqwr-tsse12at.jpg)
 
 萨姆·卡马莱森（Samuel Theodore Kamaleson，1930–2021）生于印度韦洛尔（Vellore）。高中毕业那年，母亲带他到教堂，祷告感恩之后告诉他：她早已把他献给神作传道人，所以才给他取名撒母耳——正如哈拿把撒母耳献给耶和华（撒上 1:27–28）。他不服气地顶嘴，说若自己将来一事无成，再去当牧师吧。母亲回答：“你要小心，神在听。”
 
@@ -121,31 +120,31 @@ draft: false
 
 泰米尔纳德邦的牧者常称他“Annan”，意思是“哥哥”。2021 年 2 月 28 日，他安息主怀，享年 90 岁。
 
-## 编注
 
-<span id="note-1"></span>
+-------
 
-### 1　重生
+### 编注
+
+
+##### 1　重生
 
 典出《约翰福音》3:3–7，耶稣对尼哥底母说“你们必须重生”。
 
-<span id="note-2"></span>
 
-### 2　“你已经是傻子了”
+##### 2　“你已经是傻子了”
 
 参《哥林多前书》4:10“我们为基督的缘故算是愚拙的”。他在 2010 年接受专访时，对这段对话的回忆略有不同：那声音告诉他，他本来就是傻子，问题只在于，要做一个沉默的傻子，还是做一个满有基督喜乐、能把真理说出来的傻子。
 
-<span id="note-3"></span>
 
-### 3　第一个果子
+##### 3　第一个果子
 
 据讲员讣告，那位拉住他说“请你告诉我”的人，是他带领信主的第一个人。
 
-<span id="note-4"></span>
 
-### 4　得人如得鱼／得人的渔夫
+##### 4　得人如得鱼／得人的渔夫
 
 典出《马太福音》4:19、《马可福音》1:17；文末“你也成了得人的渔夫”同此。
+
 
 **编译说明**：正文另加分段与小标题，口语略作顺读，个别段落次序略作调整，略去与现场听众互动的几句，以及举例提到的“孟买”一处地名，其余未增删。开篇导语、“关于讲员”与编注中的补充另有出处，见文末资料来源。
 
@@ -156,3 +155,4 @@ draft: false
 - [Rev. Dr. Samuel Theodore Kamaleson 讣告](https://foxandweeks.com/obituaries/o/8099/Rev.-Dr.-Samuel-Theodore-Kamaleson)，Fox & Weeks Funeral Directors，2021 年
 - Sara L. Anderson，[On Holy Ground](https://goodnewsmag.org/archive-on-holy-ground/)，Good News 杂志，1989 年
 - [Chennai](https://en.wikipedia.org/wiki/Chennai)，维基百科
+
