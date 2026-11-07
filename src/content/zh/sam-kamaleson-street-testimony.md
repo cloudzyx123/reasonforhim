@@ -10,7 +10,7 @@ tags:
   - 宣教
   - 街头布道
 section: life
-draft: false
+draft: true
 ---
 **萨姆·卡马莱森的信仰与蒙召见证**
 
