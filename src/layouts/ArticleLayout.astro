@@ -231,9 +231,20 @@ const nextChapter = seriesIndex >= 0 ? others.find(entry => entry.id === seriesI
 
   /* Astro's GFM footnotes include matching references and return links. */
   .prose :global(.footnotes) {
+    border-top:1px solid var(--line);
+    margin-top:2.5em;
+    padding-top:1.25em;
     font-size:15px;
-    line-height:1.8;
+    line-height:1.75;
     color:var(--muted)
+  }
+
+  .prose :global(.footnotes)::before {
+    content:'编注';
+    display:block;
+    margin-bottom:.85em;
+    font:600 18px/1.6 var(--serif);
+    color:var(--forest)
   }
 
   .prose :global(.footnotes strong) {
@@ -243,7 +254,7 @@ const nextChapter = seriesIndex >= 0 ? others.find(entry => entry.id === seriesI
   }
 
   .prose :global(.footnotes p) {
-    margin-bottom:.85em
+    margin-block:0 .65em
   }
 
   .prose :global(.footnotes li[id]) {
@@ -251,8 +262,9 @@ const nextChapter = seriesIndex >= 0 ? others.find(entry => entry.id === seriesI
   }
 
   @media(max-width:760px) {
-    .prose :global(.footnotes) { font-size:14px; }
-    .prose :global(.footnotes strong) { font-size:15px; }
+    .prose :global(.footnotes) { font-size:14px; line-height:1.7; margin-top:2em; padding-top:1em; }
+    .prose :global(.footnotes)::before { font-size:16px; }
+    .prose :global(.footnotes strong) { font-size:14px; }
   }
 
   .prose :global(iframe),.prose :global(video) {
