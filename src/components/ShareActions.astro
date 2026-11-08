@@ -14,7 +14,7 @@ const facebookUrl = `https://www.facebook.com/sharer/sharer.php?${new URLSearchP
   <p class="share-intro">{zh ? '把值得思考的文字，分享给朋友。' : 'Pass this essay along to a friend.'}</p>
   <div class="share-links">
     {zh && <>
-      {wechatUrl && <a class="wechat-mobile" href={wechatUrl} target="_blank" rel="noopener noreferrer" data-wechat-open>微信分享 ↗</a>}
+      {wechatUrl && <a class="wechat-mobile" href={wechatUrl} data-wechat-open>在公众号阅读 ↗</a>}
       <button type="button" data-wechat-toggle aria-expanded="false" aria-controls="wechat-panel">{wechatUrl ? '微信二维码' : '微信分享'}</button>
     </>}
     {!zh && <><a href={xUrl} target="_blank" rel="noopener noreferrer">X ↗</a><a href={facebookUrl} target="_blank" rel="noopener noreferrer">Facebook ↗</a></>}
@@ -49,7 +49,6 @@ const facebookUrl = `https://www.facebook.com/sharer/sharer.php?${new URLSearchP
     const wechat = /MicroMessenger/i.test(navigator.userAgent);
     if (wechat) {
       panel.querySelector<HTMLElement>('[data-wechat-hint]')!.hidden = false;
-      panel.querySelector<HTMLElement>('[data-wechat-open]')?.setAttribute('hidden', '');
     }
     panel.querySelectorAll<HTMLButtonElement>('[data-wechat-toggle]').forEach(button => button.addEventListener('click', () => {
       const qr = panel.querySelector<HTMLElement>('#wechat-panel')!;
