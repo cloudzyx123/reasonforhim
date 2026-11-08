@@ -22,6 +22,15 @@ const postSchema = z.object({
   // hreflang 标签就会自动在两个页面之间互相声明。
   // 如果这篇文章没有对应译文（比如你写的是独立的中文选题），留空即可，不必强行配对。
   translationId: z.string().optional(),
+  wechatUrl: z.preprocess(value => value === '' ? undefined : value,
+    z.string().url().refine(value => {
+      const url = new URL(value);
+      return url.protocol === 'https:' && url.hostname === 'mp.weixin.qq.com'
+        && (url.pathname === '/s' || url.pathname.startsWith('/s/'));
+    }, '请使用 https://mp.weixin.qq.com/s 开头的微信公众号文章链接').optional()),
+  shareImage: z.preprocess(value => value === '' ? undefined : value,
+    z.string().regex(/^\/(?:share|images)\/[a-zA-Z0-9/_-]+\.(?:jpe?g|png|webp)$/,
+      '分享图片须是 /share/ 或 /images/ 下的本地 JPG、PNG 或 WebP').optional()),
 });
 
 const zh = defineCollection({

@@ -1,0 +1,108 @@
+---
+import type { Lang } from '../lib/i18n';
+interface Props {
+  lang: Lang; title: string; description: string; image: string;
+  articleUrl: string; wechatUrl?: string; qrImage: string;
+}
+const { lang, title, description, image, articleUrl, wechatUrl, qrImage } = Astro.props;
+const zh = lang === 'zh';
+const xUrl = `https://twitter.com/intent/tweet?${new URLSearchParams({ url: articleUrl, text: title })}`;
+const facebookUrl = `https://www.facebook.com/sharer/sharer.php?${new URLSearchParams({ u: articleUrl })}`;
+---
+<section class="share-actions" data-share-actions data-lang={lang} data-url={articleUrl} aria-label={zh ? '分享文章' : 'Share this article'}>
+  <h2>{zh ? '分享这篇文章' : 'Share this essay'}</h2>
+  <p class="share-intro">{zh ? '把值得思考的文字，分享给朋友。' : 'Pass this essay along to a friend.'}</p>
+  <div class="share-links">
+    {zh && <>
+      {wechatUrl && <a class="wechat-mobile" href={wechatUrl} target="_blank" rel="noopener noreferrer" data-wechat-open>微信分享 ↗</a>}
+      <button type="button" data-wechat-toggle aria-expanded="false" aria-controls="wechat-panel">{wechatUrl ? '微信二维码' : '微信分享'}</button>
+    </>}
+    {!zh && <><a href={xUrl} target="_blank" rel="noopener noreferrer">X ↗</a><a href={facebookUrl} target="_blank" rel="noopener noreferrer">Facebook ↗</a></>}
+    <button type="button" data-copy-link>{zh ? '复制链接' : 'Copy link'}</button>
+    <button type="button" data-native-share hidden>{zh ? '系统分享' : 'Share'}</button>
+    {zh && <><a class="secondary" href={xUrl} target="_blank" rel="noopener noreferrer">X ↗</a><a class="secondary" href={facebookUrl} target="_blank" rel="noopener noreferrer">Facebook ↗</a></>}
+    {!zh && <button type="button" class="secondary" data-wechat-toggle aria-expanded="false" aria-controls="wechat-panel">WeChat QR</button>}
+  </div>
+  <div id="wechat-panel" class="wechat-panel" hidden>
+    <img src={qrImage} width="240" height="240" alt={wechatUrl && zh ? '微信公众号原文二维码' : (zh ? '博客文章二维码' : 'QR code for this essay')} />
+    <div>
+      <p>{wechatUrl && zh ? '微信扫码打开「为何是他」公众号原文。' : (zh ? '微信扫码打开博客文章，或复制上方链接转发。' : 'Scan to open this essay in WeChat.')}</p>
+      {wechatUrl && zh && <a href={wechatUrl} target="_blank" rel="noopener noreferrer">打开公众号原文 ↗</a>}
+    </div>
+  </div>
+  <p class="wechat-hint" data-wechat-hint hidden>{zh ? '在微信中请使用右上角「···」菜单转发；如无法打开公众号原文，可复制博客链接。' : 'In WeChat, use the top-right menu to share this page.'}</p>
+  <p class="share-status" data-share-status role="status"></p>
+  <input class="copy-fallback" data-copy-fallback readonly aria-label={zh ? '请手动复制文章链接' : 'Copy this article link manually'} hidden />
+  <details class="share-preview">
+    <summary>{zh ? '查看分享展示' : 'Preview shared article'}</summary>
+    <article><img src={image} alt="" loading="lazy" /><div><p class="share-site">{zh ? '为何是祂 · 信仰与思想' : 'Reason for Him · Faith & thought'}</p><h3>{title}</h3><p>{description}</p></div></article>
+  </details>
+</section>
+
+<script>
+  const panel = document.querySelector<HTMLElement>('[data-share-actions]');
+  if (panel) {
+    const zh = panel.dataset.lang === 'zh';
+    const url = panel.dataset.url!;
+    const status = panel.querySelector<HTMLElement>('[data-share-status]')!;
+    const fallback = panel.querySelector<HTMLInputElement>('[data-copy-fallback]')!;
+    const wechat = /MicroMessenger/i.test(navigator.userAgent);
+    if (wechat) {
+      panel.querySelector<HTMLElement>('[data-wechat-hint]')!.hidden = false;
+      panel.querySelector<HTMLElement>('[data-wechat-open]')?.setAttribute('hidden', '');
+    }
+    panel.querySelectorAll<HTMLButtonElement>('[data-wechat-toggle]').forEach(button => button.addEventListener('click', () => {
+      const qr = panel.querySelector<HTMLElement>('#wechat-panel')!;
+      qr.hidden = !qr.hidden;
+      button.setAttribute('aria-expanded', String(!qr.hidden));
+    }));
+    const share = panel.querySelector<HTMLButtonElement>('[data-native-share]')!;
+    if (typeof navigator.share === 'function') {
+      share.hidden = false;
+      share.addEventListener('click', async () => {
+        try { await navigator.share({ title: document.querySelector('h1')?.textContent ?? document.title, url }); }
+        catch (error) { if (!(error instanceof DOMException && error.name === 'AbortError')) status.textContent = zh ? '暂时无法打开系统分享，请使用复制链接。' : 'Sharing is unavailable. Please copy the link instead.'; }
+      });
+    }
+    panel.querySelector('[data-copy-link]')?.addEventListener('click', async () => {
+      try {
+        await navigator.clipboard.writeText(url);
+        fallback.hidden = true;
+        status.textContent = zh ? '文章链接已复制。' : 'Article link copied.';
+      } catch {
+        fallback.value = url;
+        fallback.hidden = false;
+        fallback.focus();
+        fallback.select();
+        status.textContent = zh ? '请复制下方选中的链接。' : 'Please copy the selected link below.';
+      }
+    });
+  }
+</script>
+
+<style>
+  [hidden] { display:none !important; }
+  .share-actions { border-top:1px solid var(--line); margin-top:42px; padding-top:26px; max-width:780px; }
+  h2 { font:600 22px/1.6 var(--serif); color:var(--forest); margin:0 0 5px; }
+  .share-intro { color:var(--muted); font-size:13px; margin:0 0 17px; }
+  .share-links { display:flex; flex-wrap:wrap; gap:9px; }
+  button, .share-links a { display:inline-flex; align-items:center; border:1px solid var(--line); background:transparent; color:var(--forest); padding:8px 12px; min-height:40px; font-size:12px; cursor:pointer; text-decoration:none; }
+  .secondary { color:var(--muted) !important; }
+  .wechat-mobile { display:none !important; }
+  .wechat-panel { display:flex; gap:19px; align-items:center; margin-top:18px; padding:15px; background:var(--paper); max-width:500px; }
+  .wechat-panel img { width:150px; height:150px; flex:none; image-rendering:pixelated; }
+  .wechat-panel p, .wechat-hint, .share-status { font-size:13px; line-height:1.8; color:var(--muted); }
+  .wechat-panel a { font-size:12px; color:var(--forest); }
+  .share-status:empty { display:none; }
+  .copy-fallback { width:100%; padding:8px; border:1px solid var(--line); background:var(--paper); color:var(--forest); font-size:16px; }
+  .share-preview { color:var(--muted); font-size:12px; margin-top:15px; }
+  .share-preview summary { cursor:pointer; width:fit-content; min-height:36px; }
+  .share-preview article { border:1px solid var(--line); max-width:480px; margin-top:12px; background:var(--paper); }
+  .share-preview img { display:block; width:100%; height:auto; }
+  .share-preview article > div { padding:17px 20px; }
+  .share-preview h3 { font:21px/1.7 var(--serif); color:var(--forest); margin:8px 0; }
+  .share-preview article p { font-size:13px; line-height:1.85; margin:0; }
+  .share-preview .share-site { font-size:11px; color:var(--accent); }
+  @media (max-width:760px) { button, .share-links a { min-height:44px; } .wechat-mobile:not([hidden]) { display:inline-flex !important; } .wechat-panel { align-items:flex-start; } .wechat-panel img { width:110px; height:110px; } }
+  @media print { .share-actions { display:none; } }
+</style>

@@ -51,7 +51,8 @@ export function getSection(post: { id: string; data: { section?: SectionId } }):
   return post.data.section ?? essaySections[post.id] ?? 'faith';
 }
 
-export function getShareImage(post: { id: string; data: { section?: SectionId } }): string {
+export function getShareImage(post: { id: string; data: { section?: SectionId; shareImage?: string } }): string {
+  if (post.data.shareImage) return post.data.shareImage;
   const cover = EDITORIAL_COVERS[post.id];
   const key = cover ? cover.src.split('/').pop()!.replace('.webp', '')
     : getSection(post) === 'faith' ? 'reason' : getSection(post) === 'literature' ? 'dialogue' : 'grace';

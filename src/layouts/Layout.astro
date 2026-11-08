@@ -27,6 +27,10 @@ const { title, description, lang, path, alternates = [], pubDate, updatedDate, s
 const siteUrl = Astro.site?.toString().replace(/\/$/, '') ?? '';
 const canonical = `${siteUrl}${path}`;
 const imageUrl = `${siteUrl}${shareImage}`;
+const defaultShareCard = /^\/share\/(?:grace|reason|dialogue)\.jpg$/.test(shareImage);
+const imageAlt = defaultShareCard
+  ? (lang === 'zh' ? '为何是祂：书房版画分享卡' : 'Reason for Him: illustrated reading-room share card')
+  : (lang === 'zh' ? `${title}的分享图片` : `Share image for ${title}`);
 const jsonLd = pubDate ? {
   "@context": "https://schema.org",
   "@type": "BlogPosting",
@@ -66,15 +70,15 @@ const languageHref = (target: Lang) => target === lang ? path : alternates.find(
     <meta property="og:site_name" content={LABELS[lang].siteName} />
     <meta property="og:locale" content={lang === 'zh' ? 'zh_CN' : 'en_US'} />
     <meta property="og:image" content={imageUrl} />
-    <meta property="og:image:width" content="1200" />
-    <meta property="og:image:height" content="630" />
-    <meta property="og:image:type" content="image/jpeg" />
-    <meta property="og:image:alt" content={lang === 'zh' ? '为何是祂：墨绿与米白色的书房版画' : 'Reason for Him: a forest-green reading-room engraving'} />
+    {defaultShareCard && <meta property="og:image:width" content="1200" />}
+    {defaultShareCard && <meta property="og:image:height" content="630" />}
+    {defaultShareCard && <meta property="og:image:type" content="image/jpeg" />}
+    <meta property="og:image:alt" content={imageAlt} />
     <meta name="twitter:card" content="summary_large_image" />
     <meta name="twitter:title" content={`${title} · ${LABELS[lang].siteName}`} />
     <meta name="twitter:description" content={description} />
     <meta name="twitter:image" content={imageUrl} />
-    <meta name="twitter:image:alt" content={lang === 'zh' ? '为何是祂书房版画' : 'Reason for Him reading-room engraving'} />
+    <meta name="twitter:image:alt" content={imageAlt} />
     {pubDate && <meta property="article:published_time" content={pubDate.toISOString()} />}
     {pubDate && <meta property="article:modified_time" content={(updatedDate ?? pubDate).toISOString()} />}
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />

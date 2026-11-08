@@ -78,6 +78,14 @@ components:
     type: string
     label: 译文配对编号（通常留空）
     description: 仅当中英文确实互为译文时，两篇填写相同编号。
+  wechat_url:
+    type: string
+    label: 微信公众号原文链接（可留空）
+    description: 仅填写 https://mp.weixin.qq.com/s 开头的本文公众号链接；不影响博客网址。
+  share_image:
+    type: string
+    label: 专属分享图片路径（可留空）
+    description: 例如 /share/my-article.jpg；留空时使用现有默认图片。
   visual_body:
     type: rich-text
     label: 正文
@@ -130,6 +138,10 @@ content:
         component: article_draft
       - name: translationId
         component: translation_id
+      - name: wechatUrl
+        component: wechat_url
+      - name: shareImage
+        component: share_image
       - name: body
         component: visual_body
 
@@ -162,6 +174,10 @@ content:
         component: article_draft
       - name: translationId
         component: translation_id
+      - name: wechatUrl
+        component: wechat_url
+      - name: shareImage
+        component: share_image
       - name: body
         type: code
         label: 正文（精排保护）
@@ -199,6 +215,10 @@ content:
         component: article_draft
       - name: translationId
         component: translation_id
+      - name: wechatUrl
+        component: wechat_url
+      - name: shareImage
+        component: share_image
       - name: body
         type: code
         label: 正文（Markdown，保留脚注）
@@ -234,6 +254,10 @@ content:
         component: article_draft
       - name: translationId
         component: translation_id
+      - name: wechatUrl
+        component: wechat_url
+      - name: shareImage
+        component: share_image
       - name: body
         type: code
         label: 正文（Markdown，保留脚注）
@@ -279,5 +303,9 @@ content:
         component: article_draft
       - name: translationId
         component: translation_id
+      - name: wechatUrl
+        component: wechat_url
+      - name: shareImage
+        component: share_image
       - name: body
         component: visual_body

@@ -44,6 +44,21 @@ export function checkCms(workspace = root) {
     for (const file of fs.readdirSync(dir).filter(name => /\.mdx?$/.test(name))) {
       const articlePath = `src/content/${lang}/${file}`;
       const article = validateArticle(file, fs.readFileSync(path.join(dir, file), 'utf8'));
+      if (article.data.wechatUrl) {
+        let link;
+        try { link = new URL(article.data.wechatUrl); } catch { /* Checked below. */ }
+        if (link?.protocol !== 'https:' || link.hostname !== 'mp.weixin.qq.com' ||
+          !(link.pathname === '/s' || link.pathname.startsWith('/s/'))) {
+          throw new Error(`${articlePath}：wechatUrl 须是可信的微信公众号 HTTPS 文章链接`);
+        }
+      }
+      if (article.data.shareImage) {
+        const image = article.data.shareImage;
+        if (!/^\/(?:share|images)\/[a-zA-Z0-9/_-]+\.(?:jpe?g|png|webp)$/.test(image) ||
+          !fs.existsSync(path.join(workspace, 'public', image.slice(1)))) {
+          throw new Error(`${articlePath}：shareImage 须指向 public 下存在的本地图片`);
+        }
+      }
       if (/\]\(#note-\d+\)/.test(article.body)) throw new Error(`${articlePath}：手写脚注链接易与渲染锚点失配，请使用 Markdown [^1] 脚注`);
       if (needsProtectedBody(article.body)) {
         const protectedEntry = entries.find(entry => entry.type === 'file' && entry.path === articlePath);

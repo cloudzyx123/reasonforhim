@@ -12,7 +12,7 @@
     "test": "node --test scripts/*.test.mjs",
     "dev": "astro dev",
     "build": "astro build",
-    "postbuild": "node scripts/position-built-footnotes.mjs && node scripts/check-built-links.mjs && node --test scripts/footnotes.test.mjs",
+    "postbuild": "node scripts/position-built-footnotes.mjs && node scripts/check-built-links.mjs && node --test scripts/footnotes.test.mjs scripts/share.test.mjs",
     "preview": "astro preview",
     "astro": "astro"
   },
@@ -23,6 +23,7 @@
   },
   "devDependencies": {
     "js-yaml": "4.3.2",
-    "parse5": "^7.3.0"
+    "parse5": "^7.3.0",
+    "qrcode": "^1.5.4"
   }
 }
