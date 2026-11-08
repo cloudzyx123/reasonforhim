@@ -1,6 +1,6 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import { checkCms, validateArticle } from './check-pages-cms.mjs';
+import { checkCms, needsProtectedBody, validateArticle } from './check-pages-cms.mjs';
 
 const article = `---\nurlName: new-article\ntitle: 标题\ndraft: true\n---\n\n<figure>图注和图片</figure>\n`;
 test('有效 CMS 草稿保留原文，不改写精排正文', () => {
@@ -16,3 +16,7 @@ test('草稿状态必须是布尔值', () => {
   assert.throws(() => validateArticle('new-article.md', article.replace('draft: true', 'draft: "false"')), /草稿/);
 });
 test('项目全部文章满足 CMS 规则，精排文章受保护', () => assert.ok(checkCms() > 0));
+test('Markdown 脚注须使用保留源码的 CMS 编辑入口', () => {
+  assert.equal(needsProtectedBody('正文[^1]\n\n[^1]: 注释'), true);
+  assert.equal(needsProtectedBody('普通正文和链接'), false);
+});
