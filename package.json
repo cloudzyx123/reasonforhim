@@ -9,9 +9,10 @@
     "cms:check": "node scripts/check-pages-cms.mjs",
     "prebuild": "node scripts/check-pages-cms.mjs",
     "article:prepare": "node scripts/prepare-blog-post.mjs",
+    "test": "node --test scripts/*.test.mjs",
     "dev": "astro dev",
     "build": "astro build",
-    "postbuild": "node scripts/check-built-links.mjs",
+    "postbuild": "node scripts/check-built-links.mjs && node --test scripts/footnotes.test.mjs",
     "preview": "astro preview",
     "astro": "astro"
   },

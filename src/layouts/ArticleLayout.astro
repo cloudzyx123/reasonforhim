@@ -229,31 +229,42 @@ const nextChapter = seriesIndex >= 0 ? others.find(entry => entry.id === seriesI
     text-align:center
   }
 
-  /* Compact notes only inside an explicitly marked footnote section. */
-  .prose :global(.article-footnotes) {
+  /* Astro's GFM footnotes include matching references and return links. */
+  .prose :global(.footnotes) {
+    border-top:1px solid var(--line);
+    margin-top:2.5em;
+    padding-top:1.25em;
     font-size:15px;
-    line-height:1.8;
+    line-height:1.75;
     color:var(--muted)
   }
 
-  .prose :global(.article-footnotes h5) {
-    font-size:16px;
-    line-height:1.6;
-    margin-block:1.2em .35em;
+  .prose :global(.footnotes)::before {
+    content:'编注';
+    display:block;
+    margin-bottom:.85em;
+    font:600 18px/1.6 var(--serif);
     color:var(--forest)
   }
 
-  .prose :global(.article-footnotes p) {
-    margin-bottom:.85em
+  .prose :global(.footnotes strong) {
+    font-size:16px;
+    line-height:1.6;
+    color:var(--forest)
   }
 
-  .prose :global(.article-footnotes [id^="note-"]) {
+  .prose :global(.footnotes p) {
+    margin-block:0 .65em
+  }
+
+  .prose :global(.footnotes li[id]) {
     scroll-margin-top:32px
   }
 
   @media(max-width:760px) {
-    .prose :global(.article-footnotes) { font-size:14px; }
-    .prose :global(.article-footnotes h5) { font-size:15px; }
+    .prose :global(.footnotes) { font-size:14px; line-height:1.7; margin-top:2em; padding-top:1em; }
+    .prose :global(.footnotes)::before { font-size:16px; }
+    .prose :global(.footnotes strong) { font-size:14px; }
   }
 
   .prose :global(iframe),.prose :global(video) {
