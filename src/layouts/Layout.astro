@@ -1,5 +1,6 @@
 ---
 import { LABELS, type Lang } from '../lib/i18n';
+import { canonicalUrl } from '../lib/share.mjs';
 import '../styles/global.css';
 
 interface Alternate {
@@ -25,7 +26,7 @@ const { title, description, lang, path, alternates = [], pubDate, updatedDate, s
 
 // Astro.site 来自 astro.config.mjs 里的 `site` 字段
 const siteUrl = Astro.site?.toString().replace(/\/$/, '') ?? '';
-const canonical = `${siteUrl}${path}`;
+const canonical = canonicalUrl(Astro.site, path);
 const imageUrl = `${siteUrl}${shareImage}`;
 const jsonLd = pubDate ? {
   "@context": "https://schema.org",

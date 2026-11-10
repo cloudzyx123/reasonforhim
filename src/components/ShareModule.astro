@@ -1,0 +1,50 @@
+---
+import type { Lang } from '../lib/i18n';
+import { shareLinks } from '../lib/share.mjs';
+interface Props { lang: Lang; title: string; description: string; url: string }
+const { lang, title, description, url } = Astro.props;
+const zh = lang === 'zh';
+const links = shareLinks(url, title);
+---
+<section class="share-module" data-share-root data-lang={lang} data-url={url} data-title={title} data-description={description} aria-labelledby="share-heading">
+  <div class="share-heading">
+    <h2 id="share-heading">{zh ? '分享这篇文章' : 'Share this article'}</h2>
+    <p>{zh ? '若这篇文章对你有益，欢迎转给朋友。' : 'If this was helpful, feel free to pass it along.'}</p>
+  </div>
+  <div class="share-options">
+    <button type="button" data-copy-link hidden><svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="m9.8 14.2 4.4-4.4M8.2 16.4l-1.3 1.3a4 4 0 0 1-5.6-5.6l4.1-4.1A4 4 0 0 1 11 8m2 8a4 4 0 0 0 5.6 0l4.1-4.1a4 4 0 0 0-5.6-5.6L15.8 7.6" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/></svg><span data-copy-label>{zh ? '复制链接' : 'Copy link'}</span></button>
+    <button type="button" data-native-share hidden><svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><circle cx="18" cy="5" r="2.2" stroke="currentColor" stroke-width="1.7"/><circle cx="6" cy="12" r="2.2" stroke="currentColor" stroke-width="1.7"/><circle cx="18" cy="19" r="2.2" stroke="currentColor" stroke-width="1.7"/><path d="m8 11 7.9-5M8 13l7.9 5" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"/></svg><span>{zh ? '分享' : 'Share'}</span></button>
+    <a data-platform="x" href={links.x} target="_blank" rel="noopener noreferrer" aria-label={zh ? '分享到 X（在新窗口打开）' : 'Share on X (opens in a new window)'}>X <svg viewBox="0 0 20 20" fill="none" aria-hidden="true"><path d="M5 15 15 5M7 5h8v8" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg></a>
+    <a data-platform="facebook" href={links.facebook} target="_blank" rel="noopener noreferrer" aria-label={zh ? '分享到 Facebook（在新窗口打开）' : 'Share on Facebook (opens in a new window)'}>Facebook <svg viewBox="0 0 20 20" fill="none" aria-hidden="true"><path d="M5 15 15 5M7 5h8v8" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg></a>
+  </div>
+  <p class="wechat-hint" data-wechat-hint hidden>{zh ? '也可使用右上角 ··· 转发给朋友。' : 'You can also use the top-right ··· menu to share with friends.'}</p>
+  <p class="share-status" data-share-status role="status"></p>
+  <input class="copy-fallback" data-copy-fallback readonly aria-label={zh ? '请手动复制文章链接' : 'Copy this article link manually'} hidden />
+</section>
+
+<script>
+  import { initShare } from '../lib/share-client';
+  document.querySelectorAll<HTMLElement>('[data-share-root]').forEach(initShare);
+</script>
+
+<style>
+  [hidden] { display: none !important; }
+  .share-module { border-top: 1px solid var(--line); margin: 44px 0 0; padding: 29px 0 0; max-width: 780px; }
+  .share-heading h2 { font: 600 23px/1.4 var(--serif); color: var(--forest); margin: 0 0 7px; }
+  .share-heading p { color: var(--muted); font-size: 14px; line-height: 1.7; margin: 0 0 22px; }
+  .share-options { display: flex; flex-wrap: wrap; gap: 10px; align-items: stretch; }
+  .share-options > * { display: inline-flex; gap: 9px; align-items: center; justify-content: center; min-height: 44px; padding: 10px 17px; border: 1px solid var(--line); color: var(--forest); background: transparent; font-size: 14px; line-height: 1.3; text-decoration: none; cursor: pointer; transition: transform .18s ease, background-color .18s ease, border-color .18s ease; }
+  .share-options svg { width: 19px; height: 19px; flex: none; }
+  .share-options a svg { width: 14px; height: 14px; }
+  .share-options > *:hover { background: var(--paper); border-color: var(--forest); transform: translateY(-2px); }
+  .share-options > *:active { transform: translateY(1px); }
+  .share-options [data-platform='x'], .share-module[data-primary='x'] [data-platform='x'], .share-module[data-primary='copy'] [data-copy-link], .share-module[data-primary='native'] [data-native-share] { background: var(--forest); border-color: var(--forest); color: #f6f2e9; }
+  .share-module[data-primary='copy'] [data-platform='x'], .share-module[data-primary='native'] [data-platform='x'] { background: transparent; border-color: var(--line); color: var(--forest); }
+  .share-options [data-platform='x']:hover, .share-module[data-primary='copy'] [data-copy-link]:hover, .share-module[data-primary='native'] [data-native-share]:hover { background: var(--forest-deep); color: #f6f2e9; }
+  .wechat-hint, .share-status { color: var(--muted); font-size: 13px; line-height: 1.7; margin: 13px 0 0; }
+  .share-status:empty { display: none; }
+  .copy-fallback { display: block; box-sizing: border-box; width: 100%; margin-top: 12px; padding: 10px; border: 1px solid var(--line); color: var(--forest); background: var(--paper); font-size: 16px; }
+  @media (max-width: 600px) { .share-module { margin-top: 36px; padding-top: 25px; } .share-options > * { min-height: 48px; } }
+  @media (prefers-reduced-motion: reduce) { .share-options > * { transition: none; } .share-options > *:hover, .share-options > *:active { transform: none; } }
+  @media print { .share-module { display: none; } }
+</style>

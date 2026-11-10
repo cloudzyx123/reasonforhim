@@ -3,6 +3,8 @@ import { getCollection, type CollectionEntry } from 'astro:content';
 import Layout from './Layout.astro';
 import Comments from '../components/Comments.astro';
 import ReadingTools from '../components/ReadingTools.astro';
+import ShareModule from '../components/ShareModule.astro';
+import { canonicalUrl } from '../lib/share.mjs';
 import { getAlternateLinks, type Lang } from '../lib/i18n';
 import { getSection, getShareImage, SECTIONS } from '../lib/editorial';
 interface Props {
@@ -14,6 +16,7 @@ const { post, lang, headings } = Astro.props;
 const zh = lang === 'zh';
 const section = getSection(post);
 const alternates = await getAlternateLinks(lang, post.data.translationId);
+const articleUrl = canonicalUrl(Astro.site, `/${lang}/${post.id}/`);
 const date = (value: Date) => value.toLocaleDateString(zh ? 'zh-CN' : 'en-GB', {year:'numeric',month:'long',day:'numeric',timeZone:'UTC'});
 const firstHeading = headings[0];
 const repeatedLennoxTitle = post.id === 'ai-faith-john-lennox'
@@ -46,12 +49,13 @@ const nextChapter = seriesIndex >= 0 ? others.find(entry => entry.id === seriesI
       <h1>{post.data.title}</h1>
       <p class="article-description">{post.data.description}</p>
       <div class="article-meta"><time datetime={post.data.pubDate.toISOString()}>{date(post.data.pubDate)}</time><span aria-hidden="true">·</span><span>{zh ? `约 ${minutes} 分钟阅读` : `${minutes} min read`}</span>{post.data.updatedDate && <><span aria-hidden="true">·</span><span>{zh ? '更新于 ' : 'Updated '}{date(post.data.updatedDate)}</span></>}</div>
-      <ReadingTools lang={lang} title={post.data.title} description={post.data.description} image={getShareImage(post)} />
+      <ReadingTools lang={lang} title={post.data.title} description={post.data.description} url={articleUrl} />
     </header>
     <div class="reading-layout">
       <div class="reading-column">
         <article class:list={['prose', { 'has-duplicate-title': duplicateTitle }]} lang={zh ? 'zh-Hans' : 'en'}><slot /></article>
         {post.data.tags.length > 0 && <section class="article-topics mobile-topics"><h2>{zh ? '相关主题' : 'Topics'}</h2><div>{post.data.tags.map(tag => <a href={`/${lang}/archive/?topic=${encodeURIComponent(tag)}#articles`}>{tag}</a>)}</div></section>}
+        <ShareModule lang={lang} title={post.data.title} description={post.data.description} url={articleUrl} />
         <div class="article-end"><a href="/subscribe/">{zh ? '订阅后续文章 →' : 'Subscribe to new essays →'}</a><a href={`/${lang}/archive/#articles`}>← {zh ? '返回全部文章' : 'Back to all essays'}</a></div>
         {(previousChapter || nextChapter) && <nav class="chapter-navigation" aria-label={zh ? '章节导航' : 'Chapter navigation'}>
           {previousChapter && <a href={`/${lang}/${previousChapter.id}/`}><small>{zh ? '← 上一章' : '← Previous chapter'}</small><span>{previousChapter.data.title}</span></a>}
