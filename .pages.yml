@@ -99,7 +99,7 @@ content:
     filename:
       template: "{fields.urlName}.md"
       field: false
-    exclude: [ai-faith-john-lennox.md, sam-kamaleson-street-testimony.md, how-can-you-say-only-one-true-faith.md]
+    exclude: [ai-faith-john-lennox.md, sam-kamaleson-street-testimony.md, how-can-you-say-only-one-true-faith.md, tea-at-four.md]
     operations:
       rename: false
       delete: false
@@ -238,6 +238,43 @@ content:
         type: code
         label: 正文（Markdown，保留脚注）
         description: "请保留 [^1] 等脚注引用和文末的 [^1]: 定义；在此编辑保存不会经过可视化排版转换。"
+        options:
+          format: markdown
+
+  - name: tea_at_four_article
+    label: 下午四点的茶（脚注与表格保护）
+    type: file
+    path: src/content/zh/tea-at-four.md
+    format: yaml-frontmatter
+    operations:
+      create: false
+      rename: false
+      delete: false
+    fields:
+      - name: urlName
+        component: url_name
+        readonly: true
+      - name: title
+        component: article_title
+      - name: description
+        component: article_description
+      - name: pubDate
+        component: publication_date
+      - name: updatedDate
+        component: updated_date
+      - name: section
+        component: article_section
+      - name: tags
+        component: article_tags
+      - name: draft
+        component: article_draft
+      - name: translationId
+        component: translation_id
+      - name: body
+        type: code
+        label: 正文（脚注与版本表保护）
+        description: 正文含脚注和版本对照表；修订正文请交给桌面博文发布助手。
+        readonly: true
         options:
           format: markdown
 

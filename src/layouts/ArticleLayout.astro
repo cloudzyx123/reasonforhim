@@ -6,7 +6,7 @@ import ReadingTools from '../components/ReadingTools.astro';
 import ShareModule from '../components/ShareModule.astro';
 import { canonicalUrl } from '../lib/share.mjs';
 import { getAlternateLinks, type Lang } from '../lib/i18n';
-import { getSection, getShareImage, SECTIONS } from '../lib/editorial';
+import { EDITORIAL_COVERS, getSection, getShareImage, SECTIONS } from '../lib/editorial';
 interface Props {
   post: CollectionEntry<Lang>;
   lang: Lang;
@@ -41,7 +41,7 @@ const seriesIndex = seriesIds.indexOf(post.id);
 const previousChapter = seriesIndex > 0 ? others.find(entry => entry.id === seriesIds[seriesIndex - 1]) : undefined;
 const nextChapter = seriesIndex >= 0 ? others.find(entry => entry.id === seriesIds[seriesIndex + 1]) : undefined;
 ---
-<Layout title={post.data.title} description={post.data.description} lang={lang} path={`/${lang}/${post.id}/`} alternates={alternates} pubDate={post.data.pubDate} updatedDate={post.data.updatedDate} shareImage={getShareImage(post)}>
+<Layout title={post.data.title} description={post.data.description} lang={lang} path={`/${lang}/${post.id}/`} alternates={alternates} pubDate={post.data.pubDate} updatedDate={post.data.updatedDate} shareImage={getShareImage(post)} shareImageAlt={EDITORIAL_COVERS[post.id]?.[lang]}>
   <div class="container article-container">
     <nav class="breadcrumbs" aria-label={zh ? '当前位置' : 'Breadcrumb'}><a href={`/${lang}/`}>{zh ? '首页' : 'Home'}</a><span aria-hidden="true">/</span><a href={`/${lang}/archive/#articles`}>{zh ? '文章馆藏' : 'Essays'}</a><span aria-hidden="true">/</span><span>{zh ? '正文' : 'Reading'}</span></nav>
     <header class="article-header">

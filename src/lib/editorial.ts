@@ -53,12 +53,19 @@ export function getSection(post: { id: string; data: { section?: SectionId } }):
 
 export function getShareImage(post: { id: string; data: { section?: SectionId } }): string {
   const cover = EDITORIAL_COVERS[post.id];
+  if (cover?.share) return cover.share;
   const key = cover ? cover.src.split('/').pop()!.replace('.webp', '')
     : getSection(post) === 'faith' ? 'reason' : getSection(post) === 'literature' ? 'dialogue' : 'grace';
   return `/share/${key}.jpg`;
 }
 
-export const EDITORIAL_COVERS: Record<string, { src: string; zh: string; en: string }> = {
+export const EDITORIAL_COVERS: Record<string, { src: string; zh: string; en: string; share?: string }> = {
+  'tea-at-four': {
+    src: '/images/tea-at-four/tea-cover.webp',
+    share: '/share/tea-at-four.jpg',
+    zh: '午后阳光中的茶壶和茶杯；AI 生成的象征性插图，并非故事现场。',
+    en: 'A teapot and cup in afternoon light; an AI-generated illustration, not a photograph of the story.',
+  },
   'if-i-were-paralyzed-a-poems-gospel-reflection': {
     src: '/images/editorial/grace.webp',
     zh: '版画：一位旅人穿过石拱门，走向晨光中的山丘。',
