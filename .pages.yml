@@ -242,7 +242,7 @@ content:
           format: markdown
 
   - name: tea_at_four_article
-    label: 下午四点的茶（脚注与表格保护）
+    label: 下午四点的茶（脚注保护）
     type: file
     path: src/content/zh/tea-at-four.md
     format: yaml-frontmatter
@@ -272,8 +272,8 @@ content:
         component: translation_id
       - name: body
         type: code
-        label: 正文（脚注与版本表保护）
-        description: 正文含脚注和版本对照表；修订正文请交给桌面博文发布助手。
+        label: 正文（脚注保护）
+        description: 正文含脚注；修订正文请交给桌面博文发布助手。
         readonly: true
         options:
           format: markdown
