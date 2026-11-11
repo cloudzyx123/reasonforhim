@@ -273,8 +273,7 @@ content:
       - name: body
         type: code
         label: 正文（脚注保护）
-        description: 正文含脚注；修订正文请交给桌面博文发布助手。
-        readonly: true
+        description: 正文含脚注；编辑时请保留 [^1] 引用和文末的 [^1]: 定义。
         options:
           format: markdown
 
