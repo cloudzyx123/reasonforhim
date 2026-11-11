@@ -1,6 +1,6 @@
 ---
 urlName: tea-at-four
-title: 下午四点的茶
+title: 下午四点的茶：一位七十岁老妇人的故事
 description: 一位七十岁才信主的老妇人，连续十四天下午备茶却无人来访。第十五天，一位想家的留学生敲响了她的门。
 pubDate: 2026-11-11
 updatedDate: 2026-11-11
@@ -10,12 +10,12 @@ tags:
   - 款待
   - 服事
   - 宣教
+  - 校园事工
 draft: false
 ---
-
 ![一壶茶、一只茶杯，午后阳光洒在木桌上（示意图）](/images/tea-at-four/tea-cover.webp)
 
-*午后的一壶茶。AI 生成的象征性插图，并非故事现场。*
+
 
 我们都盼望自己的一生不至于虚度。
 
@@ -77,7 +77,7 @@ draft: false
 
 ![窗边备好的茶具与空着的座位（示意图，非故事现场）](/images/tea-at-four/tea-afternoon.webp)
 
-*一壶茶，一个等待中的下午。示意图片。*
+
 
 ## 第十五天
 
