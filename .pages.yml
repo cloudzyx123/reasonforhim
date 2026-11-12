@@ -283,6 +283,7 @@ content:
     path: src/content/en
     format: yaml-frontmatter
     subfolders: false
+    exclude: [tea-at-four.md]
     filename:
       template: "{fields.urlName}.md"
       field: false
@@ -317,3 +318,39 @@ content:
         component: translation_id
       - name: body
         component: visual_body
+
+  - name: tea_at_four_english_article
+    label: Tea at Four (footnote protection)
+    type: file
+    path: src/content/en/tea-at-four.md
+    format: yaml-frontmatter
+    operations:
+      create: false
+      rename: false
+      delete: false
+    fields:
+      - name: urlName
+        component: url_name
+        readonly: true
+      - name: title
+        component: article_title
+      - name: description
+        component: article_description
+      - name: pubDate
+        component: publication_date
+      - name: updatedDate
+        component: updated_date
+      - name: section
+        component: article_section
+      - name: tags
+        component: article_tags
+      - name: draft
+        component: article_draft
+      - name: translationId
+        component: translation_id
+      - name: body
+        type: code
+        label: Body (Markdown, footnotes protected)
+        description: Keep the [^1] reference and definition when editing.
+        options:
+          format: markdown

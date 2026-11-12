@@ -1,6 +1,20 @@
 // @ts-check
 import { defineConfig } from 'astro/config';
 import sitemap from '@astrojs/sitemap';
+import { copyFileSync } from 'node:fs';
+import { fileURLToPath } from 'node:url';
+
+const englishNotFound = {
+  name: 'english-not-found',
+  hooks: {
+    'astro:build:done': ({ dir }) => {
+      copyFileSync(
+        fileURLToPath(new URL('./en/404/index.html', dir)),
+        fileURLToPath(new URL('./en/404.html', dir)),
+      );
+    },
+  },
+};
 
 // https://astro.build/config
 export default defineConfig({
@@ -9,7 +23,7 @@ export default defineConfig({
   site: 'https://reasonforhim.com',
     integrations: [sitemap({
       filter: (page) => !page.includes('/subscribe/confirmed/') && !page.includes('/subscribe/check-email/'),
-    })],
+    }), englishNotFound],
 
   i18n: {
     locales: ['zh', 'en'],

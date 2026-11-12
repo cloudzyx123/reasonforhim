@@ -1,0 +1,75 @@
+---
+import Layout from '../../layouts/Layout.astro';
+const variants = [
+  { kicker: 'REASON FOR HIM · PAGE NOT FOUND', title: 'This page is not on the shelf. Yet.', paragraphs: ['The link may have expired, or the essay may have moved.', 'A wrong turn need not end a thoughtful search.'], action: 'Return to the reading room', closing: 'Let the search lead you deeper.' },
+  { kicker: 'REASON FOR HIM · PAGE NOT FOUND', title: 'Evidence for this page is lacking.', paragraphs: ['We have investigated carefully.', 'Regrettably, we have found no sufficient evidence that this page exists.', 'Of course, absence of evidence is not evidence of absence. The address may simply be wrong.'], action: 'Return home · Search again' },
+  { kicker: 'AN UNEXPECTED ODYSSEY', title: 'It seems you have not reached Ithaca.', paragraphs: ['Odysseus took ten years to find his way home.', 'Fortunately, you do not have to.'], action: 'Return home · Continue the journey', boat: true },
+  { kicker: 'REASON FOR HIM · APORIA', title: 'All I know is that I cannot find this page.', paragraphs: ['Socrates might approve of an honest admission of ignorance.', 'But the question is not over.', 'Where should we look next?'], action: 'Return home · Keep asking', aporia: true },
+  { kicker: 'REASON FOR HIM · PAGE NOT FOUND', title: 'The page is lost. You are not.', paragraphs: ['We are sorry this page could not be found.', 'There is still much here worth discovering.'], action: 'Return home · Explore essays', scripture: true },
+  { kicker: 'DANTE · THE DARK WOOD', title: 'Midway upon the journey', paragraphs: ['Dante found himself in a dark wood, having lost the straight way.', 'Perhaps you have reached an unfamiliar crossroads too. He found a guide; you can find your way from here.'], action: 'Let Virgil lead the way', dante: true },
+  { kicker: 'GENESIS · A CALL IN THE GARDEN', title: 'Where are you?', quote: '“Where are you?”', citation: 'Genesis 3:9, World English Bible', source: 'https://ebible.org/eng-web/GEN03.htm', paragraphs: ['In the garden story, the human being hides, and God calls out.', 'This page may be missing. May you still hear the voice that seeks us.'], action: 'Return to the beginning' },
+  { kicker: 'LUKE · THE ONE THAT WAS LOST', title: 'Ninety-nine are here. One is missing.', quote: '“Which of you men, if you had one hundred sheep and lost one of them, wouldn’t leave the ninety-nine in the wilderness and go after the one that was lost, until he found it?”', citation: 'Luke 15:4, World English Bible', source: 'https://ebible.org/eng-web/LUK15.htm', paragraphs: ['We are still looking for the missing page.', 'The shepherd does not give up on the one who is lost.'], action: 'Return to the flock' },
+];
+---
+<Layout title="Page not found" description="This page is not on the shelf. Return to the reading room and keep exploring." lang="en" path="/en/404/" noindex>
+  <section class="container missing-page" id="missing-page" data-count={variants.length} aria-label="Page not found">
+    {variants.map((variant, index) => <article class="variant" data-variant={index + 1}>
+      <p class="kicker">{variant.kicker}</p>
+      <div class:list={['variant-heading', { 'socratic-heading': variant.aporia }]}>
+        <p class:list={['error-number', { 'odyssey-number': variant.boat }]}>404</p>
+        <h1>{variant.title}</h1>
+      </div>
+      {variant.boat && <blockquote class="homer-quote">There is nothing dearer to a person than home and parents.<cite>—After Homer, <em>Odyssey</em>, Book IX · <a href="https://classics.mit.edu/Homer/odyssey.9.ix.html">Read the translation ↗</a></cite></blockquote>}
+      {variant.scripture && <blockquote>One sheep was lost, and the shepherd went looking until he found it.<cite>—After Luke 15:4</cite></blockquote>}
+      {variant.quote && <blockquote>{variant.quote}<cite>—{variant.citation} · <a href={variant.source}>Read the verse ↗</a></cite></blockquote>}
+      {variant.paragraphs.map(paragraph => <p class="body-copy">{paragraph}</p>)}
+      {variant.dante && <div class="dante-verse"><p lang="it">Nel mezzo del cammin di nostra vita<br />mi ritrovai per una selva oscura,<br />ché la diritta via era smarrita.</p><cite>—Dante, <em>Inferno</em>, Canto I, lines 1–3 · <a href="https://it.wikisource.org/wiki/Divina_Commedia/Inferno/Canto_I">Read the original ↗</a></cite></div>}
+      <a class="home-link" href="/en/">{variant.action} <span aria-hidden="true">→</span></a>
+      {variant.aporia && <aside class="aporia-note" aria-label="About aporia"><h2>Aporia <span>A place to begin</span></h2><p>From Greek, often translated as “puzzlement” or “an impasse.” In philosophical dialogue, it names a moment when inquiry has not yet found an answer.</p><p>Admitting we do not know can be the beginning of further thought.</p><a href="https://plato.stanford.edu/archives/fall2017/entries/socrates/supplement.html">Explore Socratic inquiry ↗</a></aside>}
+      {variant.closing && <p class="closing">{variant.closing}</p>}
+      {variant.boat && <svg class="odyssey" viewBox="0 0 720 240" role="img" aria-label="A small boat sailing through waves in the style of an ancient Greek vase"><g fill="none" stroke="currentColor" stroke-linejoin="round" stroke-linecap="round"><path d="M15 195q30-12 60 0t60 0 60 0 60 0 60 0 60 0 60 0 60 0 60 0 60 0 60 0 60 0M15 212q30-12 60 0t60 0 60 0 60 0 60 0 60 0 60 0 60 0 60 0 60 0 60 0" stroke-width="3"/><path d="M173 148h377l-27 43H219q-34-15-46-43Z" stroke-width="5"/><path d="M219 161h304M245 176h244M307 149V42" stroke-width="4"/><path d="M313 46q66 31 117 90H313ZM307 51q-47 31-63 85h63Z" stroke-width="4"/><path d="M215 148q-16-25-39-21M548 148q19-23 38-18M350 153l-9 22m35-22-9 22m35-22-9 22m35-22-9 22m35-22-9 22" stroke-width="2"/></g></svg>}
+    </article>)}
+    <nav class="secondary-links" aria-label="Continue browsing"><a href="/en/archive/">Browse all essays</a><a href="/zh/" lang="zh">中文首页</a></nav>
+  </section>
+</Layout>
+<script is:inline>
+  const missingPage = document.getElementById('missing-page');
+  if (missingPage) {
+    const preview = /^\/en\/404(?:\.html)?\/?$/.test(location.pathname) ? new URLSearchParams(location.search).get('variant') : null;
+    const count = Number(missingPage.dataset.count);
+    missingPage.dataset.selected = preview && /^\d+$/.test(preview) && Number(preview) >= 1 && Number(preview) <= count ? String(Number(preview)) : String(1 + Math.floor(Math.random() * count));
+  }
+</script>
+<style>
+  .missing-page { font-family: var(--sans); max-width: 990px; min-height: 600px; padding-block: clamp(55px, 8vw, 105px); }
+  .variant { display: none; }
+  .variant:first-child { display: block; }
+  .missing-page[data-selected] .variant { display: none; }
+  .missing-page[data-selected='1'] .variant[data-variant='1'], .missing-page[data-selected='2'] .variant[data-variant='2'], .missing-page[data-selected='3'] .variant[data-variant='3'], .missing-page[data-selected='4'] .variant[data-variant='4'], .missing-page[data-selected='5'] .variant[data-variant='5'] { display: block; }
+  .missing-page[data-selected='6'] .variant[data-variant='6'], .missing-page[data-selected='7'] .variant[data-variant='7'], .missing-page[data-selected='8'] .variant[data-variant='8'] { display: block; }
+  .kicker { color: var(--accent); letter-spacing: .16em; font-size: 12px; font-weight: 600; margin-bottom: 32px; }
+  .error-number { font: italic clamp(72px, 12vw, 132px)/1 Georgia, serif; color: var(--forest); opacity: .16; margin-bottom: 14px; }
+  .odyssey-number { font-size: clamp(100px, 14vw, 160px); opacity: .65; }
+  .dante-verse { margin-top: 26px; padding-block: 18px; border-block: 1px solid var(--line); max-width: 600px; }
+  .dante-verse p { font: italic 17px/1.85 Georgia, serif; color: var(--forest); margin-bottom: 10px; }
+  h1 { max-width: 820px; color: var(--forest); font-size: clamp(29px, 4vw, 45px); line-height: 1.55; margin-bottom: 30px; }
+  .body-copy { max-width: 68ch; color: var(--muted); font-size: clamp(15px, 1.7vw, 18px); line-height: 1.95; margin-bottom: 12px; }
+  .home-link { display: inline-flex; align-items: center; gap: 20px; background: var(--forest); color: #f6f2e9; padding: 13px 20px; margin-top: 29px; min-height: 48px; font-size: 14px; }
+  .home-link:hover { background: var(--forest-deep); }
+  .closing { color: var(--accent); font: 18px/1.8 var(--serif); margin-top: 50px; }
+  blockquote { border-left: 2px solid var(--accent); margin: 0 0 26px; padding: 10px 0 10px 25px; font: 19px/1.9 var(--serif); color: var(--forest); }
+  cite { display: block; font: normal 12px/1.8 var(--sans); color: var(--muted); margin-top: 10px; }
+  .odyssey { display: block; width: min(100%, 680px); height: auto; margin-top: 35px; color: var(--accent); }
+  .socratic-heading { display: grid; grid-template-columns: auto minmax(0, 1fr); gap: 40px; align-items: center; margin-bottom: 32px; }
+  .socratic-heading .error-number { font: 400 clamp(120px, 17vw, 210px)/.95 Georgia, serif; letter-spacing: -.055em; color: var(--forest); opacity: 1; margin: 0; }
+  .socratic-heading h1 { font-size: clamp(28px, 3.2vw, 38px); margin: 0; text-wrap: balance; }
+  .aporia-note { margin-top: 42px; padding: 24px 28px; border-left: 2px solid var(--accent); background: var(--paper); max-width: 720px; }
+  .aporia-note h2 { font-size: 25px; margin-bottom: 12px; }
+  .aporia-note h2 span { font: 12px var(--sans); color: var(--accent); margin-left: 16px; }
+  .aporia-note p { font-size: 14px; line-height: 1.9; color: var(--muted); margin-bottom: 8px; }
+  .aporia-note > a { display: inline-flex; align-items: center; min-height: 44px; font-size: 12px; }
+  .homer-quote { margin-bottom: 30px; }
+  @media (max-width: 760px) { .socratic-heading { grid-template-columns: minmax(0, 1fr); gap: 24px; } .socratic-heading .error-number { font-size: clamp(120px, 32vw, 170px); } .aporia-note { padding: 20px; } }
+  .secondary-links { display: flex; flex-wrap: wrap; gap: 12px 26px; border-top: 1px solid var(--line); margin-top: 65px; padding-top: 20px; font-size: 13px; }
+  @media (max-width: 760px) { .missing-page { min-height: 510px; } .kicker { margin-bottom: 23px; } .secondary-links { margin-top: 45px; } }
+</style>

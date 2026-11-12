@@ -12,6 +12,7 @@ tags:
   - 宣教
   - 校园事工
 draft: false
+translationId: tea-at-four
 ---
 ![一壶茶、一只茶杯，午后阳光洒在木桌上（示意图）](/images/tea-at-four/tea-cover.webp)
 
