@@ -1,18 +1,19 @@
 ---
 urlName: sam-kamaleson-street-testimony
 title: He Was Afraid of Looking Like a Fool—Then He Sang Beside a Dustbin
-description: As a student in Madras, Sam Kamaleson was afraid of looking like a fool. One step of obedience changed the course of his life.
-pubDate: 2026-11-12
+description: As a student in Madras, Sam Kamaleson was afraid of looking like a
+  fool. One step of obedience changed the course of his life.
+pubDate: 2026-11-11
 section: life
 tags:
   - Testimony
   - Sam Kamaleson
   - Evangelism
   - Christian Mission
+  - India
 draft: false
 translationId: sam-kamaleson-street-testimony
 ---
-
 **Sam Kamaleson’s Testimony of Faith and Calling**
 
 *Edited by Richard Zhang*
