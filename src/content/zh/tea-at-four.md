@@ -11,6 +11,7 @@ tags:
   - 服事
   - 宣教
   - 校园事工
+  - 国际学生
 draft: false
 translationId: tea-at-four
 ---
@@ -142,6 +143,6 @@ translationId: tea-at-four
 
 [^1]: 名誉护柩者（honorary pallbearers）一般不抬棺，只列名随行致敬。七十人同时抬棺在实际葬礼中几乎不可能，所以「名誉」这个说法更接近原貌。
 
-> **来源说明**：这个故事由上一篇见证（[他最怕被当成傻子，却在垃圾箱旁唱起了歌](https://reasonforhim.com/zh/sam-kamaleson-street-testimony/)）里的主人公 Sam Kamaleson 讲述，后来又见于 Stephen Davey、Daniel Meyer 等人的转述。本文综合这些版本整理改写而成。
+> **来源说明**：这个故事由上一篇见证（[他最怕被当成傻子，却在垃圾箱旁唱起了歌](https://reasonforhim.com/zh/sam-kamaleson-street-testimony/)）里的主人公 Sam Kamaleson 牧师讲述，后来又见于 Stephen Davey、Daniel Meyer 等人的转述。本文综合这些版本整理改写而成。
 >
 > 「你们白白地得来，也要白白地舍去」（马太福音 10:8）。欢迎分享，也欢迎转载本文，只请保留署名、这段来源说明和原文链接，好让后来的读者知道这个故事从哪里来。
