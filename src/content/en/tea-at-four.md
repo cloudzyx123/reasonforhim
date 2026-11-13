@@ -3,6 +3,7 @@ urlName: tea-at-four
 title: "Tea at Four: A Story of Ordinary Faithfulness"
 description: "An elderly woman waits fourteen afternoons to welcome a homesick student."
 pubDate: 2026-11-11
+updatedDate: 2026-11-12
 section: life
 tags:
   - Hospitality
@@ -190,7 +191,7 @@ Amen.
 
 **A Note on Sources**
 
-Stephen Davey attributes this story to Sam Kamaleson, whose own testimony appears in an earlier [Reason for Him article](https://reasonforhim.com/zh/sam-kamaleson-street-testimony/) (in Chinese). Later retellings include one by Daniel Meyer.
+Stephen Davey attributes this story to Sam Kamaleson, whose own testimony appears in an earlier [Reason for Him article](https://reasonforhim.com/en/sam-kamaleson-street-testimony/) (in English). Later retellings include one by Daniel Meyer.
 
 This article is a narrative adaptation of these accounts. It follows Davey's account of the first visitor arriving on the fifteenth day and of the seventy pallbearers, while noting where the sources differ. The reflection and prayer are editorial additions. The story has not been independently verified from contemporary biographical or university records, and its dialogue should be read as the storytellers' retelling rather than a verbatim transcript.
 
