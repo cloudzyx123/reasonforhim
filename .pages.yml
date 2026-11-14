@@ -99,7 +99,7 @@ content:
     filename:
       template: "{fields.urlName}.md"
       field: false
-    exclude: [ai-faith-john-lennox.md, sam-kamaleson-street-testimony.md, how-can-you-say-only-one-true-faith.md, tea-at-four.md]
+    exclude: [ai-faith-john-lennox.md, sam-kamaleson-street-testimony.md, how-can-you-say-only-one-true-faith.md, tea-at-four.md, israeli-stamps-isaiah-hope.md]
     operations:
       rename: false
       delete: false
@@ -166,6 +166,43 @@ content:
         type: code
         label: 正文（精排保护）
         description: 此文含自定义图注排版，正文在此只读。需修订正文时请交给桌面博文发布助手；本页可调整摘要、标签及草稿状态。
+        readonly: true
+        options:
+          format: markdown
+
+  - name: israeli_stamps_isaiah_hope_article
+    label: 以色列邮票：2700年前的盼望（表格保护）
+    type: file
+    path: src/content/zh/israeli-stamps-isaiah-hope.md
+    format: yaml-frontmatter
+    operations:
+      create: false
+      rename: false
+      delete: false
+    fields:
+      - name: urlName
+        component: url_name
+        readonly: true
+      - name: title
+        component: article_title
+      - name: description
+        component: article_description
+      - name: pubDate
+        component: publication_date
+      - name: updatedDate
+        component: updated_date
+      - name: section
+        component: article_section
+      - name: tags
+        component: article_tags
+      - name: draft
+        component: article_draft
+      - name: translationId
+        component: translation_id
+      - name: body
+        type: code
+        label: 正文（表格保护）
+        description: 此文含主题对照表；正文在此只读。需修订正文时请交给桌面博文发布助手。
         readonly: true
         options:
           format: markdown
