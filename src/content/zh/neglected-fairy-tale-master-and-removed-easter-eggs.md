@@ -4,6 +4,7 @@ section: literature
 title: 被忽视的童话大师，和删去的彩蛋
 description: "介绍被忽视的童话大师乔治·麦克唐纳，及精读《公主与哥布林》原著时发现的两个版本间的删改\"彩蛋\"。"
 pubDate: '2025-03-10'
+updatedDate: '2026-11-15'
 tags: []
 draft: false
 ---
@@ -20,19 +21,19 @@ draft: false
 
 麦克唐纳的著作对后世文坛产生深远影响，并被许多知名作家引用，包括奥登、C.S.路易斯、J.R.R.托尔金、沃尔特·德拉马、E.奈斯比特和玛德琳·朗格尔（Madeline L'Engle，顺便提一句，非常推荐她写的A Wrinkle in Time，我曾带学生读过）。
 
-C.S.路易斯称麦克唐纳为自己的"师傅"。路易斯说：“一天，我在火车站的书摊上捡起一本（麦克唐纳写的）《幻境》（Phantastes）开始读起来。几个小时后，我意识到自己已跨入了一片伟大的疆域。”
+C.S.路易斯在为《[乔治·麦克唐纳选集](https://www.fadedpage.com/books/20140910/html.php)》所写的序言中称麦克唐纳为自己的“师傅”。路易斯说：“一天，我在火车站的书摊上捡起一本（麦克唐纳写的）《幻境》（Phantastes）开始读起来。几个小时后，我意识到自己已跨入了一片伟大的疆域。”
 
-G.K.切斯特顿称《公主与哥布林》（The Princess and The Goblin）这本书“对我的整个存在产生了影响”。
+G.K.切斯特顿在为《乔治·麦克唐纳与妻子》撰写的[序言](https://www.worksofmacdonald.com/george-macdonald-and-his-wife/2023/7/20/excerpt-from-gk-chestertons-introduction-to-george-macdonald-and-his-wife)中称《公主与哥布林》（The Princess and the Goblin）这本书“对我的整个存在产生了影响”。
 
 甚至最初不喜欢麦克唐纳的马克·吐温也和他成了朋友，而且有一些证据表明吐温受到了麦克唐纳的影响。
 
-基督徒作家章伯斯（Oswald Chambers）在《Christian Discipline》第一卷中写道："乔治·麦克唐纳的书如此被忽视，现代读者大众的趋势和浅薄昭然可见矣。
+基督徒作家章伯斯（Oswald Chambers）在《Christian Discipline》第一卷中[写道](https://www.rabbitroom.com/post/proper-introductions-george-macdonald)：“乔治·麦克唐纳的书竟如此遭到冷落，鲜明地暴露出现代读者的阅读趋向与浅薄。”
 
 ![](../../assets/images/neglected-fairy-tale-master-and-removed-easter-eggs/gpdecemm.webp)
 
 看完上面的简介，你还会选择去读或给你的孩子去读那些书店里流行却质次的儿童读物吗？
 
-最近暑假有机会带学生精读麦克唐纳的经典童话《公主与哥布林》的英语原著，没想到还意外发现了彩蛋——拿着网上搜到的旧版对比新一些的版本，我发现这本书有两个版本。
+此前一次暑假，我有机会带学生精读麦克唐纳的经典童话《公主与哥布林》的英语原著，没想到还意外发现了彩蛋——拿着网上搜到的旧版与新一些的版本对比，我发现同一本书的不同版本竟有不小的差异。
 
 ![](../../assets/images/neglected-fairy-tale-master-and-removed-easter-eggs/opn6cyn4e.webp)
 
@@ -40,7 +41,7 @@ G.K.切斯特顿称《公主与哥布林》（The Princess and The Goblin）这�
 
 （上面是我手上的新旧两个版本的封面）
 
-原始版本包含对故事的斜体中断，是作者和读者之间的对话。例如，小说原始版本的开头是这样的：
+早期文本穿插了以斜体标出的对话，仿佛作者正在与一位小读者交谈。例如，小说原始文本的开头是这样的：
 
 从前有一位小公主，她——
 
@@ -48,15 +49,15 @@ G.K.切斯特顿称《公主与哥布林》（The Princess and The Goblin）这�
 
 “因为每个小女孩都是公主。”
 
-然而，今天出版的大多数版本都删去了这些中断，包括一些声称“原始未删节”的版本。今天最常见的版本这样开始：
+然而，许多后来的版本删去了这些对话，甚至有些标榜“未删节”的版本也不例外。删改后的故事这样开始：
 
 “从前有一个小公主，她的父亲是一个多山多谷的大国的国王。”
 
 
 
-（斜体就是在后来版本中被删除的部分）
+（被删去的正是开篇这段作者与读者的对话。）
 
-我试译一下斜体部分：
+我试译一下这段对话（据 [Project Gutenberg 收录的文本](https://www.gutenberg.org/cache/epub/34339/pg34339-images.html)）：
 
 "曾经有一位小公主，她...
 
@@ -80,11 +81,42 @@ G.K.切斯特顿称《公主与哥布林》（The Princess and The Goblin）这�
 
 …
 
-所以，亲爱的Pilgrim, 你是不是突然就明白了什么？这是解开此书中心主旨的一把钥匙啊。
+所以，亲爱的 Pilgrim，读到这里，你是不是也隐约明白了什么？
 
-有意思的是，该小说的长版是最初印刷于 1872 年的版本，但短版是在麦克唐纳有生之年印刷的。This beg the question: 是麦克唐纳改变主意，最后删掉了它们？还是他的出版商的决定？似乎没有人知道。
+在麦克唐纳笔下，公主不只是一个拥有王室血统的小女孩。“每个小女孩都是公主”，因为在他看来，她们身上原本就有某种不应遗忘的高贵身份。但这份高贵不在于冠冕和权势，而在于一个人应当如何生活。公主之所以需要不断被提醒自己是公主，恰恰因为她也可能忘记自己的身份，活得与之不相称。
 
-如果是麦克唐纳本人的决定，那就很有意思了。套用《哈姆雷特》里经典的台词，Reveal or conceal, it is a question. (显明抑或隐藏，这是一个问题)
+这让我想到基督教信仰中一个深刻的观念：人的尊严不仅关乎我们已经是什么，也关乎我们蒙召应当成为什么。当然，童话的隐喻不宜直接当作神学命题，但麦克唐纳的基督教世界观，无疑使这段看似轻巧的对话有了更深的意味。
 
-你会怎么看？
+有趣的是，这段对话并非后来某位编者增添的“彩蛋”，而是小说原始叙事的一部分。《公主与哥布林》最早于1870年11月至1871年6月在麦克唐纳担任主编的《Good Words for the Young》上连载，随后出版了题署1872年的单行本。
+
+而且，原始文本中后来被删去的对话不止这一处。
+
+第三章，艾琳遇见一位坐在纺车前的神秘老妇人，想象中的儿童读者立刻打断叙述者：这不就是《睡美人》的故事吗？叙述者随即与她争辩起来，解释自己讲的是一个全新的故事。
+
+到了最后一章，读者还想知道艾琳和柯迪后来怎么样了。叙述者却不愿继续交代，并提出一个耐人寻味的想法：故事真的能够结束吗？
+
+如此看来，麦克唐纳不只是在向孩子讲故事。他还邀请孩子走进故事，与叙述者争辩、提问，一同思考故事的意义。
+
+那么，这些对话为什么消失了？
+
+我后来查到，一项关于英国儿童奇幻文学的[研究](https://doi.org/10.17077/etd.z68aojto)指出：1888年，Blackie & Son 出版的《公主与哥布林》新版已经删去了这些段落，后来不少所谓“未删节版”也沿用了这种文本。值得注意的是，1888年麦克唐纳仍然在世。
+
+究竟是作者自己决定修改，还是出版商或编辑认为这些插话妨碍了儿童阅读？目前我尚未找到能够确定其责任归属的直接证据。
+
+不过，无论删改出于什么原因，它确实改变了我们的阅读体验。
+
+删去这些对话，故事也许变得更流畅了。但同时，我们失去了一位会向孩子发问、愿意和孩子争论、甚至在故事结束时拒绝给出标准答案的叙述者。
+
+对我来说，最可惜的恰恰是这一点。
+
+**一个好的童话，或许不只是带领孩子走进想象的世界，更是邀请孩子学会在那个世界里思考。**
+
+这些被删去的对话，不正是这种邀请吗？
+
+### 版本与参考资料
+
+- [《公主与哥布林》出版书目](https://www.victorianresearch.org/atcl/show_title.php?tid=8813)：最初连载时间（1870–1871）与1872年单行本。
+- Johanna Ruth Brinkley Tomlinson, [*Playing with Words: Child Voices in British Fantasy Literature 1749–1906*](https://doi.org/10.17077/etd.z68aojto)（爱荷华大学博士论文，2014），尤其是第95–97页：早期文本的对话设计与1888年 Blackie & Son 新版的删节。
+- Aubrey Plourde, [*George MacDonald's Doors: Suspended Telos and the Child Believer*](https://www.cambridge.org/core/journals/victorian-literature-and-culture/article/george-macdonalds-doors-suspended-telos-and-the-child-believer/2BE883E8862D7E01C47EAC281EDFA4A0)（*Victorian Literature and Culture*，2021）：讨论原始文本中开放式结尾的文学与神学意义。
+- [关于不同版本删节问题的早期讨论](https://scifi.stackexchange.com/questions/124811/reason-for-differences-in-princess-and-the-goblin-editions)（2016），可与以上书目研究对照。
 
