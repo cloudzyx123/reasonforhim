@@ -53,8 +53,6 @@ G. K. 切斯特顿在为《乔治·麦克唐纳与妻子》（*George MacDonald 
 
 “从前有一个小公主，她的父亲是一个多山多谷的大国的国王。”
 
-
-
 （被删去的正是开篇这段作者与读者的对话。）
 
 我试译一下这段对话（据 [Project Gutenberg 收录的1920年 David McKay 版](https://www.gutenberg.org/cache/epub/34339/pg34339-images.html)）：
