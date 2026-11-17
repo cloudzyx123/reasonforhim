@@ -7,6 +7,8 @@ import { EDITORIAL_COVERS, getSection, SECTION_IDS, SECTIONS } from '../lib/edit
 interface Props { lang: Lang; archiveOnly?: boolean }
 const { lang, archiveOnly = false } = Astro.props;
 const zh = lang === 'zh';
+const otherLang: Lang = zh ? 'en' : 'zh';
+const alternatePath = archiveOnly ? `/${otherLang}/archive/` : `/${otherLang}/`;
 const posts = (await getCollection(lang, ({ data }) => !data.draft)).sort(
   (a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf() || a.id.localeCompare(b.id)
 );
@@ -32,6 +34,7 @@ const cover = (post: CollectionEntry<Lang>) => {
   description={zh ? '福音、护教、释经与神学文章，在信仰与理性的交汇处探索真理。' : 'Essays on the gospel, apologetics, Scripture, and theology. Exploring faith and reason.'}
   lang={lang}
   path={archiveOnly ? `/${lang}/archive/` : `/${lang}/`}
+  alternates={[{ lang: otherLang, href: alternatePath }]}
 >
   <section class="introduction container">
     <div class="intro-copy">

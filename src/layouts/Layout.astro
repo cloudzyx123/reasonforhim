@@ -47,7 +47,8 @@ const jsonLd = pubDate ? {
 
 // x-default 指向默认语言（英文通常更适合当 x-default，因为它面向更广泛的读者；
 // 如果你更希望不确定语言的访客默认落到中文页，把下面这行改成 'zh' 对应的 href）
-const defaultAlternate = alternates.find((a) => a.lang === 'en') ?? alternates[0];
+const defaultAlternate = lang === 'en' ? { lang, href: path } : alternates.find((a) => a.lang === 'en') ?? alternates[0];
+const hreflangLinks = alternates.length > 0 ? [{ lang, href: path }, ...alternates] : [];
 const isZh = lang === 'zh';
 const languageHref = (target: Lang) => target === lang ? path : alternates.find((a) => a.lang === target)?.href ?? (path.endsWith('/archive/') ? `/${target}/archive/` : `/${target}/`);
 ---
@@ -84,11 +85,10 @@ const languageHref = (target: Lang) => target === lang ? path : alternates.find(
     <link rel="canonical" href={canonical} />
 
     <!--
-      hreflang 标签：只有当这篇文章通过 translationId 找到了"确实互为译文"的
-      另一语言版本时，才会生成。没有配对译文的独立选题文章，这里不会输出任何标签，
-      这是有意为之——避免误标为互译内容反而损害 SEO（详见此前对话）。
+      文章只有通过 translationId 找到确实互为译文的另一语言版本时才输出
+      hreflang；首页与馆藏页也会互相标注。独立选题文章不输出语言互指。
     -->
-    {alternates.map((alt) => (
+    {hreflangLinks.map((alt) => (
       <link
         rel="alternate"
         hreflang={alt.lang === 'zh' ? 'zh-Hans' : 'en'}

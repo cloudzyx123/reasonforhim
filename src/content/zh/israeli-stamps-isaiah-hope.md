@@ -3,6 +3,7 @@ urlName: israeli-stamps-isaiah-hope
 title: "以色列邮票：2700年前的盼望"
 description: "三枚1962年的以色列邮票，如何承载以赛亚的和平异象？从希伯来文、弥赛亚预言和古典艺术，读到分裂的耶路撒冷。"
 pubDate: 2026-11-13
+updatedDate: 2026-11-16
 section: scripture
 tags: ["以赛亚书", "弥赛亚预言", "圣经与艺术", "以色列邮票", "历史与文化"]
 draft: false

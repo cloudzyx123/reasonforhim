@@ -4,6 +4,7 @@ title: He Was Afraid of Looking Like a Fool—Then He Sang Beside a Dustbin
 description: As a student in Madras, Sam Kamaleson was afraid of looking like a
   fool. One step of obedience changed the course of his life.
 pubDate: 2026-11-11
+updatedDate: 2026-11-16
 section: life
 tags:
   - Testimony
@@ -26,7 +27,7 @@ The young man was Sam Kamaleson. In the years that followed, he would tell the s
 
 The story begins earlier. In the 1950s, Kamaleson was studying veterinary medicine in Madras. His family had been Christian for generations. Yet he noticed that his roommate, a former Hindu, had become a different man. When Kamaleson asked what had happened, his roommate said he had become a Christian; the only explanation he could give was that he had met Jesus. “How can you meet Jesus?” Kamaleson later recalled thinking. It was then that he realized that, for all his Christian upbringing, he was not really a Christian himself. His roommate, as it turned out, had come to faith through a team of street preachers.
 
-![A street scene in Madras, India, photographed in 1945](https://upload.wikimedia.org/wikipedia/commons/5/5d/A_Madras_Street_Scene_%28BOND_0414%29.jpg)
+![A street scene in Madras, India, photographed in 1945](/images/sam-kamaleson-street-testimony/madras-street-1945.jpg)
 
 *Madras (now Chennai) in 1945—a historical street photograph, not a photograph of the event described here. Photograph by Frank Bond; Bond Photograph Library / Digital South Asia Library, via [Wikimedia Commons](https://commons.wikimedia.org/wiki/File:A_Madras_Street_Scene_(BOND_0414).jpg).*
 

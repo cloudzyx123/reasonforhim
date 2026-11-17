@@ -3,11 +3,13 @@ import { getCollection } from 'astro:content';
 import type { APIContext } from 'astro';
 
 export async function GET(context: APIContext) {
-  const posts = await getCollection('en', (entry) => !entry.data.draft);
+  const posts = (await getCollection('en', (entry) => !entry.data.draft))
+    .sort((a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf());
   return rss({
     title: 'Reason for Him',
     description: 'Why Christ? A blog on apologetics, theology, and biblical studies',
     site: context.site!,
+    customData: '<language>en</language>',
     items: posts.map((post) => ({
       title: post.data.title,
       description: post.data.description,

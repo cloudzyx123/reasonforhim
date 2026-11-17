@@ -22,7 +22,7 @@ export default defineConfig({
   // hreflang / sitemap / RSS 里的绝对链接都依赖这个值
   site: 'https://reasonforhim.com',
     integrations: [sitemap({
-      filter: (page) => !page.includes('/subscribe/confirmed/') && !page.includes('/subscribe/check-email/'),
+      filter: (page) => !page.includes('/subscribe/confirmed/') && !page.includes('/subscribe/check-email/') && !page.endsWith('/404/'),
     }), englishNotFound],
 
   i18n: {

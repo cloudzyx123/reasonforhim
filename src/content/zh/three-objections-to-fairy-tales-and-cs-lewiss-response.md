@@ -4,7 +4,8 @@ section: literature
 title: 对童话的三种异议，以及C.S.路易斯的回应
 description: "整理C.S.路易斯对\"童话故事不适合儿童\"这一常见异议的三点回应，为童话文学正名。"
 pubDate: '2025-03-10'
-tags: []
+updatedDate: 2026-11-16
+tags: ["C.S.路易斯", "童话文学", "儿童文学"]
 draft: false
 ---
 
@@ -13,8 +14,6 @@ draft: false
 路易斯喜欢童话故事。他完全相信“有时童话故事最能表达需要讲的话”（他一篇随笔的标题）。而且，正如 [我们所见](http://www.desiringgod.org/blog/posts/are-fairy-tales-just-for-children)，路易斯反对现代人将童话仅和儿童联系在一起。成年人能够且应该享受童话故事。
 
 但路易斯知道，许多人认为童话故事甚至不适合儿童阅读。在《 [论为儿童写作的三种方式](http://www.amazon.com/Stories-Other-Essays-Literature/dp/0156027682%3FSubscriptionId%3D15HRV3AZSMPK0GXTY102%26tag%3Damznf-us-tbsearch-20%26linkCode%3Dxm2%26camp%3D2025%26creative%3D165953%26creativeASIN%3D0156027682)》中，他着手为童话辩护，回应了人们提出的三点异议。
-
-![](https://imgs.zhubai.love/76317dbd175b44fa9be10ece391c71ac.jpg)
 
 异议1：童话故事给儿童带来关于世界的错误印象
 
