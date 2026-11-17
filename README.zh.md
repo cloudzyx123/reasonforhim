@@ -50,7 +50,7 @@ draft: false
 才在两边的 frontmatter 里加上同一个 `translationId`，比如：
 
 ```yaml
-translationId: "imago-dei"
+translationId: "tea-at-four"
 ```
 
 两边写一样的值，网站就会自动在这两个页面之间生成 hreflang 标签，告诉 Google
@@ -59,11 +59,11 @@ translationId: "imago-dei"
 如果你写的中文文章和英文文章是两个不同的选题（这是我们讨论过的推荐做法——
 中英文各自针对不同的读者关切独立选题），就完全不用管这个字段，留空即可。
 
-参考示例：
-- `src/content/zh/mary-de-gao-you.md` 和 `src/content/en/new-atheism-and-old-questions.md`
-  ——两篇不同选题，都没填 `translationId`
-- `src/content/zh/imago-dei.md` 和 `src/content/en/imago-dei.md`
-  ——真正的一对译文，两边都填了 `translationId: "imago-dei"`
+现有译文示例：
+- `src/content/zh/tea-at-four.md` 和 `src/content/en/tea-at-four.md`
+  ——两边都填了 `translationId: "tea-at-four"`
+- `src/content/zh/sam-kamaleson-street-testimony.md` 和 `src/content/en/sam-kamaleson-street-testimony.md`
+  ——两边都填了 `translationId: "sam-kamaleson-street-testimony"`
 
 ---
 

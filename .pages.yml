@@ -220,6 +220,7 @@ content:
     fields:
       - name: urlName
         component: url_name
+        readonly: true
       - name: title
         component: article_title
       - name: description
@@ -255,6 +256,7 @@ content:
     fields:
       - name: urlName
         component: url_name
+        readonly: true
       - name: title
         component: article_title
       - name: description

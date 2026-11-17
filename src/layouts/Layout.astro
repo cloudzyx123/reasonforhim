@@ -135,7 +135,7 @@ const languageHref = (target: Lang) => target === lang ? path : alternates.find(
             <a href={`/${lang}/#about`}>{isZh ? '关于' : 'About'}</a>
             <a href="/subscribe/" aria-current={path === '/subscribe/' ? 'page' : undefined}>{isZh ? '订阅' : 'Subscribe'}</a>
           </nav>
-          <form class="nav-search" action={`/${lang}/archive/#articles`} role="search">
+          <form class="nav-search" action={`/${lang}/archive/#articles`} role="search" aria-label={isZh ? '全站文章搜索' : 'Site essay search'}>
             <label class="sr-only" for="site-search">{isZh ? '搜索文章' : 'Search essays'}</label>
             <input id="site-search" name="q" type="search" placeholder={isZh ? '搜索文章、关键词…' : 'Search essays…'} />
             <button type="submit" aria-label={isZh ? '搜索' : 'Search'}><svg viewBox="0 0 24 24" width="19" height="19" fill="none" aria-hidden="true"><circle cx="10.5" cy="10.5" r="6.5" stroke="currentColor" stroke-width="1.6"/><path d="m16 16 5 5" stroke="currentColor" stroke-width="1.6"/></svg></button>

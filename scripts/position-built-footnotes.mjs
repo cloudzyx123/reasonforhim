@@ -15,6 +15,12 @@ export function positionFootnotes(html) {
   return html.replace(section, '').replace(marker, section);
 }
 
+export function localizeChineseFootnotes(html) {
+  return html.replace(sectionPattern, section => section
+    .replace(/(<h2\b[^>]*id="footnote-label"[^>]*>)Footnotes(<\/h2>)/, '$1脚注$2')
+    .replace(/aria-label="Back to reference (\d+)"/g, 'aria-label="返回正文脚注引用 $1"'));
+}
+
 export function positionBuiltFootnotes(directory) {
   let moved = 0;
   for (const entry of fs.readdirSync(directory, { withFileTypes: true })) {
@@ -22,7 +28,10 @@ export function positionBuiltFootnotes(directory) {
     if (entry.isDirectory()) moved += positionBuiltFootnotes(file);
     else if (entry.name.endsWith('.html')) {
       const before = fs.readFileSync(file, 'utf8');
-      const after = positionFootnotes(before);
+      const positioned = positionFootnotes(before);
+      const after = file.replaceAll('\\', '/').includes('/zh/')
+        ? localizeChineseFootnotes(positioned)
+        : positioned;
       if (after !== before) {
         fs.writeFileSync(file, after);
         moved++;
@@ -35,7 +44,7 @@ export function positionBuiltFootnotes(directory) {
 if (process.argv[1] && path.resolve(process.argv[1]) === fileURLToPath(import.meta.url)) {
   try {
     const count = positionBuiltFootnotes(path.resolve(process.argv[2] || 'dist'));
-    console.log(`已将 ${count} 篇文章的 GFM 脚注移到指定位置。`);
+    console.log(`已处理 ${count} 篇文章的 GFM 脚注位置或中文标签。`);
   } catch (error) {
     console.error(`脚注位置处理失败：${error.message}`);
     process.exitCode = 1;

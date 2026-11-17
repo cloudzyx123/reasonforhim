@@ -90,7 +90,10 @@ const nextChapter = seriesIndex >= 0 ? others.find(entry => entry.id === seriesI
   }
 
   .breadcrumbs a {
-    color:var(--muted)
+    color:var(--muted);
+    display:inline-flex;
+    align-items:center;
+    min-height:24px
   }
 
   .article-header {
@@ -202,6 +205,12 @@ const nextChapter = seriesIndex >= 0 ? others.find(entry => entry.id === seriesI
     text-decoration-color:#a5b3a1
   }
 
+  .prose[lang='zh-Hans'] :global(em) {
+    font-style:normal;
+    text-emphasis:filled dot;
+    text-emphasis-position:under;
+  }
+
   .prose :global(blockquote) {
     border-left:3px solid var(--accent);
     background:var(--paper);
@@ -255,6 +264,10 @@ const nextChapter = seriesIndex >= 0 ? others.find(entry => entry.id === seriesI
     margin-bottom:.85em;
     font:600 18px/1.6 var(--serif);
     color:var(--forest)
+  }
+
+  .prose[lang='en'] :global(.footnotes)::before {
+    content:'Editorial notes'
   }
 
   .prose :global(.footnotes strong) {

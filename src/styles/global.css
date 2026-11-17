@@ -5,6 +5,7 @@
   --ink:#29372f;
   --muted:#626b60;
   --line:#d7d8cd;
+  --control-line:#728273;
   --paper:#ecebdf;
   --accent:#9c513c;
   --serif:Georgia,'Noto Serif SC','Source Han Serif SC','Songti SC',SimSun,serif;
@@ -142,7 +143,10 @@ svg {
 }
 
 .utility-bar a {
-  color:inherit
+  color:inherit;
+  display:inline-flex;
+  align-items:center;
+  min-height:24px
 }
 
 .lang-switch {
@@ -152,7 +156,9 @@ svg {
 }
 
 .lang-switch a {
-  opacity:.65
+  opacity:.65;
+  min-width:24px;
+  justify-content:center
 }
 
 .lang-switch a[aria-current] {

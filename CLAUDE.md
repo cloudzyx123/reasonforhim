@@ -1,3 +1,5 @@
+@AGENTS.md
+
 ## Development
 
 When starting the dev server, use background mode:

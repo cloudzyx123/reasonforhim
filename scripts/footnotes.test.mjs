@@ -5,7 +5,7 @@ import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { parse } from 'parse5';
 import { checkCms } from './check-pages-cms.mjs';
-import { positionFootnotes } from './position-built-footnotes.mjs';
+import { positionFootnotes, localizeChineseFootnotes } from './position-built-footnotes.mjs';
 
 const root = fileURLToPath(new URL('../', import.meta.url));
 const slug = 'sam-kamaleson-street-testimony';
@@ -37,6 +37,16 @@ test('build-time placement is opt-in and supports other footnoted articles', () 
   assert.equal(positionFootnotes(html), `<article><p>正文</p>${section}<p>说明</p></article>`);
   assert.equal(positionFootnotes(html.replace('<!-- footnotes-position -->', '')), html.replace('<!-- footnotes-position -->', ''));
   assert.throws(() => positionFootnotes('<article><!-- footnotes-position --></article>'), /恰好一个/);
+});
+
+test('Chinese footnote labels are localized without changing English labels', () => {
+  const english = fs.readFileSync(path.join(root, 'dist/en/tea-at-four/index.html'), 'utf8');
+  const chinese = fs.readFileSync(path.join(root, 'dist/zh/tea-at-four/index.html'), 'utf8');
+  assert.match(english, /<h2 class="sr-only" id="footnote-label">Footnotes<\/h2>/);
+  assert.match(english, /aria-label="Back to reference 1"/);
+  assert.match(chinese, /<h2 class="sr-only" id="footnote-label">脚注<\/h2>/);
+  assert.match(chinese, /aria-label="返回正文脚注引用 1"/);
+  assert.equal(localizeChineseFootnotes(chinese), chinese);
 });
 
 test('built article links each numbered footnote in both directions', () => {
