@@ -133,7 +133,7 @@ const date = (post: CollectionEntry<Lang>) => post.data.pubDate.toLocaleDateStri
               <article class="essay-row" data-post={post.id} data-search={`${post.data.title} ${post.data.description} ${post.data.tags.join(' ')} ${section}`.toLocaleLowerCase()} data-tags={JSON.stringify(post.data.tags)} data-section-id={getSection(post)} data-year={String(post.data.pubDate.getUTCFullYear())} data-date={post.data.pubDate.toISOString()}>
                 <a class="essay-link" href={`/${lang}/${post.id}/`} aria-labelledby={`essay-${post.id}`}>
                   <div class="essay-cover">
-                    {cover && <img src={cover.src} srcset={cover.srcset} sizes={cover.srcset && thumbnailSizes} alt={cover.alt} width={cover.width} height={cover.height} loading="lazy" decoding="async" style={cover.position && `object-position: ${cover.position}`} data-essay-thumbnail={thumbnailSizes} />}
+                    {cover && <img src={cover.src} srcset={cover.srcset} sizes={cover.srcset && thumbnailSizes} alt={cover.alt} width={cover.width} height={cover.height} loading="lazy" decoding="async" style={{ 'object-position': cover.position, 'object-fit': cover.fit }} data-essay-thumbnail={thumbnailSizes} />}
                   </div>
                   <div>
                     <div class="row-meta"><time datetime={post.data.pubDate.toISOString()}>{date(post)}</time><span>{section}</span></div>

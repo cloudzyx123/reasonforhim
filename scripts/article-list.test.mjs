@@ -148,13 +148,17 @@ test('both languages ship a date-sorted catalogue, working thumbnails, and clean
 test('reviewed body images take priority on home and archive, with language-specific picks', async () => {
   const expected = {
     zh: {
+      'a-kid-asks-if-my-parents-dont-believe-in-jesus-can-they-go-to-heaven': 'christ-blessing-the-children.webp',
       'ai-faith-john-lennox': 'bruegel-tower-of-babel.webp',
+      'augustine-confessions-astrology-confusion-three-modern-versions': 'ldy2cxny7.webp',
+      'free-grace': 'tintoretto-conversion-of-saint-paul.webp',
       'if-i-were-paralyzed-a-poems-gospel-reflection': 'ewl5awlno.webp',
       'israeli-stamps-isaiah-hope': 'israel-stamps-1962-full-tabs.jpg',
       'laurence-a-martyr-died-from-telling-jokes': '65w8ck3r8.webp',
       'sam-kamaleson-street-testimony': 'madras-street-1945.jpg',
       'six-modern-concepts-created-by-christianity': '2ngkck7y.webp',
       'tea-at-four': 'tea-cover.webp',
+      'three-objections-to-fairy-tales-and-cs-lewiss-response': 'raphael-saint-george-and-the-dragon.webp',
     },
     en: {
       'sam-kamaleson-street-testimony': 'madras-street-1945.jpg',
@@ -171,7 +175,7 @@ test('reviewed body images take priority on home and archive, with language-spec
         assert.ok(attr(img, 'alt').trim());
       }
       if (lang === 'zh') {
-        const [row] = nodes(document, node => attr(node, 'data-post') === 'free-grace');
+        const [row] = nodes(document, node => attr(node, 'data-post') === 'a-painful-letter-of-recovery-rethinking-church-liberalization-and-lgbt-movement');
         const [img] = nodes(row, node => node.tagName === 'img');
         assert.equal(attr(img, 'src'), '/_thumbs/editorial/grace.webp-160.webp');
       }
