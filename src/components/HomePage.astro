@@ -17,7 +17,10 @@ const posts = (await getCollection(lang, ({ data }) => !data.draft)).sort(
 );
 const featured = archiveOnly ? [] : selectFeatured(posts, FEATURED_ARTICLES[lang]);
 const resolveCover = listCoverResolver(publicDir, lang);
-const covers = new Map(await Promise.all(posts.map(async post => [post.id, await resolveCover(post)] as const)));
+const [thumbnails, featuredCovers] = await Promise.all([
+  Promise.all(posts.map(async post => [post.id, await resolveCover(post, 'thumbnail')] as const)).then(entries => new Map(entries)),
+  Promise.all(featured.map(async post => [post.id, await resolveCover(post, 'featured')] as const)).then(entries => new Map(entries)),
+]);
 const popularityUrl = import.meta.env.PUBLIC_ARTICLE_POPULARITY_URL;
 const thumbnailSizes = '(max-width: 360px) 88px, (max-width: 760px) 96px, 128px';
 const years = [...new Set(posts.map(post => post.data.pubDate.getUTCFullYear()))].sort((a, b) => b - a);
@@ -59,7 +62,7 @@ const date = (post: CollectionEntry<Lang>) => post.data.pubDate.toLocaleDateStri
         </div>
         <div class="featured-grid">
           {featured.map((post, index) => {
-            const cover = covers.get(post.id);
+            const cover = featuredCovers.get(post.id);
             return (
             <article class:list={['featured-card', { 'lead-story': index === 0 }]}>
               <div class="story-copy">
@@ -124,13 +127,13 @@ const date = (post: CollectionEntry<Lang>) => post.data.pubDate.toLocaleDateStri
         </script>
         <div class="essay-list">
           {posts.map(post => {
-            const cover = covers.get(post.id);
+            const cover = thumbnails.get(post.id);
             const section = SECTIONS[getSection(post)][lang].title;
             return (
               <article class="essay-row" data-post={post.id} data-search={`${post.data.title} ${post.data.description} ${post.data.tags.join(' ')} ${section}`.toLocaleLowerCase()} data-tags={JSON.stringify(post.data.tags)} data-section-id={getSection(post)} data-year={String(post.data.pubDate.getUTCFullYear())} data-date={post.data.pubDate.toISOString()}>
                 <a class="essay-link" href={`/${lang}/${post.id}/`} aria-labelledby={`essay-${post.id}`}>
                   <div class="essay-cover">
-                    {cover && <img src={cover.src} srcset={cover.srcset} sizes={cover.srcset && thumbnailSizes} alt={cover.alt} width={cover.width} height={cover.height} loading="lazy" decoding="async" data-essay-thumbnail={thumbnailSizes} />}
+                    {cover && <img src={cover.src} srcset={cover.srcset} sizes={cover.srcset && thumbnailSizes} alt={cover.alt} width={cover.width} height={cover.height} loading="lazy" decoding="async" style={cover.position && `object-position: ${cover.position}`} data-essay-thumbnail={thumbnailSizes} />}
                   </div>
                   <div>
                     <div class="row-meta"><time datetime={post.data.pubDate.toISOString()}>{date(post)}</time><span>{section}</span></div>

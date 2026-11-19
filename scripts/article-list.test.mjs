@@ -144,3 +144,37 @@ test('both languages ship a date-sorted catalogue, working thumbnails, and clean
     }
   }
 });
+
+test('reviewed body images take priority on home and archive, with language-specific picks', async () => {
+  const expected = {
+    zh: {
+      'ai-faith-john-lennox': 'bruegel-tower-of-babel.webp',
+      'if-i-were-paralyzed-a-poems-gospel-reflection': 'ewl5awlno.webp',
+      'israeli-stamps-isaiah-hope': 'israel-stamps-1962-full-tabs.jpg',
+      'laurence-a-martyr-died-from-telling-jokes': '65w8ck3r8.webp',
+      'sam-kamaleson-street-testimony': 'madras-street-1945.jpg',
+      'six-modern-concepts-created-by-christianity': '2ngkck7y.webp',
+      'tea-at-four': 'tea-cover.webp',
+    },
+    en: {
+      'sam-kamaleson-street-testimony': 'madras-street-1945.jpg',
+      'tea-at-four': 'tea-afternoon.webp',
+    },
+  };
+  for (const [lang, covers] of Object.entries(expected)) {
+    for (const suffix of ['', 'archive/']) {
+      const document = parse(await readFile(`dist/${lang}/${suffix}index.html`, 'utf8'));
+      for (const [id, file] of Object.entries(covers)) {
+        const [row] = nodes(document, node => attr(node, 'data-post') === id);
+        const [img] = nodes(row, node => node.tagName === 'img');
+        assert.ok(attr(img, 'src').endsWith(`/${id}/${file}-160.webp`), `${lang}/${id} uses its own article image`);
+        assert.ok(attr(img, 'alt').trim());
+      }
+      if (lang === 'zh') {
+        const [row] = nodes(document, node => attr(node, 'data-post') === 'free-grace');
+        const [img] = nodes(row, node => node.tagName === 'img');
+        assert.equal(attr(img, 'src'), '/_thumbs/editorial/grace.webp-160.webp');
+      }
+    }
+  }
+});
