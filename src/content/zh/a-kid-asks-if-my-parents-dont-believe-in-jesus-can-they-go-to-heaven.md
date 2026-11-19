@@ -4,6 +4,7 @@ section: faith
 title: 一个孩子问：如果我的父母不信耶稣，能去天堂吗？
 description: "从一个初中生的提问出发，探讨\"未信主的父母能否得救\"，阐明天堂与地狱的本质，以及神的爱如何尊重人的自由选择。"
 pubDate: '2025-03-10'
+updatedDate: 2026-11-19
 tags: []
 draft: false
 ---
@@ -13,6 +14,10 @@ draft: false
 这是班上一个初中的女孩问的问题。
 
 能看出神的工作在她心里，而她又渴望父母也可以在祂的国里。
+
+![老卢卡斯·克拉纳赫的画作，几位母亲带着孩子来到耶稣面前。](/images/a-kid-asks-if-my-parents-dont-believe-in-jesus-can-they-go-to-heaven/christ-blessing-the-children.webp)
+
+*图为老卢卡斯·克拉纳赫《基督祝福孩童》（约1535–1540年）。[法兰克福施泰德博物馆藏，公有领域](https://sammlung.staedelmuseum.de/en/work/christ-blessing-the-children)。*
 
 我该如何回答可以把她引向神，既可以阐明福音，又不至于让她感到挫败和伤心，反得着鼓励呢？而且要注意，在天堂地狱的观念上，人们受到了许多文化的影响，有待被归正。
 

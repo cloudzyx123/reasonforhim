@@ -1,8 +1,11 @@
 ---
 import { getCollection, type CollectionEntry } from 'astro:content';
+import { publicDir } from 'astro:config/server';
 import Layout from '../layouts/Layout.astro';
 import type { Lang } from '../lib/i18n';
-import { EDITORIAL_COVERS, getSection, SECTION_IDS, SECTIONS } from '../lib/editorial';
+import { FEATURED_ARTICLES, getSection, SECTION_IDS, SECTIONS } from '../lib/editorial';
+import { compareArticles, selectFeatured } from '../lib/article-list.mjs';
+import { listCoverResolver } from '../lib/list-covers';
 
 interface Props { lang: Lang; archiveOnly?: boolean }
 const { lang, archiveOnly = false } = Astro.props;
@@ -10,9 +13,16 @@ const zh = lang === 'zh';
 const otherLang: Lang = zh ? 'en' : 'zh';
 const alternatePath = archiveOnly ? `/${otherLang}/archive/` : `/${otherLang}/`;
 const posts = (await getCollection(lang, ({ data }) => !data.draft)).sort(
-  (a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf() || a.id.localeCompare(b.id)
+  (a, b) => compareArticles({ id: a.id, date: +a.data.pubDate }, { id: b.id, date: +b.data.pubDate })
 );
-const featured = posts.slice(0, 3);
+const featured = archiveOnly ? [] : selectFeatured(posts, FEATURED_ARTICLES[lang]);
+const resolveCover = listCoverResolver(publicDir, lang);
+const [thumbnails, featuredCovers] = await Promise.all([
+  Promise.all(posts.map(async post => [post.id, await resolveCover(post, 'thumbnail')] as const)).then(entries => new Map(entries)),
+  Promise.all(featured.map(async post => [post.id, await resolveCover(post, 'featured')] as const)).then(entries => new Map(entries)),
+]);
+const popularityUrl = import.meta.env.PUBLIC_ARTICLE_POPULARITY_URL;
+const thumbnailSizes = '(max-width: 360px) 88px, (max-width: 760px) 96px, 128px';
 const years = [...new Set(posts.map(post => post.data.pubDate.getUTCFullYear()))].sort((a, b) => b - a);
 const sections = SECTION_IDS.map(id => ({
   id,
@@ -22,12 +32,6 @@ const sections = SECTION_IDS.map(id => ({
 const date = (post: CollectionEntry<Lang>) => post.data.pubDate.toLocaleDateString(
   zh ? 'zh-CN' : 'en-GB', { year: 'numeric', month: 'long', day: 'numeric', timeZone: 'UTC' }
 );
-const cover = (post: CollectionEntry<Lang>) => {
-  const fallback = getSection(post) === 'faith' ? 'confidence-behind-rationality-science-atheism-faith-issue'
-    : getSection(post) === 'literature' ? 'god-is-dead-chesterton-vs-nietzsche'
-    : 'if-i-were-paralyzed-a-poems-gospel-reflection';
-  return EDITORIAL_COVERS[post.id] ?? EDITORIAL_COVERS[fallback];
-};
 ---
 <Layout
   title={archiveOnly ? (zh ? '文章馆藏' : 'Essay archive') : (zh ? '首页' : 'Home')}
@@ -57,7 +61,9 @@ const cover = (post: CollectionEntry<Lang>) => {
           <a class="text-link" href="#articles">{zh ? '浏览全部文章' : 'All essays'} <span aria-hidden="true">→</span></a>
         </div>
         <div class="featured-grid">
-          {featured.map((post, index) => (
+          {featured.map((post, index) => {
+            const cover = featuredCovers.get(post.id);
+            return (
             <article class:list={['featured-card', { 'lead-story': index === 0 }]}>
               <div class="story-copy">
                 <div class="card-meta">
@@ -68,26 +74,27 @@ const cover = (post: CollectionEntry<Lang>) => {
                 <p class="card-description">{post.data.description}</p>
                 {index === 0 && <a class="text-link lead-read" href={`/${lang}/${post.id}/`}>{zh ? '开始阅读' : 'Read the essay'} <span aria-hidden="true">→</span></a>}
               </div>
-              <a class="cover-link" href={`/${lang}/${post.id}/`} aria-label={post.data.title}>
+              {cover && <a class="cover-link" href={`/${lang}/${post.id}/`} aria-label={post.data.title}>
                 <img
-                  src={cover(post).src}
-                  srcset={`${cover(post).src.replace('.webp', '-600.webp')} 600w, ${cover(post).src} 1200w`}
-                  sizes={index === 0 ? '(max-width: 760px) calc(100vw - 40px), (max-width: 1240px) 55vw, 680px' : '(max-width: 760px) calc(100vw - 40px), (max-width: 1240px) 34vw, 405px'}
-                  alt={cover(post)[lang]}
-                  width="1200"
-                  height="800"
+                  src={cover.src}
+                  srcset={cover.srcset}
+                  sizes={cover.srcset && (index === 0 ? '(max-width: 760px) calc(100vw - 40px), (max-width: 1240px) 55vw, 680px' : '(max-width: 760px) calc(100vw - 40px), (max-width: 1240px) 34vw, 405px')}
+                  alt={cover.alt}
+                  width={cover.width}
+                  height={cover.height}
                   loading={index === 0 ? 'eager' : 'lazy'}
                   fetchpriority={index === 0 ? 'high' : 'auto'}
                 />
-              </a>
+              </a>}
             </article>
-          ))}
+            );
+          })}
         </div>
       </section>
     )}
 
     <div class="archive-layout">
-      <section id="articles" class="archive" aria-labelledby="archive-heading" data-archive data-lang={lang} data-section-labels={JSON.stringify(Object.fromEntries(sections.map(section => [section.id, section.title])))}>
+      <section id="articles" class="archive" aria-labelledby="archive-heading" data-archive data-lang={lang} data-popularity-url={popularityUrl || undefined} data-section-labels={JSON.stringify(Object.fromEntries(sections.map(section => [section.id, section.title])))}>
         <div class="section-heading archive-heading">
           <div><p class="section-kicker">{zh ? '在文字之间，继续探寻' : 'Keep exploring'}</p><h2 id="archive-heading">{zh ? '全部文章' : 'The essay collection'}</h2></div>
           <span class="archive-total">{zh ? `共 ${posts.length} 篇` : `${posts.length} essays`}</span>
@@ -103,24 +110,40 @@ const cover = (post: CollectionEntry<Lang>) => {
         </form>
         <div class="archive-options">
           <label>{zh ? '年份' : 'Year'}<select data-year aria-label={zh ? '按年份浏览' : 'Browse by year'}><option value="">{zh ? '全部年份' : 'All years'}</option>{years.map(year => <option value={String(year)}>{year}</option>)}</select></label>
-          <label>{zh ? '排序' : 'Sort'}<select data-order aria-label={zh ? '文章排序' : 'Sort essays'}><option value="newest">{zh ? '最新在前' : 'Newest first'}</option><option value="oldest">{zh ? '最早在前' : 'Oldest first'}</option></select></label>
+          <label>{zh ? '排序' : 'Sort'}<select data-order aria-label={zh ? '文章排序' : 'Sort essays'}><option value="newest">{zh ? '最新' : 'New'}</option><option value="top" hidden disabled>{zh ? '热门' : 'Top'}</option><option value="oldest">{zh ? '最早' : 'Oldest'}</option></select></label>
         </div>
         <div class="filter-status">
           <p data-result-count aria-live="polite">{zh ? '按发布时间排序' : 'Most recent first'}</p>
           <button type="button" data-reset hidden>{zh ? '清除筛选 ×' : 'Clear filters ×'}</button>
         </div>
+        <script is:inline>
+          if (new URLSearchParams(location.search).get('sort') === 'top') {
+            const section = document.currentScript.closest('[data-popularity-url]');
+            if (section) {
+              section.dataset.topPending = '';
+              setTimeout(() => delete section.dataset.topPending, 5000);
+            }
+          }
+        </script>
         <div class="essay-list">
-          {posts.map((post, index) => (
-            <article class="essay-row" data-post data-search={`${post.data.title} ${post.data.description} ${post.data.tags.join(' ')} ${SECTIONS[getSection(post)][lang].title}`.toLocaleLowerCase()} data-tags={JSON.stringify(post.data.tags)} data-section-id={getSection(post)} data-year={String(post.data.pubDate.getUTCFullYear())} data-date={post.data.pubDate.toISOString()}>
-              <span class="essay-number" aria-hidden="true">{String(index + 1).padStart(2, '0')}</span>
-              <div>
-                <div class="row-meta"><time datetime={post.data.pubDate.toISOString()}>{date(post)}</time><span>{SECTIONS[getSection(post)][lang].title}</span></div>
-                <h3><a href={`/${lang}/${post.id}/`}>{post.data.title}</a></h3>
-                <p>{post.data.description}</p>
-              </div>
-              <a class="row-arrow" href={`/${lang}/${post.id}/`} aria-label={`${zh ? '阅读：' : 'Read: '}${post.data.title}`}>↗</a>
-            </article>
-          ))}
+          {posts.map(post => {
+            const cover = thumbnails.get(post.id);
+            const section = SECTIONS[getSection(post)][lang].title;
+            return (
+              <article class="essay-row" data-post={post.id} data-search={`${post.data.title} ${post.data.description} ${post.data.tags.join(' ')} ${section}`.toLocaleLowerCase()} data-tags={JSON.stringify(post.data.tags)} data-section-id={getSection(post)} data-year={String(post.data.pubDate.getUTCFullYear())} data-date={post.data.pubDate.toISOString()}>
+                <a class="essay-link" href={`/${lang}/${post.id}/`} aria-labelledby={`essay-${post.id}`}>
+                  <div class="essay-cover">
+                    {cover && <img src={cover.src} srcset={cover.srcset} sizes={cover.srcset && thumbnailSizes} alt={cover.alt} width={cover.width} height={cover.height} loading="lazy" decoding="async" style={{ 'object-position': cover.position, 'object-fit': cover.fit }} data-essay-thumbnail={thumbnailSizes} />}
+                  </div>
+                  <div>
+                    <div class="row-meta"><time datetime={post.data.pubDate.toISOString()}>{date(post)}</time><span>{section}</span></div>
+                    <h3 id={`essay-${post.id}`}>{post.data.title}</h3>
+                    <p>{post.data.description}</p>
+                  </div>
+                </a>
+              </article>
+            );
+          })}
         </div>
         <div class="empty-state" data-empty hidden={posts.length > 0}>
           <h3>{posts.length ? (zh ? '没有找到相关文章' : 'No matching essays') : (zh ? '文章即将刊载' : 'Essays are on their way')}</h3>
@@ -160,11 +183,22 @@ const cover = (post: CollectionEntry<Lang>) => {
 </Layout>
 
 <script>
+  import { articleOrder, compareArticles, getTopWindow, matchesArticle, validatePopularitySnapshot } from '../lib/article-list.mjs';
+
   const archive = document.querySelector<HTMLElement>('[data-archive]');
   if (archive) {
     const input = document.querySelector<HTMLInputElement>('#archive-query')!;
     const navInput = document.querySelector<HTMLInputElement>('#site-search');
-    const rows = Array.from(archive.querySelectorAll<HTMLElement>('[data-post]'));
+    const rows = Array.from(archive.querySelectorAll<HTMLElement>('[data-post]'), row => ({
+      row,
+      id: row.dataset.post!,
+      date: Date.parse(row.dataset.date!),
+      views: 0,
+      tags: JSON.parse(row.dataset.tags ?? '[]') as string[],
+      section: row.dataset.sectionId!,
+      year: row.dataset.year!,
+      search: row.dataset.search!,
+    }));
     const count = archive.querySelector<HTMLElement>('[data-result-count]')!;
     const reset = archive.querySelector<HTMLButtonElement>('[data-reset]')!;
     const empty = archive.querySelector<HTMLElement>('[data-empty]')!;
@@ -172,9 +206,14 @@ const cover = (post: CollectionEntry<Lang>) => {
     const yearSelect = archive.querySelector<HTMLSelectElement>('[data-year]')!;
     const orderSelect = archive.querySelector<HTMLSelectElement>('[data-order]')!;
     const list = archive.querySelector<HTMLElement>('.essay-list')!;
+    const topOption = orderSelect.querySelector<HTMLOptionElement>('[value="top"]')!;
     const sectionLabels: Record<string, string> = JSON.parse(archive.dataset.sectionLabels ?? '{}');
     let topic = '';
     let section = '';
+    let topWindow = 0;
+    let lastOrder = 'newest';
+    let updatingQuery = false;
+    let unavailableTop = false;
 
     function readParams() {
       const params = new URLSearchParams(location.search);
@@ -182,33 +221,34 @@ const cover = (post: CollectionEntry<Lang>) => {
       section = params.get('section') ?? '';
       input.value = params.get('q') ?? '';
       yearSelect.value = params.get('year') ?? '';
-      orderSelect.value = params.get('sort') === 'oldest' ? 'oldest' : 'newest';
+      orderSelect.value = articleOrder(params.get('sort'), topWindow);
+      unavailableTop = params.get('sort') === 'top' && orderSelect.value !== 'top';
     }
 
     function filter(updateUrl = true, push = false) {
       const query = input.value.trim().toLocaleLowerCase();
       const terms = query.split(/\s+/).filter(Boolean);
+      const order = articleOrder(orderSelect.value, topWindow);
+      if (updateUrl) unavailableTop = false;
+      if (order !== lastOrder) {
+        for (const { row } of [...rows].sort((a, b) => compareArticles(a, b, order))) list.append(row);
+        lastOrder = order;
+      }
       let visible = 0;
-      const ordered = [...rows].sort((a, b) => {
-        const comparison = (a.dataset.date ?? '').localeCompare(b.dataset.date ?? '') || (a.dataset.search ?? '').localeCompare(b.dataset.search ?? '');
-        return orderSelect.value === 'oldest' ? comparison : -comparison;
-      });
-      for (const row of ordered) {
-        const tags: string[] = JSON.parse(row.dataset.tags ?? '[]');
-        row.hidden = !terms.every(term => row.dataset.search?.includes(term))
-          || (!!topic && !tags.includes(topic))
-          || (!!section && row.dataset.sectionId !== section)
-          || (!!yearSelect.value && row.dataset.year !== yearSelect.value);
-        list.append(row);
-        if (!row.hidden) { visible++; row.querySelector('.essay-number')!.textContent = String(visible).padStart(2, '0'); }
+      const filters = { terms, topic, section, year: yearSelect.value };
+      for (const article of rows) {
+        article.row.hidden = !matchesArticle(article, filters);
+        if (!article.row.hidden) visible++;
       }
       if (navInput) navInput.value = input.value;
       const label = [sectionLabels[section] ?? section, topic, yearSelect.value].filter(Boolean).join(' · ');
       const active = !!query || !!topic || !!section || !!yearSelect.value;
-      count.textContent = active
-        ? `${label ? `${label} · ` : ''}${zh ? `找到 ${visible} 篇文章` : `${visible} essays found`}`
-        : (orderSelect.value === 'oldest' ? (zh ? '最早的文章在前' : 'Oldest first') : (zh ? '按发布时间排序' : 'Most recent first'));
-      reset.hidden = !active;
+      const topLabel = order === 'top' ? (zh ? `近 ${topWindow} 天浏览量` : `Page views over ${topWindow} days`)
+        : unavailableTop && !archive.hasAttribute('data-top-pending') ? (zh ? '热门数据暂不可用，按发布时间排序' : 'Top data unavailable. Most recent first.') : '';
+      const result = zh ? `找到 ${visible} 篇文章` : `${visible} ${visible === 1 ? 'essay' : 'essays'} found`;
+      count.textContent = active ? [label, result, topLabel].filter(Boolean).join(' · ')
+        : topLabel || (order === 'oldest' ? (zh ? '最早的文章在前' : 'Oldest first') : (zh ? '按发布时间排序' : 'Most recent first'));
+      reset.hidden = !active && order === 'newest';
       empty.hidden = visible > 0;
       document.querySelectorAll<HTMLAnchorElement>('[data-section]').forEach(link => {
         if (link.dataset.section === section) link.setAttribute('aria-current', 'true');
@@ -220,21 +260,30 @@ const cover = (post: CollectionEntry<Lang>) => {
         topic ? url.searchParams.set('topic', topic) : url.searchParams.delete('topic');
         section ? url.searchParams.set('section', section) : url.searchParams.delete('section');
         yearSelect.value ? url.searchParams.set('year', yearSelect.value) : url.searchParams.delete('year');
-        orderSelect.value === 'oldest' ? url.searchParams.set('sort', 'oldest') : url.searchParams.delete('sort');
+        order === 'newest' ? url.searchParams.delete('sort') : url.searchParams.set('sort', order);
         if (push) url.hash = 'articles';
         if (url.href !== location.href) { if (push) history.pushState(null, '', url); else history.replaceState(null, '', url); }
       }
     }
-    input.addEventListener('input', () => filter());
-    archive.querySelector('form')?.addEventListener('submit', event => { event.preventDefault(); filter(); });
+    input.addEventListener('input', () => { filter(true, !updatingQuery); updatingQuery = true; });
+    input.addEventListener('blur', () => { updatingQuery = false; });
+    archive.querySelector('form')?.addEventListener('submit', event => { event.preventDefault(); filter(true, true); });
     document.querySelector('.nav-search')?.addEventListener('submit', event => {
       event.preventDefault();
       input.value = navInput?.value ?? '';
-      filter();
+      filter(true, true);
       archive.scrollIntoView({ block: 'start' });
       input.focus({ preventScroll: true });
     });
-    reset.addEventListener('click', () => { input.value = ''; topic = ''; section = ''; yearSelect.value = ''; orderSelect.value = 'newest'; filter(true, true); });
+    reset.addEventListener('click', () => {
+      input.value = '';
+      topic = '';
+      section = '';
+      yearSelect.value = '';
+      orderSelect.value = 'newest';
+      filter(true, true);
+      input.focus({ preventScroll: true });
+    });
     yearSelect.addEventListener('change', () => filter(true, true));
     orderSelect.addEventListener('change', () => filter(true, true));
     document.querySelectorAll<HTMLAnchorElement>('[data-section]').forEach(link => link.addEventListener('click', event => {
@@ -245,9 +294,33 @@ const cover = (post: CollectionEntry<Lang>) => {
       filter(true, true);
       archive.scrollIntoView({ block: 'start' });
     }));
-    window.addEventListener('popstate', () => { readParams(); filter(false); });
+    window.addEventListener('popstate', () => { updatingQuery = false; readParams(); filter(false); });
     readParams();
     filter(false);
+
+    if (archive.dataset.popularityUrl) {
+      const lang = archive.dataset.lang;
+      fetch(archive.dataset.popularityUrl, { signal: AbortSignal.timeout(4000), credentials: 'omit', referrerPolicy: 'no-referrer' })
+        .then(response => response.ok ? response.json() : null)
+        .then(data => {
+          const snapshot = validatePopularitySnapshot(data);
+          if (!snapshot) return;
+          for (const article of rows) article.views = snapshot.pageViews[`/${lang}/${article.id}/`] ?? 0;
+          topWindow = getTopWindow(snapshot, rows.some(article => article.views > 0));
+          if (!topWindow) return;
+          topOption.hidden = topOption.disabled = false;
+          topOption.textContent = zh ? `热门（近 ${topWindow} 天）` : `Top (${topWindow} days)`;
+          if (new URLSearchParams(location.search).get('sort') === 'top') {
+            readParams();
+            filter(false);
+          }
+        })
+        .catch(() => { /* Keep the date-based catalogue available. */ })
+        .finally(() => {
+          delete archive.dataset.topPending;
+          if (unavailableTop) filter(false);
+        });
+    }
   }
 </script>
 
@@ -296,13 +369,17 @@ const cover = (post: CollectionEntry<Lang>) => {
   .filter-status { display: flex; justify-content: space-between; gap: 12px; min-height: 50px; align-items: center; font-size: 12px; color: var(--muted); }
   .filter-status p { margin: 0; }
   .filter-status button { border: 0; background: none; color: var(--forest); font-size: 12px; padding: 6px 0; }
-  .essay-row { border-top: 1px solid var(--line); padding: 26px 0; display: grid; grid-template-columns: 26px minmax(0, 1fr) 22px; gap: 17px; }
-  .essay-number { font: italic 17px var(--serif); color: #7d877b; padding-top: 4px; }
-  .row-meta { display: flex; flex-wrap: wrap; gap: 7px 16px; color: var(--muted); font-size: 12px; margin-bottom: 10px; }
+  [data-top-pending] .essay-list { visibility: hidden; }
+  .essay-row { border-top: 1px solid var(--line); padding-block: 18px; }
+  .essay-link { display: grid; grid-template-columns: 128px minmax(0, 1fr); gap: 20px; align-items: start; }
+  .essay-link:hover { text-decoration: none; }
+  .essay-link:hover h3 { text-decoration: underline; text-underline-offset: 4px; }
+  .essay-cover { aspect-ratio: 4 / 3; overflow: hidden; background: var(--paper); border: 1px solid var(--line); }
+  .essay-cover img { display: block; width: 100%; height: 100%; object-fit: cover; }
+  .row-meta { display: flex; flex-wrap: wrap; gap: 2px 12px; color: var(--muted); font-size: 12px; margin-bottom: 4px; }
   .row-meta > span { color: var(--accent); }
-  .essay-row h3 { font-size: 23px; line-height: 1.65; margin-bottom: 10px; overflow-wrap: anywhere; }
-  .essay-row p { font-size: 14px; color: var(--muted); line-height: 1.9; margin: 0; }
-  .row-arrow { font-size: 22px; align-self: center; }
+  .essay-row h3 { font-size: 22px; line-height: 1.45; margin-bottom: 4px; overflow-wrap: anywhere; }
+  .essay-row p { display: -webkit-box; -webkit-box-orient: vertical; -webkit-line-clamp: 2; overflow: hidden; overflow-wrap: anywhere; font-size: 14px; color: var(--muted); line-height: 1.65; margin: 0; }
   .sidebar h2 { font-size: 23px; margin-bottom: 21px; }
   .section-list { border-top: 2px solid var(--forest); }
   .section-list a { display: flex; justify-content: space-between; gap: 15px; align-items: baseline; border-bottom: 1px solid var(--line); padding-block: 17px; }
@@ -352,12 +429,15 @@ const cover = (post: CollectionEntry<Lang>) => {
     .card-meta { font-size: 12px; gap: 6px 16px; }
     .card-description { font-size: 14px; }
     .archive-layout { grid-template-columns: minmax(0, 1fr); gap: 35px; padding-top: 30px; }
-    .essay-row { gap: 12px; grid-template-columns: 22px minmax(0, 1fr) 18px; padding-block: 23px; }
-    .essay-row h3 { font-size: 21px; }
+    .essay-row { padding-block: 15px; }
+    .essay-link { gap: 12px; grid-template-columns: 96px minmax(0, 1fr); }
+    .essay-row h3 { font-size: 18px; }
+    .essay-row p { font-size: 13px; -webkit-line-clamp: 3; }
     .archive-search button { padding-inline: 13px; }
     .archive-search button span { margin-left: 5px; }
     .about-panel { margin-top: 30px; }
     .closing-note { margin-top: 32px; }
     .closing-note p { font-size: 15px; }
   }
+  @media (max-width: 360px) { .essay-link { grid-template-columns: 88px minmax(0, 1fr); } }
 </style>

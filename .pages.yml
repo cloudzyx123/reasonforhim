@@ -37,6 +37,16 @@ components:
     label: 一句话摘要
     description: 建议约 40–60 字，用于文章列表、搜索和分享。
     required: true
+  article_cover:
+    type: image
+    label: 文章缩略图（可留空）
+    description: 用于首页和馆藏。可选择或上传已获使用许可的图片；留空时沿用站内配图。
+    options:
+      media: article_images
+  article_cover_alt:
+    type: string
+    label: 缩略图替代文字（可留空）
+    description: 用一句简短的话说明图片传达的信息。纯装饰图片可留空。
   publication_date:
     type: date
     label: 发布日期
@@ -118,6 +128,10 @@ content:
         component: article_title
       - name: description
         component: article_description
+      - name: coverImage
+        component: article_cover
+      - name: coverAlt
+        component: article_cover_alt
       - name: pubDate
         component: publication_date
       - name: updatedDate
@@ -150,6 +164,10 @@ content:
         component: article_title
       - name: description
         component: article_description
+      - name: coverImage
+        component: article_cover
+      - name: coverAlt
+        component: article_cover_alt
       - name: pubDate
         component: publication_date
       - name: updatedDate
@@ -187,6 +205,10 @@ content:
         component: article_title
       - name: description
         component: article_description
+      - name: coverImage
+        component: article_cover
+      - name: coverAlt
+        component: article_cover_alt
       - name: pubDate
         component: publication_date
       - name: updatedDate
@@ -225,6 +247,10 @@ content:
         component: article_title
       - name: description
         component: article_description
+      - name: coverImage
+        component: article_cover
+      - name: coverAlt
+        component: article_cover_alt
       - name: pubDate
         component: publication_date
       - name: updatedDate
@@ -261,6 +287,10 @@ content:
         component: article_title
       - name: description
         component: article_description
+      - name: coverImage
+        component: article_cover
+      - name: coverAlt
+        component: article_cover_alt
       - name: pubDate
         component: publication_date
       - name: updatedDate
@@ -297,6 +327,10 @@ content:
         component: article_title
       - name: description
         component: article_description
+      - name: coverImage
+        component: article_cover
+      - name: coverAlt
+        component: article_cover_alt
       - name: pubDate
         component: publication_date
       - name: updatedDate
@@ -343,6 +377,10 @@ content:
         component: article_title
       - name: description
         component: article_description
+      - name: coverImage
+        component: article_cover
+      - name: coverAlt
+        component: article_cover_alt
       - name: pubDate
         component: publication_date
       - name: updatedDate
@@ -375,6 +413,10 @@ content:
         component: article_title
       - name: description
         component: article_description
+      - name: coverImage
+        component: article_cover
+      - name: coverAlt
+        component: article_cover_alt
       - name: pubDate
         component: publication_date
       - name: updatedDate
@@ -411,6 +453,10 @@ content:
         component: article_title
       - name: description
         component: article_description
+      - name: coverImage
+        component: article_cover
+      - name: coverAlt
+        component: article_cover_alt
       - name: pubDate
         component: publication_date
       - name: updatedDate

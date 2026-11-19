@@ -2,6 +2,20 @@
 
 三张图均由内置 ImageGen 工具生成，非参考杂志转载图片。最终图片存于 public/images/editorial/，转为 1200 × 800 WebP 供首页使用，并提供 600 × 400 的 `-600.webp` 响应式版本。主题对应为恩典、思想对话、信仰与理性。
 
+首页和馆藏的文章列表依次使用 CMS 指定图片、已核对的正文配图、已有文章配图和栏目版画。正文配图的选择按语言记录在 `src/lib/list-covers.ts`，选择时检查来源、裁切效果和替代文字。构建会为列表生成宽 160 和 320 像素的 WebP 缩略图。选读卡片会读取原图尺寸，仅在有合适的 `-600.webp` 文件时加入响应式候选。
+
+## 部分缩略图的来源
+
+- 《人成为神，还是神成为人？》使用老彼得·勃鲁盖尔的《巴别塔》。[图像来源](https://commons.wikimedia.org/wiki/File:Pieter_Bruegel_the_Elder_-_The_Tower_of_Babel_(Vienna)_-_Google_Art_Project.jpg)
+- 《如果我是瘫子》使用詹姆斯·蒂索描绘瘫子从屋顶被放下的画作。[布鲁克林博物馆](https://opencollection.brooklynmuseum.org/objects/4504)
+- 《以色列邮票：2700年前的盼望》使用正文内作者收藏的三枚 1962 年邮票照片。[邮票资料](https://commons.wikimedia.org/wiki/Category:1962_stamps_of_Israel_-_Mo%27adim_Lesimkha_series)
+- 《劳伦斯：一位死于讲笑话的殉道者》使用弗拉·安杰利科《瓦勒良面前的劳伦斯》的壁画局部。[图像来源](https://commons.wikimedia.org/wiki/File:Lawrence-before-Valerianus.jpg)
+- 萨姆·卡马莱森见证的中英文版使用弗兰克·邦德拍摄的 1945 年马德拉斯历史街景。[图像来源](https://commons.wikimedia.org/wiki/File:A_Madras_Street_Scene_(BOND_0414).jpg)
+- 《基督教缔造的六个现代观念》使用卡拉瓦乔的《多马的怀疑》。[图像来源](https://commons.wikimedia.org/wiki/File:Caravaggio_incredulity.jpg)
+- 《下午四点的茶》的中英文版各用本篇正文里的茶具插图。
+
+《一个孩子问：如果我的父母不信耶稣，能去天堂吗？》《自由之恩典》和《对童话的三种异议》新增的馆藏画作同时用于正文和列表，来源和公有领域状态见相应文章的图注。《一封沉痛的挽回书信》使用栏目版画，书信仍以原文开场。
+
 ## 分享展示
 
 `public/share/` 中的三张 1200 × 630 JPEG 分享图由现有版画与 `src/assets/share/wordmark.svg` 拼合。修改版画或品牌字样后，运行 `node scripts/build-share-images.mjs` 重新生成。文章优先使用对应封面，其余文章按栏目选择配图，映射在 `src/lib/editorial.ts`。

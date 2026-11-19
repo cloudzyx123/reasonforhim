@@ -4,6 +4,7 @@ section: scripture
 title: Free Grace 自由之恩典
 description: "探讨保罗所传\"自由恩典\"福音的三层含义：出于神的主权、借信心白白领受、使人从内在辖制中得释放。"
 pubDate: '2025-03-10'
+updatedDate: 2026-11-19
 tags: []
 draft: false
 ---
@@ -23,4 +24,8 @@ bondage, including the bondage of legalism and the bondage of moral anarchy”
 
 “保罗对世界的突出贡献是他对“白白的（自由）恩典”这一好消息的介绍——这白白的恩典，正如他自己所说的那样，是他对这显明于耶\*稣教导中、又体现在耶\*稣的一生与所成之工中的福音的重新介绍。保罗所宣扬的上帝的自由恩典之自由乃是在于若干层面——在于它拥有至高主权、是不受约束的；在于它提供给无论是男人还是女人，让他们仅凭信心就得以被接纳；在于它是他们从各种内在的和属灵的（包括法律主义的束缚和道德无政府主义的）束缚中得释放的根源和原理。”
 —— F. F.布鲁斯，《心得自由的使徒保罗》
+
+![丁托列托画笔下的保罗倒在石阶上，举起双手望向天空。](/images/free-grace/tintoretto-conversion-of-saint-paul.webp)
+
+*图为雅各布·丁托列托《圣保罗归信》（约1544年）。[美国国家美术馆藏，公有领域](https://www.nga.gov/artworks/46142-conversion-saint-paul)。*
 

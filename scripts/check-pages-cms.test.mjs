@@ -15,6 +15,13 @@ test('编辑旧文的英文网址名不能悄悄改变线上路由', () => {
 test('草稿状态必须是布尔值', () => {
   assert.throws(() => validateArticle('new-article.md', article.replace('draft: true', 'draft: "false"')), /草稿/);
 });
+test('列表缩略图接受 CMS 图片，拒绝外链和路径穿越', () => {
+  const addCover = image => article.replace('draft: true', `draft: true\ncoverImage: ${image}`);
+  assert.equal(validateArticle('new-article.md', addCover('/images/a-cover/photo_10.avif')).data.coverImage, '/images/a-cover/photo_10.avif');
+  for (const image of ['https://example.com/a.png', '//example.com/a.png', '/images/../a.png', '/images/a.svg']) {
+    assert.throws(() => validateArticle('new-article.md', addCover(image)), /站内图片/);
+  }
+});
 test('项目全部文章满足 CMS 规则，精排文章受保护', () => assert.ok(checkCms() > 0));
 test('Markdown 脚注须使用保留源码的 CMS 编辑入口', () => {
   assert.equal(needsProtectedBody('正文[^1]\n\n[^1]: 注释'), true);
