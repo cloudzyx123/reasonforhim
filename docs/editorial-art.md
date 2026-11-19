@@ -2,6 +2,8 @@
 
 三张图均由内置 ImageGen 工具生成，非参考杂志转载图片。最终图片存于 public/images/editorial/，转为 1200 × 800 WebP 供首页使用，并提供 600 × 400 的 `-600.webp` 响应式版本。主题对应为恩典、思想对话、信仰与理性。
 
+首页和馆藏的文章列表依次使用 CMS 指定图片、已有文章配图和栏目版画。构建会为列表生成宽 160 和 320 像素的 WebP 缩略图。选读卡片会读取原图尺寸，仅在有合适的 `-600.webp` 文件时加入响应式候选。
+
 ## 分享展示
 
 `public/share/` 中的三张 1200 × 630 JPEG 分享图由现有版画与 `src/assets/share/wordmark.svg` 拼合。修改版画或品牌字样后，运行 `node scripts/build-share-images.mjs` 重新生成。文章优先使用对应封面，其余文章按栏目选择配图，映射在 `src/lib/editorial.ts`。

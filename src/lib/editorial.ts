@@ -3,6 +3,12 @@ import type { Lang } from './i18n';
 export const SECTION_IDS = ['faith', 'scripture', 'literature', 'life'] as const;
 export type SectionId = typeof SECTION_IDS[number];
 
+// 按展示顺序填写每种语言的文章文件名，省略 .md。空位由最新公开文章补齐。
+export const FEATURED_ARTICLES: Record<Lang, readonly string[]> = {
+  zh: [],
+  en: [],
+};
+
 export const SECTIONS: Record<SectionId, Record<Lang, { title: string; description: string }>> = {
   faith: {
     zh: { title: '护教与理性', description: '在追问与对话中，寻找相信的理由。' },

@@ -1,6 +1,7 @@
 import { defineCollection, z } from 'astro:content';
 import { glob } from 'astro/loaders';
 import { SECTION_IDS } from './lib/editorial';
+import { coverImagePattern } from './lib/cover-path.mjs';
 
 // 公共的文章 schema：中英文文章共用同一套字段
 const postSchema = z.object({
@@ -8,6 +9,8 @@ const postSchema = z.object({
   urlName: z.string().regex(/^[a-z0-9]+(?:-[a-z0-9]+)*$/).optional(),
   title: z.string(),
   description: z.string(),
+  coverImage: z.preprocess(value => value == null || value === '' ? undefined : value, z.string().regex(coverImagePattern).optional()),
+  coverAlt: z.preprocess(value => value == null ? undefined : value, z.string().trim().optional()),
   // 发布日期，写成 2026-07-31 这样的格式即可，Astro 会自动解析
   pubDate: z.coerce.date(),
   updatedDate: z.preprocess(value => value == null || value === '' ? undefined : value, z.coerce.date().optional()),

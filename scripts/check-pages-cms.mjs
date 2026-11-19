@@ -2,6 +2,7 @@ import fs from 'node:fs';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { load, JSON_SCHEMA } from 'js-yaml';
+import { coverImagePattern } from '../src/lib/cover-path.mjs';
 
 const root = fileURLToPath(new URL('../', import.meta.url));
 const slugPattern = /^[a-z0-9]+(?:-[a-z0-9]+)*$/;
@@ -14,6 +15,9 @@ export function validateArticle(file, source) {
   if (!slugPattern.test(name)) throw new Error(`${file}：文件名必须使用英文 kebab-case`);
   if (data?.urlName !== name) throw new Error(`${file}：英文网址名 urlName 须与文件名 ${name} 一致。已发布文章请保留原网址名。`);
   if (typeof data.draft !== 'boolean') throw new Error(`${file}：请明确设置草稿开关 draft`);
+  if (data.coverImage != null && data.coverImage !== '' && (typeof data.coverImage !== 'string' || !coverImagePattern.test(data.coverImage))) {
+    throw new Error(`${file}：缩略图须为 /images/ 下的站内图片`);
+  }
   return { data, body: source.slice(front[0].length) };
 }
 
@@ -32,6 +36,8 @@ export function checkCms(workspace = root) {
   for (const entry of entries) {
     if (entry.operations?.rename !== false || entry.operations?.delete !== false) throw new Error(`${entry.name}：请保留文章改名/删除保护`);
     if (entry.type === 'collection' && (entry.filename.template !== '{fields.urlName}.md' || entry.filename.field !== false)) throw new Error('新文件名必须由英文网址名生成');
+    if (!entry.fields.some(field => field.name === 'coverImage' && field.component === 'article_cover')
+      || !entry.fields.some(field => field.name === 'coverAlt' && field.component === 'article_cover_alt')) throw new Error(`${entry.name}：请保留缩略图字段`);
     for (const field of entry.fields) {
       if (field.name === 'slug') throw new Error('勿使用 Astro 的保留 slug 字段覆盖实际路由');
       if (field.component && !components[field.component]) throw new Error(`缺少字段组件 ${field.component}`);
@@ -48,7 +54,6 @@ export function checkCms(workspace = root) {
       if (needsProtectedBody(article.body)) {
         const protectedEntry = entries.find(entry => entry.type === 'file' && entry.path === articlePath);
         const field = protectedEntry?.fields.find(field => field.name === 'body');
-        const hasFootnotes = /\[\^[^\]\r\n]+\]/.test(article.body);
         const hasFineHtml = /<(?:figure|iframe|table)\b/i.test(article.body);
         if (field?.type !== 'code' || field.options?.format !== 'markdown' || (hasFineHtml && !field.readonly)) {
           throw new Error(`${articlePath}：含脚注或精排 HTML，须配置独立 Markdown 代码正文入口；精排 HTML 须只读`);
