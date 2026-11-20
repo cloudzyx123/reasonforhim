@@ -22,6 +22,7 @@ const [thumbnails, featuredCovers] = await Promise.all([
   Promise.all(featured.map(async post => [post.id, await resolveCover(post, 'featured')] as const)).then(entries => new Map(entries)),
 ]);
 const popularityUrl = import.meta.env.PUBLIC_ARTICLE_POPULARITY_URL;
+const productionPopularityUrl = 'https://cloudzyx123.github.io/reasonforhim/article-popularity.json';
 const thumbnailSizes = '(max-width: 360px) 88px, (max-width: 760px) 96px, 128px';
 const years = [...new Set(posts.map(post => post.data.pubDate.getUTCFullYear()))].sort((a, b) => b - a);
 const sections = SECTION_IDS.map(id => ({
@@ -116,10 +117,13 @@ const date = (post: CollectionEntry<Lang>) => post.data.pubDate.toLocaleDateStri
           <p data-result-count aria-live="polite">{zh ? '按发布时间排序' : 'Most recent first'}</p>
           <button type="button" data-reset hidden>{zh ? '清除筛选 ×' : 'Clear filters ×'}</button>
         </div>
-        <script is:inline>
-          if (new URLSearchParams(location.search).get('sort') === 'top') {
-            const section = document.currentScript.closest('[data-popularity-url]');
-            if (section) {
+        <script is:inline define:vars={{ productionHost: Astro.site?.hostname, productionPopularityUrl }}>
+          const section = document.currentScript.closest('[data-archive]');
+          if (section) {
+            if (!section.dataset.popularityUrl && location.hostname === productionHost) {
+              section.dataset.popularityUrl = productionPopularityUrl;
+            }
+            if (section.dataset.popularityUrl && new URLSearchParams(location.search).get('sort') === 'top') {
               section.dataset.topPending = '';
               setTimeout(() => delete section.dataset.topPending, 5000);
             }
