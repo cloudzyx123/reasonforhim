@@ -282,6 +282,7 @@ svg {
 
 .footer-top {
   display:flex;
+  flex-wrap:wrap;
   justify-content:space-between;
   gap:35px;
   padding-block:42px
@@ -301,9 +302,16 @@ svg {
 
 .footer-top nav {
   display:flex;
-  gap:32px;
+  flex-wrap:wrap;
+  gap:0 32px;
   align-items:center;
   font-size:13px
+}
+
+.footer-top nav a {
+  display:inline-flex;
+  align-items:center;
+  min-height:44px
 }
 
 .footer-bottom {
@@ -362,8 +370,7 @@ svg {
     padding-block:30px
   }
   .footer-top nav {
-    gap:24px;
-    flex-wrap:wrap
+    gap:0 24px
   }
   .footer-bottom {
     flex-direction:column;

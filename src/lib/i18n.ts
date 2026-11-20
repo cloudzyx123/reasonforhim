@@ -7,6 +7,11 @@ export const LABELS: Record<Lang, { siteName: string; home: string }> = {
   en: { siteName: 'Reason for Him', home: 'Home' },
 };
 
+export const HOME_SCREEN_GUIDE = {
+  zh: { label: '添加到手机桌面', href: '/subscribe/#home-screen' },
+  en: { label: 'Add to Home Screen', href: '/subscribe/#home-screen-en' },
+} as const;
+
 /**
  * 给定当前文章的 translationId，去"另一种语言"的合集里找配对的译文。
  * 找不到（或本来就没填 translationId）就返回空数组 —— 这完全正常，

@@ -2,7 +2,7 @@
 import { publicDir } from 'astro:config/server';
 import Layout from '../layouts/Layout.astro';
 import EssayRow from './EssayRow.astro';
-import type { Lang } from '../lib/i18n';
+import { HOME_SCREEN_GUIDE, type Lang } from '../lib/i18n';
 import { FEATURED_ARTICLES, getSection, SECTIONS } from '../lib/editorial';
 import { selectHomeReading } from '../lib/article-list.mjs';
 import { catalogue, formatEssayDate } from '../lib/catalogue';
@@ -87,6 +87,7 @@ const coverSizes = '(max-width: 640px) calc(100vw - 40px), (max-width: 760px) 46
           <a href="https://space.bilibili.com/53749288">{zh ? 'B 站' : 'Bilibili'}</a>
           <a href={`/${lang}/rss.xml`}>RSS</a>
           <a href="/subscribe/">{zh ? '邮件订阅' : 'Subscribe by email'}</a>
+          <a href={HOME_SCREEN_GUIDE[lang].href}>{HOME_SCREEN_GUIDE[lang].label}</a>
         </div>
       </div>
     </section>
