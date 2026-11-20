@@ -3,8 +3,10 @@ import { mkdtemp, mkdir, writeFile, readFile, rm, access } from 'node:fs/promise
 import os from 'node:os';
 import path from 'node:path';
 import test from 'node:test';
+import { listCoverResolver } from '../src/lib/list-covers.ts';
+import { FEATURED_ARTICLES } from '../src/lib/editorial.ts';
 import { parse } from 'parse5';
-import { DAY_MS, articleOrder, compareArticles, getTopWindow, matchesArticle, selectFeatured, validatePopularitySnapshot } from '../src/lib/article-list.mjs';
+import { DAY_MS, articleOrder, compareArticles, getTopWindow, matchesArticle, selectHomeReading, validatePopularitySnapshot } from '../src/lib/article-list.mjs';
 import { analyticsWindow, collectPopularity, publishedPaths } from './update-article-popularity.mjs';
 
 const now = Date.parse('2026-11-18T18:00:00Z');
@@ -50,10 +52,17 @@ test('Top requires a fresh, valid snapshot with measured views in the current la
   assert.equal(validatePopularitySnapshot({ ...raw, windowEnd: '2026-11-31' }), null);
 });
 
-test('editorial selections prioritize explicit public IDs and fill remaining slots in date order', () => {
-  const posts = ['latest', 'second', 'third', 'fourth', 'draft'].map(id => ({ id, data: { draft: id === 'draft' } }));
-  assert.deepEqual(selectFeatured(posts, ['draft', 'fourth', 'missing', 'fourth']).map(post => post.id), ['fourth', 'latest', 'second']);
-  assert.deepEqual(selectFeatured(posts, []).map(post => post.id), ['latest', 'second', 'third']);
+test('a single configured public cover precedes up to five other recent essays', () => {
+  for (const size of [0, 1, 2, 3, 8]) {
+    const posts = Array.from({ length: size }, (_, i) => ({ id: String(i), data: {} }));
+    const draft = { id: 'draft', data: { draft: true } };
+    for (const ids of [[], ['draft', 'missing'], ['draft', '4', '4', '1']]) {
+      const { cover, recent } = selectHomeReading([draft, ...posts], ids);
+      const expected = ids.map(id => posts.find(post => post.id === id)).find(Boolean) ?? posts[0];
+      assert.equal(cover, expected);
+      assert.deepEqual(recent, posts.filter(post => post !== expected).slice(0, 5));
+    }
+  }
 });
 
 const limits = { enabled: true, maxDuration: 30 * DAY_MS / 1000, notOlderThan: 180 * DAY_MS / 1000, maxPageSize: 3 };
@@ -120,32 +129,86 @@ function attr(node, name) {
   return node.attrs?.find(attribute => attribute.name === name)?.value;
 }
 
-test('both languages ship a date-sorted catalogue, working thumbnails, and clean canonical URLs', async () => {
-  const paths = await publishedPaths();
+test('article artwork requires an existing original and body picks require a matching reference', async () => {
+  const resolve = listCoverResolver(new URL('../public/', import.meta.url), 'en');
+  const body = '/images/tea-at-four/tea-afternoon.webp';
+  const tea = { id: 'tea-at-four', body, data: { coverImage: '/images/missing.webp' } };
+  for (const placement of ['home', 'archive']) {
+    assert.equal((await resolve(tea, placement)).src, body);
+    assert.equal((await resolve({ ...tea, data: { coverImage: '/images/editorial/reason.webp' } }, placement)).src, body);
+    assert.equal((await resolve({ ...tea, body: '' }, placement)).src, '/images/tea-at-four/tea-cover.webp');
+    const cms = { coverImage: '/images/sam-kamaleson-street-testimony/madras-street-1945.jpg', coverAlt: 'A street in Madras.' };
+    const cover = await resolve({ ...tea, data: cms }, placement);
+    assert.equal(cover.src, cms.coverImage);
+    assert.equal(cover.alt, cms.coverAlt);
+  }
+  for (const coverImage of ['/images/missing.webp', '/images/editorial/dialogue.webp', '/images/editorial/grace-600.webp']) {
+    const post = { id: 'unknown', data: { section: 'life', coverImage } };
+    assert.equal(await resolve(post, 'home'), undefined);
+    assert.ok((await resolve(post, 'archive')).src.startsWith('/images/editorial/'));
+  }
+  assert.equal(await resolve({ id: 'god-is-dead-chesterton-vs-nietzsche', data: {} }, 'home'), undefined);
+});
+
+test('each home has a single cover, distinct recent essays and native catalogue destinations', async () => {
   for (const lang of ['zh', 'en']) {
-    for (const suffix of ['', 'archive/']) {
-      const url = `/${lang}/${suffix}`;
-      const document = parse(await readFile(`dist${url}index.html`, 'utf8'));
-      const rows = nodes(document, node => attr(node, 'data-post') !== undefined);
-      const ids = rows.map(row => ({ id: attr(row, 'data-post'), date: Date.parse(attr(row, 'data-date')) }));
-      assert.deepEqual(ids, [...ids].sort(compareArticles));
-      const links = rows.map(row => attr(nodes(row, node => node.tagName === 'a')[0], 'href'));
-      assert.deepEqual([...links].sort(), paths.filter(article => article.startsWith(`/${lang}/`)));
-      assert.equal(attr(nodes(document, node => attr(node, 'rel') === 'canonical')[0], 'href'), `https://reasonforhim.com${url}`);
-      assert.notEqual(attr(nodes(document, node => node.tagName === 'option' && attr(node, 'value') === 'top')[0], 'disabled'), undefined);
-      for (const row of rows) {
-        const [img] = nodes(row, node => node.tagName === 'img');
-        assert.equal(attr(img, 'loading'), 'lazy');
-        assert.notEqual(attr(img, 'alt'), undefined);
-        assert.ok(Number(attr(img, 'width')) > 0 && Number(attr(img, 'height')) > 0);
-        await access(`dist${attr(img, 'src')}`);
-        for (const candidate of (attr(img, 'srcset') ?? '').split(', ').filter(Boolean)) await access(`dist${candidate.split(' ')[0]}`);
-      }
+    const home = parse(await readFile(`dist/${lang}/index.html`, 'utf8'));
+    const archive = parse(await readFile(`dist/${lang}/archive/index.html`, 'utf8'));
+    const rows = doc => nodes(doc, node => attr(node, 'data-post') !== undefined);
+    const posts = rows(archive).map(row => ({ id: attr(row, 'data-post'), data: {} }));
+    const { cover, recent } = selectHomeReading(posts, FEATURED_ARTICLES[lang]);
+    assert.equal(nodes(home, node => node.tagName === 'h1').length, 1);
+    assert.equal(nodes(home, node => attr(node, 'data-archive') !== undefined).length, 0);
+    assert.equal(attr(nodes(home, node => attr(node, 'rel') === 'canonical')[0], 'href'), `https://reasonforhim.com/${lang}/`);
+    assert.equal(attr(nodes(home, node => node.tagName === 'form')[0], 'action'), `/${lang}/archive/#articles`);
+    for (const id of ['about', 'articles']) assert.equal(nodes(home, node => attr(node, 'id') === id).length, 1);
+    for (const section of ['faith', 'scripture', 'literature', 'life']) {
+      assert.ok(nodes(home, node => attr(node, 'href') === `/${lang}/archive/?section=${section}#articles`).length);
+    }
+    assert.deepEqual(rows(home).map(row => attr(row, 'data-post')), recent.map(post => post.id));
+    const lead = nodes(home, node => attr(node, 'aria-labelledby') === 'cover-title');
+    assert.equal(lead.length, cover ? 1 : 0);
+    if (!cover) continue;
+    assert.equal(attr(lead[0], 'href'), `/${lang}/${cover.id}/`);
+    const [img] = nodes(lead[0], node => node.tagName === 'img');
+    const archiveRow = rows(archive).find(row => attr(row, 'data-post') === cover.id);
+    const [thumbnail] = nodes(archiveRow, node => node.tagName === 'img');
+    const original = src => src.replace(/^\/(?:_thumbs|images)\//, '').replace(/-\d+\.webp$/, '');
+    const archiveArt = thumbnail && original(attr(thumbnail, 'src'));
+    if (archiveArt && !/^editorial\/(grace|dialogue|reason)(-600)?\.webp$/.test(archiveArt)) assert.ok(img);
+    if (img) {
+      assert.equal(original(attr(img, 'src')), archiveArt);
+      assert.equal(attr(img, 'loading'), 'eager');
+      assert.equal(attr(img, 'fetchpriority'), 'high');
+      for (const candidate of attr(img, 'srcset').split(', ')) await access(`dist${candidate.split(' ')[0]}`);
     }
   }
 });
 
-test('reviewed body images take priority on home and archive, with language-specific picks', async () => {
+test('both languages ship a date-sorted catalogue, working thumbnails, and clean canonical URLs', async () => {
+  const paths = await publishedPaths();
+  for (const lang of ['zh', 'en']) {
+    const url = `/${lang}/archive/`;
+    const document = parse(await readFile(`dist${url}index.html`, 'utf8'));
+    const rows = nodes(document, node => attr(node, 'data-post') !== undefined);
+    const ids = rows.map(row => ({ id: attr(row, 'data-post'), date: Date.parse(attr(row, 'data-date')) }));
+    assert.deepEqual(ids, [...ids].sort(compareArticles));
+    const links = rows.map(row => attr(nodes(row, node => node.tagName === 'a')[0], 'href'));
+    assert.deepEqual([...links].sort(), paths.filter(article => article.startsWith(`/${lang}/`)));
+    assert.equal(attr(nodes(document, node => attr(node, 'rel') === 'canonical')[0], 'href'), `https://reasonforhim.com${url}`);
+    assert.notEqual(attr(nodes(document, node => node.tagName === 'option' && attr(node, 'value') === 'top')[0], 'disabled'), undefined);
+    for (const row of rows) {
+      const [img] = nodes(row, node => node.tagName === 'img');
+      assert.equal(attr(img, 'loading'), 'lazy');
+      assert.notEqual(attr(img, 'alt'), undefined);
+      assert.ok(Number(attr(img, 'width')) > 0 && Number(attr(img, 'height')) > 0);
+      await access(`dist${attr(img, 'src')}`);
+      for (const candidate of (attr(img, 'srcset') ?? '').split(', ').filter(Boolean)) await access(`dist${candidate.split(' ')[0]}`);
+    }
+  }
+});
+
+test('reviewed body images take priority in the archive, with language-specific picks', async () => {
   const expected = {
     zh: {
       'a-kid-asks-if-my-parents-dont-believe-in-jesus-can-they-go-to-heaven': 'christ-blessing-the-children.webp',
@@ -166,19 +229,17 @@ test('reviewed body images take priority on home and archive, with language-spec
     },
   };
   for (const [lang, covers] of Object.entries(expected)) {
-    for (const suffix of ['', 'archive/']) {
-      const document = parse(await readFile(`dist/${lang}/${suffix}index.html`, 'utf8'));
-      for (const [id, file] of Object.entries(covers)) {
-        const [row] = nodes(document, node => attr(node, 'data-post') === id);
-        const [img] = nodes(row, node => node.tagName === 'img');
-        assert.ok(attr(img, 'src').endsWith(`/${id}/${file}-160.webp`), `${lang}/${id} uses its own article image`);
-        assert.ok(attr(img, 'alt').trim());
-      }
-      if (lang === 'zh') {
-        const [row] = nodes(document, node => attr(node, 'data-post') === 'a-painful-letter-of-recovery-rethinking-church-liberalization-and-lgbt-movement');
-        const [img] = nodes(row, node => node.tagName === 'img');
-        assert.equal(attr(img, 'src'), '/_thumbs/editorial/grace.webp-160.webp');
-      }
+    const document = parse(await readFile(`dist/${lang}/archive/index.html`, 'utf8'));
+    for (const [id, file] of Object.entries(covers)) {
+      const [row] = nodes(document, node => attr(node, 'data-post') === id);
+      const [img] = nodes(row, node => node.tagName === 'img');
+      assert.ok(attr(img, 'src').endsWith(`/${id}/${file}-160.webp`), `${lang}/${id} uses its own article image`);
+      assert.ok(attr(img, 'alt').trim());
+    }
+    if (lang === 'zh') {
+      const [row] = nodes(document, node => attr(node, 'data-post') === 'a-painful-letter-of-recovery-rethinking-church-liberalization-and-lgbt-movement');
+      const [img] = nodes(row, node => node.tagName === 'img');
+      assert.equal(attr(img, 'src'), '/_thumbs/editorial/grace.webp-160.webp');
     }
   }
 });

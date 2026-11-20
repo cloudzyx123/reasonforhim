@@ -1,8 +1,8 @@
 ---
-import HomePage from '../../components/HomePage.astro';
+import ArchivePage from '../../components/ArchivePage.astro';
 export function getStaticPaths() {
   return (['zh', 'en'] as const).map(lang => ({ params: { lang }, props: { lang } }));
 }
 const { lang } = Astro.props;
 ---
-<HomePage lang={lang} archiveOnly />
+<ArchivePage lang={lang} />

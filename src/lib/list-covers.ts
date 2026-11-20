@@ -1,7 +1,7 @@
 import { access } from 'node:fs/promises';
 import { fileURLToPath } from 'node:url';
 import sharp from 'sharp';
-import { EDITORIAL_COVERS, getSection, type SectionId } from './editorial';
+import { EDITORIAL_COVERS, getSection, type SectionId } from './editorial.ts';
 import type { Lang } from './i18n';
 
 type CoverChoice = { src?: string; alt: string; position?: string; fit?: 'contain' };
@@ -126,11 +126,13 @@ const bodyCovers: Record<string, CoverChoice & { src: string }> = {
 };
 
 const sectionCovers = {
-  faith: EDITORIAL_COVERS['confidence-behind-rationality-science-atheism-faith-issue'],
-  scripture: EDITORIAL_COVERS['if-i-were-paralyzed-a-poems-gospel-reflection'],
-  literature: EDITORIAL_COVERS['god-is-dead-chesterton-vs-nietzsche'],
-  life: EDITORIAL_COVERS['if-i-were-paralyzed-a-poems-gospel-reflection'],
+  faith: '/images/editorial/reason.webp',
+  scripture: '/images/editorial/grace.webp',
+  literature: '/images/editorial/dialogue.webp',
+  life: '/images/editorial/grace.webp',
 };
+
+const brandImages = new Set(Object.values(sectionCovers).flatMap(src => [src, src.replace('.webp', '-600.webp')]));
 
 export function listCoverResolver(publicDir: URL, lang: Lang) {
   const metadata = new Map<string, ReturnType<typeof readImage>>();
@@ -153,17 +155,20 @@ export function listCoverResolver(publicDir: URL, lang: Lang) {
 
   return async (
     post: { id: string; body?: string; data: { section?: SectionId; coverImage?: string; coverAlt?: string } },
-    placement: 'thumbnail' | 'featured',
+    page: 'home' | 'archive',
   ) => {
     const mapped = Object.hasOwn(EDITORIAL_COVERS, post.id) ? EDITORIAL_COVERS[post.id] : undefined;
     const bodyCover = bodyCovers[`${lang}/${post.id}`];
-    const fallback = sectionCovers[getSection(post)];
-    const choices: (CoverChoice | undefined)[] = [
+    const configured: (CoverChoice | undefined)[] = [
       { src: post.data.coverImage, alt: post.data.coverAlt ?? '' },
-      placement === 'thumbnail' && bodyCover && post.body?.includes(bodyCover.src) ? bodyCover : undefined,
+      bodyCover && post.body?.includes(bodyCover.src) ? bodyCover : undefined,
       { src: mapped?.src, alt: mapped?.[lang] ?? '' },
-      { src: fallback.src, alt: '' },
     ];
+    const choices = configured.filter(choice => choice?.src && !brandImages.has(choice.src));
+    if (page === 'archive') {
+      choices.push(...configured.filter(choice => choice?.src && brandImages.has(choice.src)));
+      choices.push({ src: sectionCovers[getSection(post)], alt: '' });
+    }
     for (const choice of choices) {
       if (!choice?.src) continue;
       const { src, alt, position, fit } = choice;
