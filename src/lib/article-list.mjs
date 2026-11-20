@@ -48,8 +48,16 @@ export function matchesArticle(article, { terms, topic, section, year }) {
     && (!year || article.year === year);
 }
 
-export function selectFeatured(posts, ids) {
-  const byId = new Map(posts.filter(post => !post.data.draft).map(post => [post.id, post]));
-  const orderedIds = new Set([...ids, ...byId.keys()]);
-  return Array.from(orderedIds, id => byId.get(id)).filter(Boolean).slice(0, 3);
+/**
+ * @template {{ id: string, data: { draft?: boolean } }} T
+ * @param {T[]} posts Essays from one language, newest first.
+ * @param {readonly string[]} featuredIds
+ */
+export function selectHomeReading(posts, featuredIds) {
+  const published = posts.filter(post => !post.data.draft);
+  const byId = new Map(published.map(post => [post.id, post]));
+  const selectedId = featuredIds.find(id => byId.has(id));
+  const cover = selectedId ? byId.get(selectedId) : published[0];
+  const recent = published.filter(post => post !== cover).slice(0, 5);
+  return { cover, recent };
 }

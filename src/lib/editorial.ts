@@ -3,7 +3,7 @@ import type { Lang } from './i18n';
 export const SECTION_IDS = ['faith', 'scripture', 'literature', 'life'] as const;
 export type SectionId = typeof SECTION_IDS[number];
 
-// 按展示顺序填写每种语言的文章文件名，省略 .md。空位由最新公开文章补齐。
+// 按展示顺序填写每种语言的文章文件名，省略 .md。首页采用首篇有效的公开文章；留空时采用最新公开文章。
 export const FEATURED_ARTICLES: Record<Lang, readonly string[]> = {
   zh: [],
   en: [],
