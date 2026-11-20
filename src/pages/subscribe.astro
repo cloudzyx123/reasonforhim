@@ -60,6 +60,8 @@ const formUrl = getEmailFormUrl();
             <li>在菜单中向下滑动，点「添加到主屏幕」。</li>
             <li>确认名称，点「添加」。</li>
           </ol>
+          <img class="guide-illustration" src="/images/home-screen/iphone-zh.webp" width="780" height="1380" loading="lazy" decoding="async"
+            alt="Safari 操作示意图：工具栏中的方框上箭头是「共享」，点开后向下找「添加到主屏幕」。" />
           <p class="note">若看到「作为网页 App 打开」开关，开启后会在独立窗口中打开，关闭则在 Safari 中打开。</p>
           <p class="note">找不到「添加到主屏幕」？请确认使用的是 Safari。也可以滑到共享菜单底部，点「编辑操作」把它加回来。不同布局的按钮位置可能略有差异。</p>
           <h3>Android（Chrome）</h3>
@@ -69,6 +71,8 @@ const formUrl = getEmailFormUrl();
             <li>在较新的版本中，点「安装并创建快捷方式」，再选「创建快捷方式」。较旧的版本中，这个选项叫「添加到主屏幕」。</li>
             <li>确认名称，点「添加」。</li>
           </ol>
+          <img class="guide-illustration" src="/images/home-screen/android-zh.webp" width="780" height="1370" loading="lazy" decoding="async"
+            alt="Chrome 操作示意图：点地址栏右侧的三个点，选择「安装并创建快捷方式」，再点「创建快捷方式」。" />
           <p class="note">使用华为、小米、vivo、OPPO 等手机自带的浏览器，或使用夸克等浏览器时，请在菜单中寻找「添加到桌面」「发送到桌面」或相近的选项。</p>
           <p class="note">点了没有反应？部分手机需要先到系统「设置」里，为该浏览器开启「桌面快捷方式」权限。</p>
           <h3>从微信打开的读者</h3>
@@ -93,6 +97,8 @@ const formUrl = getEmailFormUrl();
               <li>Scroll down and tap Add to Home Screen.</li>
               <li>Check the name and tap Add.</li>
             </ol>
+            <img class="guide-illustration" src="/images/home-screen/iphone-en.webp" width="780" height="1380" loading="lazy" decoding="async"
+              alt="Safari illustration. Tap the square with an upward arrow to share, then scroll down to Add to Home Screen." />
             <p class="note">If you see an “Open as Web App” switch, leave it on to open the site in a separate window, or turn it off to open in Safari.</p>
             <h4>Android (Chrome)</h4>
             <ol>
@@ -101,6 +107,8 @@ const formUrl = getEmailFormUrl();
               <li>Tap Install and create shortcut, then Create shortcut. In older versions, look for Add to Home screen.</li>
               <li>Tap Add.</li>
             </ol>
+            <img class="guide-illustration" src="/images/home-screen/android-en.webp" width="780" height="1454" loading="lazy" decoding="async"
+              alt="Chrome illustration. Tap the three dots beside the address bar, then Install and create shortcut, then Create shortcut." />
             <p class="note">Other browsers usually offer a similar “Add to Home screen” option in their menu.</p>
           </div>
         </details>
@@ -166,6 +174,7 @@ const formUrl = getEmailFormUrl();
   .steps ol { padding-inline-start: 1.6em; margin: 0 0 12px; }
   .steps li + li { margin-top: 4px; }
   .steps p { margin-bottom: 10px; }
+  .guide-illustration { display: block; width: min(100%, 390px); height: auto; margin-block: 16px; border: 1px solid var(--line); }
   .home-link { display: flex; flex-wrap: wrap; align-items: center; gap: 0 16px; }
   .home-link a { display: inline-flex; align-items: center; min-height: 44px; text-decoration: underline; text-underline-offset: 4px; }
   .home-link span { color: var(--muted); font-size: 13px; }
