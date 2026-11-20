@@ -130,8 +130,7 @@ const languageHref = (target: Lang) => target === lang ? path : alternates.find(
           <button class="mobile-nav-toggle" type="button" data-nav-toggle aria-expanded="false" aria-controls="site-navigation" hidden>{isZh ? '菜单' : 'Menu'} <span aria-hidden="true">☰</span></button>
           <nav id="site-navigation" class="primary-nav" aria-label={isZh ? '主导航' : 'Main navigation'}>
             <a href={`/${lang}/`} aria-current={path === `/${lang}/` ? 'page' : undefined}>{isZh ? '首页' : 'Home'}</a>
-            <a href={`/${lang}/archive/`} aria-current={path === `/${lang}/archive/` ? 'page' : undefined}>{isZh ? '文章' : 'Essays'}</a>
-            <a href={`/${lang}/archive/#topics`}>{isZh ? '阅读栏目' : 'Sections'}</a>
+            <a href={`/${lang}/archive/`} aria-current={path === `/${lang}/archive/` ? 'page' : undefined}>{isZh ? '文章馆藏' : 'Archive'}</a>
             <a href={`/${lang}/#about`}>{isZh ? '关于' : 'About'}</a>
             <a href="/subscribe/" aria-current={path === '/subscribe/' ? 'page' : undefined}>{isZh ? '订阅' : 'Subscribe'}</a>
           </nav>
