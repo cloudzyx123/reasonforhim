@@ -1,12 +1,12 @@
 # 热门排序接入与维护
 
-线上首页、馆藏及抽查文章的 HTML 均包含一份 Cloudflare Web Analytics beacon，站点代码里没有这段脚本。Cloudflare Pages 支持自动注入。现有部署令牌在账户查询返回 403，在 GraphQL schema 请求返回 401。账户的实际统计窗口、可用字段和采样结果待专用只读令牌验证。[Cloudflare Pages 的 Web Analytics](https://developers.cloudflare.com/pages/how-to/web-analytics/)
+线上首页和馆藏由 Cloudflare 自动注入 Web Analytics beacon。统计工作流使用单独的只读令牌查询文章浏览量。[Cloudflare Pages 的 Web Analytics](https://developers.cloudflare.com/pages/how-to/web-analytics/)
 
 ## 启用步骤
 
 1. 在 Cloudflare 的 Web Analytics 面板确认 `reasonforhim.com` 有页面浏览记录。为该账户创建只读 API Token，选择 **Account → Account Analytics → Read**，只授权这一账户。到 GitHub 仓库的 **Settings → Secrets and variables → Actions**，将令牌存为 Secret `CLOUDFLARE_ANALYTICS_TOKEN`，将 Cloudflare Account ID 存为 Variable `CLOUDFLARE_ACCOUNT_ID`。[Cloudflare 权限说明](https://developers.cloudflare.com/fundamentals/api/reference/permissions/)
 2. 在 GitHub 的 **Settings → Pages** 将 Source 设为 **GitHub Actions**。升级合并后，在 **Actions → Refresh article popularity** 从 `main` 运行一次，确认成功发布 `article-popularity.json`。这个 GitHub Pages 项目只托管统计文件。[GitHub Pages 配置](https://docs.github.com/en/pages/getting-started-with-github-pages/configuring-a-publishing-source-for-your-github-pages-site)
-3. 在现有 Cloudflare 生产构建的环境变量中加入 `PUBLIC_ARTICLE_POPULARITY_URL=https://cloudzyx123.github.io/reasonforhim/article-popularity.json`，随下一次部署生效。这个地址是公开文件，API Token 只存放在 GitHub Secrets。部署后在中文与英文馆藏分别检查热门选项是否可用。每种语言须有自己的有效浏览数据才会显示。
+3. `reasonforhim.com` 默认读取 GitHub Pages 的公开统计文件。需要更换数据源时，可在构建环境设置 `PUBLIC_ARTICLE_POPULARITY_URL`。部署后在中文与英文馆藏分别检查热门选项是否可用。每种语言须有自己的有效浏览数据才会显示。
 
 ## 统计与故障处理
 
