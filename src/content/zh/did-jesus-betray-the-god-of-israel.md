@@ -12,6 +12,7 @@ tags:
   - 伊斯兰教
   - " 复活"
 draft: false
+coverAlt: 大祭司质问耶稣，耶稣沉静地站立。烛光将宗教权威与受审者置于鲜明对照中，恰好呼应“究竟是谁背离了上帝”的问题。
 ---
 **问：** 如果伊斯兰教与基督教信仰的不是同一位神，那么犹太教与基督教信仰的同样不是同一位神。这意味着耶稣是个实打实的叛徒和骗子，他背叛了犹太人的上帝。不知道我的逻辑是否正确呢？
 
@@ -45,9 +46,9 @@ draft: false
 
 ![960px-Gerard_van_Honthorst_-_Christ_before_the_High_Priest_-_WGA11650.jpg](/images/mwpyjbwi-s79bwf55.jpg)
 
-```
 *洪特霍斯特，《基督在大祭司面前》，约1617年。伦敦国家美术馆藏。图片来源：Wikimedia Commons（Public Domain）。*
-```
+
+
 
 那么，究竟是谁“背叛”了谁？
 
