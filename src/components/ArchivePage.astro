@@ -1,4 +1,5 @@
 ---
+import EmailSignup from "../components/EmailSignup.astro";
 import { publicDir } from 'astro:config/server';
 import Layout from '../layouts/Layout.astro';
 import EssayRow from './EssayRow.astro';
@@ -105,6 +106,7 @@ const years = [...new Set(posts.map(post => post.data.pubDate.getUTCFullYear()))
             <a class="text-link" href="https://space.bilibili.com/53749288" target="_blank" rel="noopener noreferrer">{zh ? '观看 B 站视频' : 'Watch on Bilibili'} <span aria-hidden="true">↗</span></a>
             <a class="text-link" href={`/${lang}/rss.xml`}>{zh ? '通过 RSS 订阅' : 'Follow via RSS'} <span aria-hidden="true">↗</span></a>
           </div>
+          <EmailSignup {lang} />
         </section>
       </aside>
     </div>

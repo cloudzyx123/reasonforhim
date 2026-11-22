@@ -1,0 +1,76 @@
+---
+import { getEmailFormUrl } from '../config/subscriptions';
+import type { Lang } from '../lib/i18n';
+interface Props { lang: Lang }
+const { lang } = Astro.props;
+const zh = lang === 'zh';
+const action = getEmailFormUrl();
+---
+{action && <div>
+  <a data-signup-fallback href={action}>{zh ? '通过邮件订阅文章' : 'Subscribe by email'}</a>
+<form hidden data-email-signup class="email-signup" method="post" action={action} aria-label={zh ? '邮件订阅' : 'Email subscription'}>
+  <h3>{zh ? '新文章，寄到你的邮箱' : 'New essays by email'}</h3>
+  <label class="consent"><input type="checkbox" name="OPT_IN" value="1" required />
+    {zh ? '我同意接收文章更新，可随时退订。' : 'Email me new essays. I can unsubscribe anytime.'}</label>
+  <div class="controls">
+    <label><span class="sr-only">{zh ? '邮箱地址' : 'Email address'}</span>
+      <input type="email" name="EMAIL" autocomplete="email" required placeholder={zh ? '邮箱地址' : 'Email address'} /></label>
+    <button type="submit">{zh ? '订阅更新' : 'Subscribe'}</button>
+  </div>
+  <input class="trap" type="text" name="email_address_check" value="" tabindex="-1" autocomplete="off" aria-hidden="true" />
+  <input type="hidden" name="locale" value="en" />
+  <small>{zh ? '提交后，请到邮箱确认。' : 'Check your inbox to confirm.'} <a href="https://www.brevo.com/en/legal/privacypolicy/">{zh ? 'Brevo 隐私政策' : 'Brevo privacy policy'}</a></small>
+  <p role="status" aria-live="polite"></p>
+</form></div>}
+<script>
+  for (const form of document.querySelectorAll<HTMLFormElement>('[data-email-signup]')) {
+    const fallback = form.previousElementSibling as HTMLAnchorElement;
+    const button = form.querySelector('button')!;
+    const status = form.querySelector('[role="status"]')!;
+    const zh = document.documentElement.lang.startsWith('zh');
+    form.hidden = false;
+    fallback.hidden = true;
+    form.addEventListener('submit', async event => {
+      event.preventDefault();
+      if (button.disabled) return;
+      button.disabled = true;
+      status.textContent = zh ? '正在提交…' : 'Submitting…';
+      try {
+        const response = await fetch(form.action, {
+          method: 'POST', body: new FormData(form), credentials: 'omit', signal: AbortSignal.timeout(20000),
+        });
+        const result = await response.json();
+        if (!response.ok || result.success !== true) {
+          status.textContent = result.errors?.EMAIL || result.errors?.OPT_IN ||
+            (zh ? '未能提交，请检查邮箱或使用上方的订阅链接。' : 'Check your email address or use the subscription link above.');
+          fallback.hidden = false;
+          return;
+        }
+        form.reset();
+        status.textContent = zh ? '请查收确认邮件，点击邮件中的链接完成订阅。' : 'Check your inbox and follow the link to confirm your subscription.';
+      } catch {
+        status.textContent = zh ? '暂时无法确认提交结果。请先查看收件箱，也可使用上方的订阅链接。' : 'We could not confirm the result. Check your inbox or use the subscription link above.';
+        fallback.hidden = false;
+      } finally {
+        button.disabled = false;
+      }
+    });
+  }
+</script>
+<style>
+  .email-signup { position:relative; border-top:1px solid var(--line); padding-top:16px; margin-top:16px; max-width:28rem; }
+  [hidden] { display:none !important; }
+  [role="status"]:empty { display:none; }
+  .email-signup h3 { font:500 19px/1.45 var(--serif); margin:0 0 6px; }
+  .consent { display:flex; gap:7px; align-items:center; min-height:44px; font-size:13px; cursor:pointer; }
+  .consent input { accent-color:var(--forest); flex:none; }
+  .controls { display:flex; flex-wrap:wrap; gap:6px; }
+  .controls label { flex:1 1 9rem; min-width:0; }
+  .controls input,button { min-height:44px; border:1px solid var(--control-line); border-radius:2px; }
+  .controls input { width:100%; padding:8px; font:inherit; font-size:16px; }
+  button { background:var(--forest); color:white; padding:8px 12px; }
+  small { display:block; color:var(--muted); margin-top:8px; }
+  small a { text-decoration:underline; }
+  .trap { position:absolute; left:0; width:1px; height:1px; opacity:0; pointer-events:none; }
+  @media print { .email-signup { display:none } }
+</style>

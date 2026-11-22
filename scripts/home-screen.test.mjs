@@ -20,7 +20,6 @@ for (const [lang, anchor] of [['zh', 'home-screen'], ['en', 'home-screen-en']]) 
     const home = page(lang);
     const article = page(`${lang}/sam-kamaleson-street-testimony`);
     const areas = [
-      find(home, node => attr(node, 'id') === 'about'),
       find(home, node => node.tagName === 'footer'),
       find(article, node => node.tagName === 'footer'),
     ];

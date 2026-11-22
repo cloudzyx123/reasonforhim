@@ -300,6 +300,12 @@ svg {
   color:#b8c5b5
 }
 
+.footer-contact a {
+  text-decoration:underline;
+  text-underline-offset:3px;
+  overflow-wrap:anywhere
+}
+
 .footer-top nav {
   display:flex;
   flex-wrap:wrap;

@@ -1,4 +1,5 @@
 ---
+import EmailSignup from "../components/EmailSignup.astro";
 import { getCollection, type CollectionEntry } from 'astro:content';
 import Layout from './Layout.astro';
 import Comments from '../components/Comments.astro';
@@ -56,6 +57,7 @@ const nextChapter = seriesIndex >= 0 ? others.find(entry => entry.id === seriesI
         <article class:list={['prose', { 'has-duplicate-title': duplicateTitle }]} lang={zh ? 'zh-Hans' : 'en'}><slot /></article>
         {post.data.tags.length > 0 && <section class="article-topics mobile-topics"><h2>{zh ? '相关主题' : 'Topics'}</h2><div>{post.data.tags.map(tag => <a href={`/${lang}/archive/?topic=${encodeURIComponent(tag)}#articles`}>{tag}</a>)}</div></section>}
         <ShareModule lang={lang} title={post.data.title} description={post.data.description} url={articleUrl} />
+        <div class="mobile-signup"><EmailSignup {lang} /></div>
         <div class="article-end"><a href="/subscribe/">{zh ? '订阅后续文章 →' : 'Subscribe to new essays →'}</a><a href={`/${lang}/archive/#articles`}>← {zh ? '返回全部文章' : 'Back to all essays'}</a></div>
         {(previousChapter || nextChapter) && <nav class="chapter-navigation" aria-label={zh ? '章节导航' : 'Chapter navigation'}>
           {previousChapter && <a href={`/${lang}/${previousChapter.id}/`}><small>{zh ? '← 上一章' : '← Previous chapter'}</small><span>{previousChapter.data.title}</span></a>}
@@ -73,6 +75,7 @@ const nextChapter = seriesIndex >= 0 ? others.find(entry => entry.id === seriesI
           {toc.length > 0 && <details class="contents"><summary><span class="toc-closed">{zh ? '展开目录' : 'Show contents'}</span><span class="toc-open">{zh ? '收起目录' : 'Hide contents'}</span></summary><nav aria-label={zh ? '文章目录' : 'Table of contents'}>{toc.map(heading => <a class:list={{ nested: heading.depth > minimumDepth }} href={`#${heading.slug}`}>{heading.text}</a>)}</nav></details>}
           {post.data.tags.length > 0 && <section class="article-topics"><h2>{zh ? '相关主题' : 'Topics'}</h2><div>{post.data.tags.map(tag => <a href={`/${lang}/archive/?topic=${encodeURIComponent(tag)}#articles`}>{tag}</a>)}</div></section>}
           <section class="reading-note"><p class="eyebrow">{zh ? '继续探寻' : 'CONTINUE THE EXPLORATION'}</p><p>{zh ? '把阅读，留给值得思考的事。' : 'Make room for ideas worth thinking about.'}</p><a href={`/${lang}/rss.xml`}>{zh ? 'RSS 订阅' : 'RSS feed'} ↗</a></section>
+          <div class="sidebar-signup"><EmailSignup {lang} /></div>
         </div>
       </aside>
     </div>
@@ -481,7 +484,10 @@ const nextChapter = seriesIndex >= 0 ? others.find(entry => entry.id === seriesI
     }
   }
 
+  .mobile-signup { display:none; }
   @media(max-width:850px) {
+    .mobile-signup { display:block; }
+    .sidebar-signup { display:none; }
     .reading-layout {
       display:flex;
       flex-direction:column;

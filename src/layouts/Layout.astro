@@ -1,5 +1,5 @@
 ---
-import { HOME_SCREEN_GUIDE, LABELS, type Lang } from '../lib/i18n';
+import { AUTHOR_EMAIL, HOME_SCREEN_GUIDE, LABELS, type Lang } from '../lib/i18n';
 import { canonicalUrl } from '../lib/share.mjs';
 import '../styles/global.css';
 
@@ -150,7 +150,9 @@ const languageHref = (target: Lang) => target === lang ? path : alternates.find(
 
     <footer class="site-footer">
       <div class="container footer-top">
-        <div><a class="footer-name" href={`/${lang}/`}>{LABELS[lang].siteName}</a><p>{isZh ? '让信仰经得起追问，让思考走向更深处。' : 'Faith worth questioning. Ideas worth exploring.'}</p></div>
+        <div><a class="footer-name" href={`/${lang}/`}>{LABELS[lang].siteName}</a><p>{isZh ? '让信仰经得起追问，让思考走向更深处。' : 'Faith worth questioning. Ideas worth exploring.'}</p>
+          <p class="footer-contact">{isZh ? '联系作者' : 'Contact the author'} · <a href={`mailto:${AUTHOR_EMAIL}`}>{AUTHOR_EMAIL}</a></p>
+        </div>
         <nav aria-label={isZh ? '页脚导航' : 'Footer navigation'}>
           <a href={`/${lang}/archive/`}>{isZh ? '全部文章' : 'All essays'}</a>
           <a href={`/${lang}/#about`}>{isZh ? '关于本站' : 'About this blog'}</a>
