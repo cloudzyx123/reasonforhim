@@ -2,7 +2,7 @@
 import { publicDir } from 'astro:config/server';
 import Layout from '../layouts/Layout.astro';
 import EssayRow from './EssayRow.astro';
-import type { Lang } from '../lib/i18n';
+import { AUTHOR_EMAIL, type Lang } from '../lib/i18n';
 import { FEATURED_ARTICLES, getSection, SECTIONS } from '../lib/editorial';
 import { selectHomeReading } from '../lib/article-list.mjs';
 import { catalogue, formatEssayDate } from '../lib/catalogue';
@@ -82,6 +82,9 @@ const coverSizes = '(max-width: 640px) calc(100vw - 40px), (max-width: 760px) 46
       <div>
         <h2 id="about-heading">{zh ? '关于这间书房' : 'About this reading room'}</h2>
         <p>{zh ? '这里收录关于福音、护教、释经与神学的文字，也关注文学与思想中的信仰回声。' : 'A collection of writing on the gospel, apologetics, Scripture, and theology, with an ear for the echoes of faith in literature and ideas.'}</p>
+        <p class="write-invitation">{zh
+          ? <>如果哪篇文章让你想到一个问题，或有不同的看法，欢迎<a href={`mailto:${AUTHOR_EMAIL}`}>给我写信</a>。</>
+          : <>If an essay brings a question to mind or you see things differently, I’d love to hear from you. <a href={`mailto:${AUTHOR_EMAIL}`}>Write to me</a>.</>}</p>
         <a class="email-link" href="/subscribe/#email-heading">{zh ? '通过邮件订阅新文章' : 'Subscribe to new essays by email'} <span aria-hidden="true">→</span></a>
       </div>
     </section>
@@ -128,6 +131,7 @@ const coverSizes = '(max-width: 640px) calc(100vw - 40px), (max-width: 760px) 46
   .about img { display: block; }
   .about h2 { font-size: 23px; }
   .about p { max-width: 74ch; margin: 8px 0 0; font-size: 14px; color: var(--muted); }
+  .write-invitation a { text-decoration: underline; text-underline-offset: 3px; }
   .email-link { gap: 8px; display: inline-flex; align-items: center; min-height: 44px; font-size: 13px; text-decoration: underline; text-underline-offset: 4px; }
   @media (max-width: 1000px) {
     .subjects nav { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px 24px; }

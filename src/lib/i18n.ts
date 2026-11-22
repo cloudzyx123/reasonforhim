@@ -2,6 +2,8 @@ import { getCollection } from 'astro:content';
 
 export type Lang = 'zh' | 'en';
 
+export const AUTHOR_EMAIL = 'hello@reasonforhim.com';
+
 export const LABELS: Record<Lang, { siteName: string; home: string }> = {
   zh: { siteName: '为何是祂', home: '首页' },
   en: { siteName: 'Reason for Him', home: 'Home' },
