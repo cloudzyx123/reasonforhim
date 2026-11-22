@@ -20,13 +20,13 @@ const image = lead && await resolveCover(lead, 'home');
 const coverSizes = '(max-width: 640px) calc(100vw - 40px), (max-width: 760px) 46vw, (max-width: 1240px) calc((100vw - 80px) * .48), 550px';
 ---
 <Layout
-  title={zh ? '首页' : 'Home'}
-  description={zh ? '福音、护教、释经与神学文章，在信仰与理性的交汇处探索真理。' : 'Essays on the gospel, apologetics, Scripture, and theology. Exploring faith and reason.'}
+  title={zh ? '信仰、理性与文学｜基督教护教与思想文章' : 'Home'}
+  description={zh ? '从路易斯笔下的神话，到人工智能带来的信仰之问，这间书房收录基督教护教、文学评论与圣经研读文章。' : 'Essays on the gospel, apologetics, Scripture, and theology. Exploring faith and reason.'}
   {lang} path={`/${lang}/`} alternates={[{ lang: otherLang, href: `/${otherLang}/` }]}
 >
   <div class="container reading-room">
     <section aria-labelledby="featured-heading">
-      <h1 class="rubric" id="featured-heading">{zh ? '书房选读' : 'From the reading room'}</h1>
+      <h1 class="rubric" id="featured-heading">{zh ? '信仰、理性与文学选读' : 'From the reading room'}</h1>
       {lead ? (
         <article class:list={['cover', { 'type-cover': !image }]}>
           <a href={`/${lang}/${lead.id}/`} aria-labelledby="cover-title" class="cover-link">

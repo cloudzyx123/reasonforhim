@@ -1,22 +1,23 @@
 ---
 urlName: lewis-and-tolkien-debate-myths-and-lies
 section: literature
-title: 从神话到真理：托尔金与C.S.路易斯觉醒时刻的对谈
-description: "重现1931年托尔金与C.S.路易斯那场促成路易斯归信的著名夜谈，探讨神话究竟是谎言还是承载真理的载体。"
+title: 神话与基督教：托尔金与 C.S. 路易斯的牛津夜谈
+description: 1931 年，路易斯与托尔金、戴森的一场夜谈，如何改变了他对福音的理解？路易斯在信中回顾了这场谈话，后人又将它改编为影视对白。
 pubDate: '2024-08-02'
-tags: []
+updatedDate: '2026-11-22'
+tags: [托尔金, C.S. 路易斯, 神话与基督教]
 draft: false
 ---
 
-## 从神话到真理：托尔金与C.S.路易斯觉醒时刻的对谈
+1931 年 9 月 19 日晚，C.S. 路易斯在牛津大学莫德林学院与 J.R.R. 托尔金、雨果·戴森共进晚餐。三人沿着艾迪生小径散步，谈起隐喻和神话，又回到路易斯的房间，继续谈基督教，直到次日凌晨。
 
-在牛津附近乡村路上，两位伟大的学者散着步。一位是神话小说家J.R.R.托尔金，即《魔戒》（《指环王》）的作者，另一位是同样伟大的作家C.S.路易斯，即《纳尼亚传奇》的作者。那时，路易斯三十出头，对神话和基督教上帝持怀疑态度；而托尔金比他年长几岁，已是一名基督徒。这场辩论最终促使 C.S.路易斯归信基督。
+三天后，路易斯写信给好友亚瑟·格里夫斯，还记得风吹落叶时，三个人曾一起屏住呼吸。到了 10 月 18 日，他在信里说起那晚触动自己的问题：为什么读到古老神话里一位神的牺牲，他会深受感动，读到福音书里基督的死与复活，却觉得难以理解？他用“真实的神话”来形容自己对福音的新认识：这个故事打动了他的想象力，而他也相信它发生在历史之中。[路易斯致格里夫斯的两封信（英文节录）](https://www.thegospelcoalition.org/blogs/evangelical-history/85-years-ago-today-j-r-r-tolkien-convinces-c-s-lewis-that-christ-is-the-true-myth/)
 
-@TonyReinke 在Twitter 上指出，“1931 年 9 月 19 日晚上，J.R.R.托尔金和 C.S.路易斯去散步。这是教会历史上最重要的散步之一。”
+![托尔金与路易斯的肖像拼图](../../assets/images/lewis-and-tolkien-debate-myths-and-lies/m8mdu63pm.webp)
 
+## 影视改编中的对话
 
-![](../../assets/images/lewis-and-tolkien-debate-myths-and-lies/m8mdu63pm.webp)
-
+下文译介的是 EWTN 纪录片中由演员演绎的对白。节目将那晚的讨论写成托尔金与路易斯的双人戏，具体措辞应按编剧的文学重构来读。可对照[节目片段的英文台词](https://sylvietheolog.wordpress.com/wp-content/uploads/2015/11/myths_and_lies_tolkien_lewis5.pdf)。
 
 路易斯：我觉得神话终究是荒谬的。
 
@@ -53,7 +54,7 @@ draft: false
 
 托尔金：啊哈，Quid est veritas，“真理是什么?” 我很高兴看到你进入了神话的精神，杰克，你刚刚扮演起了彼拉多的角色。（译注：典出《约翰福音》18:28。彼拉多是罗马帝国犹太行省的第五任总督。他最出名的事迹是判处耶稣钉十字架。）
 
-![](../../assets/images/lewis-and-tolkien-debate-myths-and-lies/nlg3alwme.webp)
+![耶稣站在彼拉多面前受审的画作](../../assets/images/lewis-and-tolkien-debate-myths-and-lies/nlg3alwme.webp)
 
 
 路易斯：彼拉多？（托尔金笑了）哦，我明白了。你能够相信较小的神话，是因为你已经接受了大的那个。 一旦你接受了大的神话，即关于基督的谎话，那么就很容易接受较小的神话。好吧，托勒，我来扮演彼拉多的角色——我洗手不干咯，不再想这些荒唐事儿了 （译注：四卷福音书都有记载彼拉多回避处死耶稣的责任。《马太福音》中，彼拉多洗手以示不负处死耶稣的责任，且不情愿地送他上刑架。）
@@ -71,7 +72,7 @@ draft: false
 路易斯：（沉默后）托勒，你刚才说的灾难和“福灾”是什么意思？
 
 托尔金：比如，这故事里有堕落（the Fall）的灾难，也有救赎的福灾；有钉十字架的灾难，也有复活的福灾。这其中有着人心所渴望的一切，因为它的讲述者就是渴望本身的实现者。这故事在喜乐中开始，也在喜乐中结束。
-![](../../assets/images/lewis-and-tolkien-debate-myths-and-lies/ry25ado98.webp)
+![四幅图依次以地球、果核、十字架和号角表现创造、堕落、救赎与复兴](../../assets/images/lewis-and-tolkien-debate-myths-and-lies/ry25ado98.webp)
 
 路易斯：但故事能带来快乐，并不一定就是真的。快乐的神话有很多，而它们在我看来都很假，很站不住脚。
 
@@ -83,7 +84,7 @@ draft: false
 
 路易斯：太惊人了，托勒，你让我大受震撼……
 
-![](../../assets/images/lewis-and-tolkien-debate-myths-and-lies/07ywcdpnn.webp)
+![路易斯与托尔金的黑白侧面肖像](../../assets/images/lewis-and-tolkien-debate-myths-and-lies/07ywcdpnn.webp)
 
 
 

@@ -1,15 +1,13 @@
 ---
 urlName: neglected-fairy-tale-master-and-removed-easter-eggs
 section: literature
-title: 被忽视的童话大师，和删去的彩蛋
+title: 被忽视的童话大师乔治·麦克唐纳，和被删去的三段对话
 description: "从《公主与哥布林》被删的三段作者与小读者对话，重新认识童话大师乔治·麦克唐纳，并追查1870年连载及1888年删节版的出版史。"
 pubDate: '2025-03-10'
-updatedDate: '2026-11-16'
-tags: []
+updatedDate: '2026-11-22'
+tags: [乔治·麦克唐纳, 公主与哥布林, 儿童文学]
 draft: false
 ---
-
-## 被忽视的童话大师，和删去的彩蛋
 
 人们经常说“有眼不识泰山”、“有眼不识金镶玉”，意思是大牛站在你面前，你都认不出来，也就是通俗点说的“不识货”。
 
@@ -29,15 +27,15 @@ G. K. 切斯特顿在为《乔治·麦克唐纳与妻子》（*George MacDonald 
 
 基督徒作家章伯斯（Oswald Chambers）也曾[感慨](https://www.rabbitroom.com/post/proper-introductions-george-macdonald)：“乔治·麦克唐纳的书竟如此遭到冷落，鲜明地暴露出现代读者的阅读趋向与浅薄。”
 
-![](../../assets/images/neglected-fairy-tale-master-and-removed-easter-eggs/gpdecemm.webp)
+![乔治·麦克唐纳的英文小传，附作家伏案写作的照片](../../assets/images/neglected-fairy-tale-master-and-removed-easter-eggs/gpdecemm.webp)
 
 看完上面的简介，你还会选择去读或给你的孩子去读那些书店里流行却质次的儿童读物吗？
 
 此前一次暑假教学中，我带学生精读麦克唐纳的经典童话《公主与哥布林》的英语原著，没想到还意外发现了彩蛋——拿着网上搜到的旧版与新一些的版本对比，我发现同一本书的不同版本竟有不小的差异。
 
-![](../../assets/images/neglected-fairy-tale-master-and-removed-easter-eggs/opn6cyn4e.webp)
+![《公主与哥布林》英文版封面，河流经过山崖上的城堡](../../assets/images/neglected-fairy-tale-master-and-removed-easter-eggs/opn6cyn4e.webp)
 
-![](../../assets/images/neglected-fairy-tale-master-and-removed-easter-eggs/ve02ugp33.webp)
+![另一版《公主与哥布林》封面，插图中两个人物相拥](../../assets/images/neglected-fairy-tale-master-and-removed-easter-eggs/ve02ugp33.webp)
 
 （上面是我手上的新旧两个版本的封面）
 
