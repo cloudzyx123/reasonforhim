@@ -126,6 +126,8 @@ We believe in the rejection of creeds,
 
 And the flowering of individual thought.
 
+
+
 "Chance" a post-script
 
 If chance be
