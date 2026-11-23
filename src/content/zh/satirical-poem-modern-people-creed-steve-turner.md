@@ -2,17 +2,17 @@
 urlName: satirical-poem-modern-people-creed-steve-turner
 section: literature
 title: 讽刺诗《（现代人的）信条》 - 史蒂夫·特纳
-description: "史蒂夫·特纳讽刺诗《（现代人的）信条》中译，以反讽笔法揭露相对主义与实用主义的自相矛盾。"
-pubDate: '2025-03-10'
+description: 史蒂夫·特纳讽刺诗《（现代人的）信条》中译，以反讽笔法揭露相对主义与实用主义的自相矛盾。
+pubDate: 2025-03-10
 updatedDate: 2026-11-23
 tags:
   - 诗歌
   - 基督教文学
   - 史蒂夫·特纳
   - 道德相对主义
+  - 世界观辨析
 draft: false
 ---
-
 ## 讽刺诗《（现代人的）信条》 - 史蒂夫·特纳
 
 ![](../../assets/images/satirical-poem-modern-people-creed-steve-turner/z40dumldg.webp)
@@ -155,7 +155,7 @@ draft: false
 
 所发出的声音。
 
-\\_\\_\\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_
+_
 
 史蒂夫·特纳（Steve Turner）, 英国记者， 《信条》一诗写于1993年，是他对现代思想的讽刺诗
 
@@ -249,7 +249,7 @@ Bomb Blasts School!
 It is but the sound of man
 worshipping his maker.
 
-\\_\\_\\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_
+_
 
 Steve Turner, (English journalist), "Creed," his satirical poem written in 1993 on the modern mind.
 Taken from Ravi Zacharias’ book, Can Man live Without God?, Pages 42-44
