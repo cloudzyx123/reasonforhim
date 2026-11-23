@@ -10,7 +10,9 @@ section: literature
 draft: false
 translationId: satirical-poem-modern-people-creed-steve-turner
 tags:
-  - poetry
+  - Poetry
+  - Satire
+  - Moral Relativism
 ---
 Creed
 
