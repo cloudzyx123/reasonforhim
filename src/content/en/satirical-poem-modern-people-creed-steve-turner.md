@@ -7,7 +7,7 @@ description: "In his satirical poem “Creed,” Steve Turner turns the refrain 
   absolute truth."
 pubDate: 2025-03-09
 section: literature
-draft: true
+draft: false
 translationId: satirical-poem-modern-people-creed-steve-turner
 ---
 Creed
