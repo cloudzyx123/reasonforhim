@@ -163,6 +163,19 @@ _
 
 ![](../../assets/images/satirical-poem-modern-people-creed-steve-turner/we08uzv23.webp)
 
+-----
+
+**编者延伸阅读**　特纳在诗的第一行把马克思、弗洛伊德和达尔文的名字连成一串。克里夫特也把这三人并列，却从一个更古老的问题说起：人为什么愿意相信，自己的过错早已写在星辰里？参读[《占星术之惑，及其三种现代版本》](https://reasonforhim.com/zh/augustine-confessions-astrology-confusion-three-modern-versions/)。
+
+
+
+
+
+
+
+
+
+
 Creed
 
 by Steve Turner
