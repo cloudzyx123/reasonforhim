@@ -4,7 +4,12 @@ section: scripture
 title: 为什么《圣经》对天国的描写如此肤浅？
 description: "回应\"圣经对天国的描写为何如此肤浅\"的提问，说明这是神体恤人有限的理性、俯就人所能理解的语言。"
 pubDate: '2024-10-03'
-tags: []
+updatedDate: 2026-11-23
+tags:
+  - 答网友问
+  - 天堂
+  - 启示录
+  - 圣经中的比喻
 draft: false
 ---
 

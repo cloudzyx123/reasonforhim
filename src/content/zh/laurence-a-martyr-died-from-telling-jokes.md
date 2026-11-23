@@ -4,7 +4,12 @@ section: life
 title: 劳伦斯：一位死于讲笑话的殉道者
 description: "纪念三世纪殉道者劳伦斯，讲述他把穷人瘸子盲人呈给罗马皇帝、称他们为\"教会的宝藏\"的故事。"
 pubDate: '2025-03-10'
-tags: []
+updatedDate: 2026-11-23
+tags:
+  - 罗马的劳伦斯
+  - 早期教会
+  - 殉道
+  - 服事穷人
 draft: false
 ---
 

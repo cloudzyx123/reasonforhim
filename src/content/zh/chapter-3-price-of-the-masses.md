@@ -4,7 +4,12 @@ section: scripture
 title: 《子里的选民》第三章：万人的赎价
 description: "《子里的选民》第三章，从人的罪与神人间独一中保基督入手，阐述基督为万人舍己作赎价的教义。"
 pubDate: '2025-03-10'
-tags: []
+updatedDate: 2026-11-23
+tags:
+  - 《子里的选民》
+  - 救赎
+  - 基督的中保职分
+  - 普世赎罪
 draft: false
 ---
 

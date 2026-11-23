@@ -4,7 +4,12 @@ section: literature
 title: 讽刺诗《（现代人的）信条》 - 史蒂夫·特纳
 description: "史蒂夫·特纳讽刺诗《（现代人的）信条》中译，以反讽笔法揭露相对主义与实用主义的自相矛盾。"
 pubDate: '2025-03-10'
-tags: []
+updatedDate: 2026-11-23
+tags:
+  - 诗歌
+  - 基督教文学
+  - 史蒂夫·特纳
+  - 道德相对主义
 draft: false
 ---
 

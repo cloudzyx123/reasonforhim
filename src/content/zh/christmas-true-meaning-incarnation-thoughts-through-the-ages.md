@@ -4,7 +4,11 @@ section: scripture
 title: '[圣诞真义] - 关于道成肉身的历代撷思'
 description: "借历代神学家与讲道者的默想文字，重新思考圣诞节的真义——道成肉身的降卑与荣耀。"
 pubDate: '2025-03-10'
-tags: []
+updatedDate: 2026-11-23
+tags:
+  - 圣诞节
+  - 道成肉身
+  - 基督的降卑
 draft: false
 ---
 

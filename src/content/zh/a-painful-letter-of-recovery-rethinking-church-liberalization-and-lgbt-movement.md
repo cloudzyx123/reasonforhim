@@ -4,7 +4,13 @@ section: scripture
 title: 一封沉痛的挽回书信 —— 再思教会自由化和LGBT运动
 description: "一封致教会的公开信，反思宗派在性伦理议题上的自由化转向，重申圣经对婚姻与圣洁的教导。"
 pubDate: '2024-08-15'
-tags: []
+updatedDate: 2026-11-23
+tags:
+  - 基督教性伦理
+  - 婚姻
+  - 同性恋
+  - 圣经权威
+  - 自由派
 draft: false
 ---
 

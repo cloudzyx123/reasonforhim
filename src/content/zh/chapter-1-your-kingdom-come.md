@@ -4,7 +4,11 @@ section: scripture
 title: 《子里的选民》第一章：愿你的国降临
 description: "《子里的选民》第一章，探讨神的主权如何在动荡时代中托住信徒，历史朝着\"你的国降临\"这一既定终局前行。"
 pubDate: '2025-03-10'
-tags: []
+updatedDate: 2026-11-23
+tags:
+  - 《子里的选民》
+  - 神的国
+  - 神的主权
 draft: false
 ---
 
