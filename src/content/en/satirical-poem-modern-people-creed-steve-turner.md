@@ -9,6 +9,8 @@ pubDate: 2025-03-09
 section: literature
 draft: false
 translationId: satirical-poem-modern-people-creed-steve-turner
+tags:
+  - poetry
 ---
 Creed
 
