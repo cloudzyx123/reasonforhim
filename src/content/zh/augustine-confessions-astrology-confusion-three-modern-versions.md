@@ -1,16 +1,16 @@
 ---
 urlName: augustine-confessions-astrology-confusion-three-modern-versions
 section: faith
-title: '[奥古斯丁《忏悔录》之随想] 占星术之惑，及其三种现代版本'
-description: "借奥古斯丁对占星术的反思，剖析达尔文主义、马克思主义与弗洛伊德主义如何延续\"洗脱人的罪责\"这一古老诱惑。"
-pubDate: '2025-03-10'
-tags: []
+title: "[奥古斯丁《忏悔录》之随想] 占星术之惑，及其三种现代版本 （彼得·克里夫特）"
+description: 借奥古斯丁对占星术的反思，剖析达尔文主义、马克思主义与弗洛伊德主义如何延续"洗脱人的罪责"这一古老诱惑。
+pubDate: 2025-03-10
+tags:
+  - 彼得·克里夫特
 draft: false
 ---
-
 ## [奥古斯丁《忏悔录》之随想] 占星术之惑，及其三种现代版本
 
-> \[占星家们\]教导说：“你犯罪的因由在于天，是出于天命，是不可避免的；是金星、或土星、或火星所为。”换句话说，人，有血有肉，骄傲堕落，是无罪的；罪责乃在于天上日月星辰的创造者和主治者。
+> 占星家们教导说：“你犯罪的因由在于天，是出于天命，是不可避免的；是金星、或土星、或火星所为。”换句话说，人，有血有肉，骄傲堕落，是无罪的；罪责乃在于天上日月星辰的创造者和主治者。
 
 > 奥古斯丁，《忏悔录》卷四，第三章
 
@@ -28,17 +28,17 @@ draft: false
 
 占星术仍然在掌权；唯一的区别是那众星已落到了地上。
 
-* * *
+---
 
 (译自Peter Kreeft, I Burned for Your Peace - Augustines Confessions Unpacked  )
 
 ![](../../assets/images/augustine-confessions-astrology-confusion-three-modern-versions/poxzudn0z.webp)
 
-彼得．克里夫特（Peter Kreeft）：波士顿学院哲学系教授，著作超过四十部，当中不乏畅销书，题材广泛，如灵修学、哲学、护教学、伦理、《圣经》研究等，包括《天堂一内心深处的渴望》（Heaven, the Heart's Deepest Longing）、《重寻美德》（Back to Virtue）、《你也可以明白圣经》（You Can Understand the Bible）、《天使与魔鬼》（Angels and Demons）、《哲学101》（Philosophy 101）及《神学大全中的大全》（Summa of the Summa）等
+彼得·克里夫特（Peter Kreeft）：波士顿学院哲学系教授，著作超过四十部，当中不乏畅销书，题材广泛，如灵修学、哲学、护教学、伦理、《圣经》研究等，包括《天堂一内心深处的渴望》（Heaven, the Heart's Deepest Longing）、《重寻美德》（Back to Virtue）、《你也可以明白圣经》（You Can Understand the Bible）、《天使与魔鬼》（Angels and Demons）、《哲学101》（Philosophy 101）及《神学大全中的大全》（Summa of the Summa）等
 
 版权所有：2016 Peter Kreeft
 
 翻译版权：2022 张云轩
 
-欢迎转发朋友圈。未经许可，请勿转载。
+欢迎转发。未经许可，请勿转载。
 
