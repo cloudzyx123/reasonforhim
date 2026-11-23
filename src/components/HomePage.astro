@@ -21,7 +21,9 @@ const coverSizes = '(max-width: 640px) calc(100vw - 40px), (max-width: 760px) 46
 ---
 <Layout
   title={zh ? '信仰、理性与文学｜基督教护教与思想文章' : 'Home'}
-  description={zh ? '从路易斯笔下的神话，到人工智能带来的信仰之问，这间书房收录基督教护教、文学评论与圣经研读文章。' : 'Essays on the gospel, apologetics, Scripture, and theology. Exploring faith and reason.'}
+  description={zh
+    ? '从路易斯笔下的神话，到人工智能带来的信仰之问，这间书房收录基督教护教、文学评论与圣经研读文章。'
+    : 'Start with featured and recent essays from Reason for Him on the gospel, questions of belief, and Christian faith in everyday life.'}
   {lang} path={`/${lang}/`} alternates={[{ lang: otherLang, href: `/${otherLang}/` }]}
 >
   <div class="container reading-room">

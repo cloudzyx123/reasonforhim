@@ -18,8 +18,10 @@ const productionPopularityUrl = 'https://cloudzyx123.github.io/reasonforhim/arti
 const years = [...new Set(posts.map(post => post.data.pubDate.getUTCFullYear()))].sort((a, b) => b - a);
 ---
 <Layout
-  title={zh ? '文章馆藏' : 'Essay archive'}
-  description={zh ? '福音、护教、释经与神学文章，在信仰与理性的交汇处探索真理。' : 'Essays on the gospel, apologetics, Scripture, and theology. Exploring faith and reason.'}
+  title={zh ? '基督教文章馆藏｜护教、释经、文学与见证' : 'Christian Essays on Faith and Life'}
+  description={zh
+    ? '在「为何是祂」中文馆藏中，按栏目、年份或关键词查找文章，阅读基督教护教、圣经与神学、文学评论和信仰见证。'
+    : 'Browse English essays on Christian faith, personal witness, and everyday life. Find articles by subject, year, or keyword.'}
   lang={lang}
   path={`/${lang}/archive/`}
   alternates={[{ lang: otherLang, href: `/${otherLang}/archive/` }]}
