@@ -13,11 +13,13 @@ const excluded = new Set(['script', 'style', 'template', 'nav', 'footer', 'svg']
 
 type Footnote = { id: string; text: string };
 function clean(text: string) {
-  return text.replace(/\s+/g, ' ').trim();
+  return text.split('\n').map(part => part.trim().replace(/\s+/g, ' ')).filter(Boolean).join('\n');
 }
 
 function visibleText(node: DefaultTreeAdapterMap['node'], footnotes: Footnote[]): string {
-  if (node.nodeName === '#text' && 'value' in node) return node.value;
+  // Source line wraps are inline whitespace. Only HTML blocks delimit passages.
+  if (node.nodeName === '#text' && 'value' in node) return node.value.replace(/\s+/g, ' ');
+  if (node.nodeName === 'br') return ' ';
   if (!('childNodes' in node)) return '';
   if ('attrs' in node && (excluded.has(node.tagName) || node.attrs.some(({ name, value }) =>
     name === 'hidden' || (name === 'aria-hidden' && value === 'true') ||
@@ -34,7 +36,7 @@ function visibleText(node: DefaultTreeAdapterMap['node'], footnotes: Footnote[])
       return ' ';
     }
   }
-  return blocks.has(node.nodeName) ? ' ' + text + ' ' : text;
+  return blocks.has(node.nodeName) ? '\n' + text + '\n' : text;
 }
 
 export const GET: APIRoute = async ({ params }) => {

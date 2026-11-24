@@ -53,6 +53,37 @@ function descendants(node, predicate) {
   return (node.childNodes ?? []).flatMap(child => descendants(child, predicate));
 }
 
+test('short English terms use the same boundaries in fields, whole phrases and highlights', () => {
+  const faith = 'Tea at Four: A Story of Ordinary Faithfulness';
+  const article = { title: faith, description: faith, labels: faith, body: faith, footnotes: [] };
+  for (const text of ['AI', 'ai', 'Ai', 'faith AI']) {
+    assert.equal(searchArticle(article, searchQuery(text)), null);
+  }
+  const query = searchQuery('AI');
+  const line = 'AI时代、狭义AI、（ai）、AGI、faith、OpenAI、AI2';
+  assert.deepEqual([...line.matchAll(query.highlight)].map(match => match[0]), ['AI', 'AI', 'ai']);
+  assert.ok(searchArticle({ ...article, body: line }, searchQuery('AI时代')));
+  assert.equal(searchQuery('faith AI').phrase.test('faith aims'), false);
+});
+
+test('same-paragraph matches outrank distributed terms and the snippet shows the nearest occurrences', () => {
+  const article = { title: '', labels: '', description: '', body: '狭义 AI\n通用人工智能（AGI）' };
+  const query = searchQuery('AI AGI');
+  const dispersed = searchArticle(article, query);
+  const longParagraph = '伦诺克斯谈 AI，总是先把两种东西分开。' +
+    '一套从数据里筛出模式的程序，通常只做一件原本需要人类智能的事。'.repeat(8) +
+    '通用人工智能（AGI）。打个比方，如果今天的 AI 像一位只精通一门手艺的专家';
+  const together = searchArticle({ ...article, body: article.body + '\n' + longParagraph }, query);
+  assert.ok(together.score > dispersed.score);
+  assert.ok(query.terms.every(term => term.test(together.snippet)));
+  assert.ok(!together.snippet.includes('伦诺克斯谈'));
+  const far = searchArticle({ ...article, body: longParagraph.replace('今天的 AI', '今天的人工智能') }, query);
+  assert.ok(query.terms.every(term => term.test(far.snippet)));
+  assert.ok(far.snippet.includes(' … '));
+  const note = { id: 'user-content-fn-1', text: article.body };
+  assert.equal(searchArticle({ ...article, body: '', footnotes: [note] }, query).score, dispersed.score);
+});
+
 test('each language index covers its published essays, including rendered paragraphs and footnotes', async () => {
   for (const lang of ['zh', 'en']) {
     const archive = await readFile(`dist/${lang}/archive/index.html`, 'utf8');
@@ -64,6 +95,15 @@ test('each language index covers its published essays, including rendered paragr
       const [prose] = descendants(parse(html), node => node.tagName === 'article' &&
         node.attrs.some(attr => attr.name === 'class' && attr.value.split(' ').includes('prose')));
       assert.ok(prose, id);
+      const bodyParagraphs = new Set(body.split('\n'));
+      const blocks = descendants(prose, node => node.tagName === 'p' ||
+        node.attrs?.some(attr => attr.name === 'data-footnotes'));
+      for (const block of blocks) {
+        if (block.tagName === 'p' && block.childNodes.every(node => node.nodeName === '#text')) {
+          const paragraph = block.childNodes.map(node => node.value).join('').trim().replace(/\s+/g, ' ');
+          if (paragraph) assert.ok(bodyParagraphs.has(paragraph), 'Expected a separate paragraph in ' + id);
+        }
+      }
       const notes = descendants(prose, node => node.attrs?.some(attr => attr.name === 'data-footnotes'));
       const items = notes.flatMap(section => descendants(section, node => node.tagName === 'li'));
       assert.deepEqual(footnotes.map(note => note.id), items.map(item => item.attrs.find(attr => attr.name === 'id').value));
