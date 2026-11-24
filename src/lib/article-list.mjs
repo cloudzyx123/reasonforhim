@@ -41,9 +41,8 @@ export function compareArticles(a, b, order = 'newest') {
   return newestFirst || idOrder;
 }
 
-export function matchesArticle(article, { terms, topic, section, year }) {
-  return terms.every(term => article.search.includes(term))
-    && (!topic || article.tags.includes(topic))
+export function matchesArticle(article, { topic, section, year }) {
+  return (!topic || article.tags.includes(topic))
     && (!section || article.section === section)
     && (!year || article.year === year);
 }

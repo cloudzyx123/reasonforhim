@@ -24,15 +24,14 @@ test('New, Oldest and Top use stable dates and article IDs, including missing an
   assert.ok(compareArticles({ ...latest, views: 25 }, popular, 'top') < 0);
 });
 
-test('section, year, search and exact tags combine inside the Top order', () => {
-  const filters = { terms: ['信仰', 'hope'], topic: '福音', section: 'faith', year: '2025' };
-  const fields = { section: 'faith', year: '2025', tags: ['福音'], search: '信仰与 hope' };
+test('section, year and exact tags combine inside the Top order', () => {
+  const filters = { topic: '福音', section: 'faith', year: '2025' };
+  const fields = { section: 'faith', year: '2025', tags: ['福音'] };
   const articles = [
     { ...middle, ...fields, year: '2024', views: 55 },
     { ...popular, ...fields },
     { ...tie, ...fields, section: 'life', views: 42 },
     { ...latest, ...fields },
-    { ...tie, ...fields, search: '信仰', views: 50 },
     { ...tie, ...fields, tags: ['福音故事'], views: 50 },
   ];
   assert.deepEqual(articles.filter(article => matchesArticle(article, filters)).sort((a, b) => compareArticles(a, b, 'top')).map(article => article.id), ['popular', 'latest']);
