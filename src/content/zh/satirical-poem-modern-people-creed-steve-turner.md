@@ -19,9 +19,9 @@ translationId: satirical-poem-modern-people-creed-steve-turner
 
 ![](../../assets/images/satirical-poem-modern-people-creed-steve-turner/z40dumldg.webp)
 
-《信条》
-作者：史蒂夫·特纳
-翻译：张云轩
+《信条》  
+by 史蒂夫·特纳  
+云轩 译
 
 我们信仰马克思弗洛伊德达尔文。
 我们相信一切都可行，
@@ -29,19 +29,16 @@ translationId: satirical-poem-modern-people-creed-steve-turner
 就是尽你所知，按着
 你个人对“伤害”的定义即可。
 
-
 我们信仰婚前、婚后，以及婚外的性行为。
 我们相信罪有疗愈作用。
 我们相信红杏出墙别有生趣。
 我们相信鸡奸也无伤大雅。
 我们最忌讳把一些事当成忌讳。
 
-
 我们相信万物都不断进步，
 尽管有相反的证据。
 你必须把这证据调查清楚，
 毕竟你能用证据证明任何东西。
-
 
 我们相信星座运势、外星飞碟、
 念力弯勺都有个中奥秘。
@@ -50,13 +47,11 @@ translationId: satirical-poem-modern-people-creed-steve-turner
 他是个不错的道德老师，
 虽然我们认为他的道德教训差强人意。
 
-
 我们相信所有宗教大同小异
 至少我们所信的看来如此。
 它们都追求爱和良善。
 它们的不同，不过在于创造、罪、
 天堂、地狱、上帝和救恩这些小事罢了。
-
 
 我们相信死后便是虚无，
 因为你若去求问死人，
@@ -71,19 +66,16 @@ translationId: satirical-poem-modern-people-creed-steve-turner
 普通的就是正常的，
 正常的就是好的。
 
-
 我们相信全面裁军，
 我们相信战争和杀戮有直接联系。
 美国人应该把他们的枪打成拖拉机，
 而俄国人定会乖乖跟着做。
-
 
 我们相信人在本质上是好的，
 只是他的行为让他失望。
 这是社会的过错，
 社会的过错乃是形势所迫，
 形势的过错乃是社会所迫。
-
 
 我们相信每个人都应该找到
 自己眼中看为正确的真理。
@@ -93,10 +85,8 @@ translationId: satirical-poem-modern-people-creed-steve-turner
 我们相信世上没有绝对的真理，
 唯有“没有绝对真理”这一条是真理。
 
-
 我们信仰对诸般信条的摒弃，
 要让个人思想百花齐放。
-
 
 
 
@@ -116,20 +106,16 @@ translationId: satirical-poem-modern-people-creed-steve-turner
 此乃人膜拜造他的主
 所发出的声音。
 
-____________________
+---
 
-<div class="poetry-prose">
 
-史蒂夫·特纳（Steve Turner）是英国诗人、作家及记者。《信条》（Creed）是一首讽刺现代思想的诗歌。
-本文由张云轩根据英文原诗翻译，原文参见拉维·撒迦利亚（Ravi Zacharias）著《没有上帝，人能活着吗？》（ Can Man Live Without God?），第42—44页。
+
+史蒂夫·特纳（Steve Turner）是英国诗人、作家及记者。《信条》（Creed）是一首讽刺现代思想的诗歌。  
+本文由笔者根据英文原诗翻译，原文参见拉维·撒迦利亚（Ravi Zacharias）著《没有上帝，人能活着吗？》（ Can Man Live Without God?），第42—44页。
 
 
 
 “没有上帝，人能活着吗？”，答案是否定的，但我们无时不刻不在尝试……
-
-</div>
-
-
 
 
 
