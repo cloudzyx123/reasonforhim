@@ -168,7 +168,7 @@ _
 
 史蒂夫·特纳（Steve Turner）, 英国记者， 《信条》一诗写于1993年，是他对现代思想的讽刺诗
 
-该诗引用自拉维‧撒迦利亚（Ravi Zacharias）的书
+该诗引用自拉维‧撒迦利亚（Ravi Zacharias）的书《Can Man Live Without God?》
 
 ![](../../assets/images/satirical-poem-modern-people-creed-steve-turner/we08uzv23.webp)
 
