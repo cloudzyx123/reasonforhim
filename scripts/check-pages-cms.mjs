@@ -15,6 +15,9 @@ export function validateArticle(file, source) {
   if (!slugPattern.test(name)) throw new Error(`${file}：文件名必须使用英文 kebab-case`);
   if (data?.urlName !== name) throw new Error(`${file}：英文网址名 urlName 须与文件名 ${name} 一致。已发布文章请保留原网址名。`);
   if (typeof data.draft !== 'boolean') throw new Error(`${file}：请明确设置草稿开关 draft`);
+  if (data.contentFormat !== undefined && !['prose', 'poetry'].includes(data.contentFormat)) {
+    throw new Error(`${file}：正文排版模式 contentFormat 须为 prose 或 poetry`);
+  }
   if (data.coverImage != null && data.coverImage !== '' && (typeof data.coverImage !== 'string' || !coverImagePattern.test(data.coverImage))) {
     throw new Error(`${file}：缩略图须为 /images/ 下的站内图片`);
   }

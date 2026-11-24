@@ -88,10 +88,22 @@ components:
     type: string
     label: 译文配对编号（通常留空）
     description: 仅当中英文确实互为译文时，两篇填写相同编号。
+  article_content_format:
+    type: select
+    label: 正文排版模式
+    description: 诗歌模式保留诗行换行。请在正文的 Source（源码）中粘贴并保存诗歌。
+    required: true
+    default: prose
+    options:
+      values:
+        - name: prose
+          label: 普通文章
+        - name: poetry
+          label: 诗歌模式
   visual_body:
     type: rich-text
     label: 正文
-    description: 可粘贴文字、设置标题、插入链接和图片。图片下方请保留图注、来源及许可说明。
+    description: 普通文章可用 Editor（可视化）编辑。诗歌请用 Source（源码）粘贴和保存，诗节之间空一行。图片下方请保留图注、来源及许可说明。
     required: true
     options:
       format: markdown
@@ -109,7 +121,7 @@ content:
     filename:
       template: "{fields.urlName}.md"
       field: false
-    exclude: [ai-faith-john-lennox.md, sam-kamaleson-street-testimony.md, how-can-you-say-only-one-true-faith.md, tea-at-four.md, israeli-stamps-isaiah-hope.md]
+    exclude: [ai-faith-john-lennox.md, sam-kamaleson-street-testimony.md, how-can-you-say-only-one-true-faith.md, tea-at-four.md, israeli-stamps-isaiah-hope.md, satirical-poem-modern-people-creed-steve-turner.md]
     operations:
       rename: false
       delete: false
@@ -144,8 +156,52 @@ content:
         component: article_draft
       - name: translationId
         component: translation_id
+      - name: contentFormat
+        component: article_content_format
       - name: body
         component: visual_body
+
+  - name: modern_people_creed_article
+    label: （现代人的）信条（诗行保护）
+    type: file
+    path: src/content/zh/satirical-poem-modern-people-creed-steve-turner.md
+    format: yaml-frontmatter
+    operations:
+      create: false
+      rename: false
+      delete: false
+    fields:
+      - name: urlName
+        component: url_name
+        readonly: true
+      - name: title
+        component: article_title
+      - name: description
+        component: article_description
+      - name: coverImage
+        component: article_cover
+      - name: coverAlt
+        component: article_cover_alt
+      - name: pubDate
+        component: publication_date
+      - name: updatedDate
+        component: updated_date
+      - name: section
+        component: article_section
+      - name: tags
+        component: article_tags
+      - name: draft
+        component: article_draft
+      - name: translationId
+        component: translation_id
+      - name: contentFormat
+        component: article_content_format
+      - name: body
+        type: code
+        label: 正文（Markdown，保留诗行）
+        description: 同一诗节内每行直接换行，诗节之间空一行。请保留图片链接和包住文末散文说明的 div 标记。
+        options:
+          format: markdown
 
   - name: lennox_article
     label: AI 与伦诺克斯（精排保护）
@@ -393,6 +449,8 @@ content:
         component: article_draft
       - name: translationId
         component: translation_id
+      - name: contentFormat
+        component: article_content_format
       - name: body
         component: visual_body
 
