@@ -117,10 +117,12 @@ translationId: satirical-poem-modern-people-creed-steve-turner
 
 ____________________
 
-Steve Turner, 英国记者， 《信条》写于1993年，是他对现代思想的讽刺诗
-摘自Ravi Zacharias的书《没有上帝，人能活着吗？》P. 42-44
+史蒂夫·特纳（Steve Turner）是英国诗人、作家及记者。《信条》（Creed）是一首讽刺现代思想的诗歌。
+本文由张云轩根据英文原诗翻译，原文参见拉维·撒迦利亚（Ravi Zacharias）著《没有上帝，人能活着吗？》（ Can Man Live Without God?），第42—44页。
 
-“没有上帝，人能活着吗？”，答案是否定的，但我们无时不刻不在尝试。
+
+
+“没有上帝，人能活着吗？”，答案是否定的，但我们无时不刻不在尝试……
 
 
 
