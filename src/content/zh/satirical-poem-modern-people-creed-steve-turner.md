@@ -24,6 +24,8 @@ translationId: satirical-poem-modern-people-creed-steve-turner
 
 翻译：张云轩
 
+
+
 我们信仰马克思弗洛伊德达尔文。
 
 我们相信一切都可行，
@@ -34,6 +36,8 @@ translationId: satirical-poem-modern-people-creed-steve-turner
 
 你对伤害的定义即可。
 
+
+
 我们信仰婚前、婚后，以及婚外的性行为。
 
 我们信仰“罪恶娱乐疗法”。
@@ -43,6 +47,8 @@ translationId: satirical-poem-modern-people-creed-steve-turner
 我们相信鸡奸也无伤大雅。
 
 我们最忌讳把一些事当成忌讳。
+
+
 
 我们相信万物都不断进步，
 
