@@ -14,7 +14,7 @@ const { post, lang, cover } = Astro.props;
 const section = SECTIONS[getSection(post)][lang].title;
 const thumbnailSizes = '(max-width: 360px) 88px, (max-width: 760px) 96px, 128px';
 ---
-<article class="essay-row" data-post={post.id} data-search={`${post.data.title} ${post.data.description} ${post.data.tags.join(' ')} ${section}`.toLocaleLowerCase()} data-tags={JSON.stringify(post.data.tags)} data-section-id={getSection(post)} data-year={String(post.data.pubDate.getUTCFullYear())} data-date={post.data.pubDate.toISOString()}>
+<article class="essay-row" data-post={post.id} data-tags={JSON.stringify(post.data.tags)} data-section-id={getSection(post)} data-year={String(post.data.pubDate.getUTCFullYear())} data-date={post.data.pubDate.toISOString()}>
   <a class="essay-link" href={`/${lang}/${post.id}/`} aria-labelledby={`essay-${post.id}`}>
     <div class="essay-cover">
       {cover && <img src={cover.src} srcset={cover.srcset} sizes={cover.srcset && thumbnailSizes} alt={cover.alt} width={cover.width} height={cover.height} loading="lazy" decoding="async" style={{ 'object-position': cover.position, 'object-fit': cover.fit }} data-essay-thumbnail={thumbnailSizes} />}
@@ -37,6 +37,8 @@ const thumbnailSizes = '(max-width: 360px) 88px, (max-width: 760px) 96px, 128px'
   .row-meta > span { color: var(--accent); }
   .essay-row h3 { font-size: 22px; line-height: 1.45; margin-bottom: 4px; overflow-wrap: anywhere; }
   .essay-row p { display: -webkit-box; -webkit-box-orient: vertical; -webkit-line-clamp: 2; overflow: hidden; overflow-wrap: anywhere; font-size: 14px; color: var(--muted); line-height: 1.65; margin: 0; }
+  .essay-row[data-match] p { display: block; }
+  .essay-row :global(mark) { color: var(--ink); background: #f1dfac; }
   @media (max-width: 760px) {
     .essay-row { padding-block: 15px; }
     .essay-link { gap: 12px; grid-template-columns: 96px minmax(0, 1fr); }

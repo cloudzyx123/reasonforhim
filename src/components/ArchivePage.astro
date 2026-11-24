@@ -52,12 +52,12 @@ const years = [...new Set(posts.map(post => post.data.pubDate.getUTCFullYear()))
         </nav>
         <form class="archive-search" role="search" aria-label={zh ? '馆藏文章搜索' : 'Archive essay search'}>
           <label class="sr-only" for="archive-query">{zh ? '在文章中搜索' : 'Search this collection'}</label>
-          <input id="archive-query" type="search" name="q" placeholder={zh ? '输入标题、摘要或关键词' : 'Search titles, descriptions, or keywords'} />
+          <input id="archive-query" type="search" name="q" placeholder={zh ? '搜索文章全文与脚注' : 'Search essays and footnotes'} />
           <button type="submit">{zh ? '搜索' : 'Search'} <span aria-hidden="true">→</span></button>
         </form>
         <div class="archive-options">
           <label>{zh ? '年份' : 'Year'}<select data-year aria-label={zh ? '按年份浏览' : 'Browse by year'}><option value="">{zh ? '全部年份' : 'All years'}</option>{years.map(year => <option value={String(year)}>{year}</option>)}</select></label>
-          <label>{zh ? '排序' : 'Sort'}<select data-order aria-label={zh ? '文章排序' : 'Sort essays'}><option value="newest">{zh ? '最新' : 'New'}</option><option value="top" hidden disabled>{zh ? '热门' : 'Top'}</option><option value="oldest">{zh ? '最早' : 'Oldest'}</option></select></label>
+          <label>{zh ? '排序' : 'Sort'}<select data-order aria-label={zh ? '文章排序' : 'Sort essays'}><option value="relevance" hidden disabled>{zh ? '相关性' : 'Relevance'}</option><option value="newest" selected>{zh ? '最新' : 'New'}</option><option value="top" hidden disabled>{zh ? '热门' : 'Top'}</option><option value="oldest">{zh ? '最早' : 'Oldest'}</option></select></label>
         </div>
         <div class="filter-status">
           <p data-result-count aria-live="polite">{zh ? '按发布时间排序' : 'Most recent first'}</p>
@@ -118,21 +118,45 @@ const years = [...new Set(posts.map(post => post.data.pubDate.getUTCFullYear()))
 
 <script>
   import { articleOrder, compareArticles, getTopWindow, matchesArticle, validatePopularitySnapshot } from '../lib/article-list.mjs';
+  import { searchArticle, searchQuery } from '../lib/article-search.mjs';
+
+  function highlight(element: HTMLElement, text: string, pattern: RegExp) {
+    const fragment = document.createDocumentFragment();
+    let offset = 0;
+    let match: RegExpExecArray | null;
+    while ((match = pattern.exec(text)) !== null) {
+      fragment.append(text.slice(offset, match.index));
+      const mark = document.createElement('mark');
+      mark.textContent = match[0];
+      fragment.append(mark);
+      offset = match.index + match[0].length;
+    }
+    fragment.append(text.slice(offset));
+    element.textContent = '';
+    element.append(fragment);
+  }
 
   const archive = document.querySelector<HTMLElement>('[data-archive]');
   if (archive) {
     const input = document.querySelector<HTMLInputElement>('#archive-query')!;
     const navInput = document.querySelector<HTMLInputElement>('#site-search');
-    const rows = Array.from(archive.querySelectorAll<HTMLElement>('[data-post]'), row => ({
-      row,
-      id: row.dataset.post!,
-      date: Date.parse(row.dataset.date!),
-      views: 0,
-      tags: JSON.parse(row.dataset.tags ?? '[]') as string[],
-      section: row.dataset.sectionId!,
-      year: row.dataset.year!,
-      search: row.dataset.search!,
-    }));
+    const rows = Array.from(archive.querySelectorAll<HTMLElement>('[data-post]'), row => {
+      const heading = row.querySelector('h3')!;
+      const summary = row.querySelector('p')!;
+      const tags: string[] = JSON.parse(row.dataset.tags ?? '[]');
+      return {
+        row, tags, heading, summary,
+        id: row.dataset.post!,
+        date: Date.parse(row.dataset.date!),
+        views: 0,
+        section: row.dataset.sectionId!,
+        year: row.dataset.year!,
+        title: heading.textContent ?? '',
+        description: summary.textContent ?? '',
+        labels: [...tags, row.querySelector('.row-meta span')?.textContent].join(' · '),
+        score: 0,
+      };
+    });
     const count = archive.querySelector<HTMLElement>('[data-result-count]')!;
     const reset = archive.querySelector<HTMLButtonElement>('[data-reset]')!;
     const empty = archive.querySelector<HTMLElement>('[data-empty]')!;
@@ -141,6 +165,7 @@ const years = [...new Set(posts.map(post => post.data.pubDate.getUTCFullYear()))
     const orderSelect = archive.querySelector<HTMLSelectElement>('[data-order]')!;
     const list = archive.querySelector<HTMLElement>('.essay-list')!;
     const topOption = orderSelect.querySelector<HTMLOptionElement>('[value="top"]')!;
+    const relevanceOption = orderSelect.querySelector<HTMLOptionElement>('[value="relevance"]')!;
     const sectionLabels: Record<string, string> = JSON.parse(archive.dataset.sectionLabels ?? '{}');
     let topic = '';
     let section = '';
@@ -148,6 +173,24 @@ const years = [...new Set(posts.map(post => post.data.pubDate.getUTCFullYear()))
     let lastOrder = 'newest';
     let updatingQuery = false;
     let unavailableTop = false;
+    let requestedOrder: string | null = null;
+    let bodies: Map<string, string> | undefined;
+    let indexState: 'idle' | 'loading' | 'error' = 'idle';
+
+    async function loadIndex() {
+      indexState = 'loading';
+      try {
+        const response = await fetch(`/${archive!.dataset.lang}/search.json`);
+        if (!response.ok) throw new Error('Search index unavailable');
+        const data: Record<string, string> = await response.json();
+        if (!rows.every(({ id }) => typeof data[id] === 'string')) throw new Error('Incomplete search index');
+        bodies = new Map(Object.entries(data));
+        indexState = 'idle';
+      } catch {
+        indexState = 'error';
+      }
+      filter(false);
+    }
 
     function readParams() {
       const params = new URLSearchParams(location.search);
@@ -155,24 +198,42 @@ const years = [...new Set(posts.map(post => post.data.pubDate.getUTCFullYear()))
       section = params.get('section') ?? '';
       input.value = params.get('q') ?? '';
       yearSelect.value = params.get('year') ?? '';
-      orderSelect.value = articleOrder(params.get('sort'), topWindow);
-      unavailableTop = params.get('sort') === 'top' && orderSelect.value !== 'top';
+      requestedOrder = params.get('sort');
+      unavailableTop = requestedOrder === 'top' && !topWindow;
     }
 
     function filter(updateUrl = true, push = false) {
-      const query = input.value.trim().toLocaleLowerCase();
-      const terms = query.split(/\s+/).filter(Boolean);
-      const order = articleOrder(orderSelect.value, topWindow);
+      const query = searchQuery(input.value);
+      if (query && !bodies && (indexState === 'idle' || (indexState === 'error' && updateUrl))) void loadIndex();
+      const waiting = !!query && !bodies;
+      relevanceOption.hidden = relevanceOption.disabled = !query;
+      const order = query && !requestedOrder ? 'relevance' : articleOrder(requestedOrder, topWindow);
+      orderSelect.value = order;
       if (updateUrl) unavailableTop = false;
-      if (order !== lastOrder) {
-        for (const { row } of [...rows].sort((a, b) => compareArticles(a, b, order))) list.append(row);
-        lastOrder = order;
-      }
       let visible = 0;
-      const filters = { terms, topic, section, year: yearSelect.value };
+      const filters = { topic, section, year: yearSelect.value };
       for (const article of rows) {
-        article.row.hidden = !matchesArticle(article, filters);
+        const eligible = matchesArticle(article, filters);
+        const hit = eligible && query && bodies
+          ? searchArticle({ ...article, body: bodies.get(article.id)! }, query) : null;
+        article.score = hit?.score ?? 0;
+        article.row.hidden = !eligible || (!!query && !hit);
+        if (hit && query) {
+          article.row.dataset.match = '';
+          highlight(article.heading, article.title, query.highlight);
+          highlight(article.summary, hit.snippet, query.highlight);
+        } else if (article.row.hasAttribute('data-match')) {
+          delete article.row.dataset.match;
+          article.heading.textContent = article.title;
+          article.summary.textContent = article.description;
+        }
         if (!article.row.hidden) visible++;
+      }
+      if (order !== lastOrder || (order === 'relevance' && !waiting)) {
+        const ranked = [...rows].sort((a, b) =>
+          (order === 'relevance' ? b.score - a.score : 0) || compareArticles(a, b, order));
+        for (const { row } of ranked) list.append(row);
+        lastOrder = order;
       }
       if (navInput) navInput.value = input.value;
       const label = [sectionLabels[section] ?? section, topic, yearSelect.value].filter(Boolean).join(' · ');
@@ -183,7 +244,10 @@ const years = [...new Set(posts.map(post => post.data.pubDate.getUTCFullYear()))
       count.textContent = active ? [label, result, topLabel].filter(Boolean).join(' · ')
         : topLabel || (order === 'oldest' ? (zh ? '最早的文章在前' : 'Oldest first') : (zh ? '按发布时间排序' : 'Most recent first'));
       reset.hidden = !active && order === 'newest';
-      empty.hidden = visible > 0;
+      if (waiting) count.textContent = indexState === 'error'
+        ? (zh ? '全文索引加载失败，请再次点击搜索。' : 'Could not load the search index. Press Search to retry.')
+        : (zh ? '正在加载全文索引…' : 'Loading the search index…');
+      empty.hidden = waiting || visible > 0;
       document.querySelectorAll<HTMLAnchorElement>('[data-section]').forEach(link => {
         if (link.dataset.section === section) link.setAttribute('aria-current', 'true');
         else link.removeAttribute('aria-current');
@@ -194,7 +258,8 @@ const years = [...new Set(posts.map(post => post.data.pubDate.getUTCFullYear()))
         topic ? url.searchParams.set('topic', topic) : url.searchParams.delete('topic');
         section ? url.searchParams.set('section', section) : url.searchParams.delete('section');
         yearSelect.value ? url.searchParams.set('year', yearSelect.value) : url.searchParams.delete('year');
-        order === 'newest' ? url.searchParams.delete('sort') : url.searchParams.set('sort', order);
+        if (order === 'relevance' || (order === 'newest' && !query)) url.searchParams.delete('sort');
+        else url.searchParams.set('sort', order);
         if (push) url.hash = 'articles';
         if (url.href !== location.href) { if (push) history.pushState(null, '', url); else history.replaceState(null, '', url); }
       }
@@ -214,12 +279,15 @@ const years = [...new Set(posts.map(post => post.data.pubDate.getUTCFullYear()))
       topic = '';
       section = '';
       yearSelect.value = '';
-      orderSelect.value = 'newest';
+      requestedOrder = null;
       filter(true, true);
       input.focus({ preventScroll: true });
     });
     yearSelect.addEventListener('change', () => filter(true, true));
-    orderSelect.addEventListener('change', () => filter(true, true));
+    orderSelect.addEventListener('change', () => {
+      requestedOrder = orderSelect.value === 'relevance' ? null : orderSelect.value;
+      filter(true, true);
+    });
     document.querySelectorAll<HTMLAnchorElement>('[data-section]').forEach(link => link.addEventListener('click', event => {
       if (event.metaKey || event.ctrlKey || event.shiftKey || event.altKey) return;
       event.preventDefault();
