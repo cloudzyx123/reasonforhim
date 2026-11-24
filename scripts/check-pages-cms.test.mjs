@@ -28,6 +28,7 @@ test('正文排版模式可省略，只接受 prose 或 poetry', () => {
 test('中英文 CMS 都可选择诗歌模式，并可直接保存 Markdown 源码', () => {
   const config = load(readFileSync(new URL('../.pages.yml', import.meta.url), 'utf8'));
   const format = config.components.article_content_format;
+  assert.equal(format.required, true);
   assert.equal(format.default, 'prose');
   assert.deepEqual(format.options.values.map(value => value.name), ['prose', 'poetry']);
   assert.equal(config.components.visual_body.options.switcher, true);

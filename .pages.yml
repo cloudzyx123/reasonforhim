@@ -92,6 +92,7 @@ components:
     type: select
     label: 正文排版模式
     description: 诗歌模式保留诗行换行。请在正文的 Source（源码）中粘贴并保存诗歌。
+    required: true
     default: prose
     options:
       values:
