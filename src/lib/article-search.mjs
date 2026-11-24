@@ -23,24 +23,40 @@ function excerpt(text, offset, length) {
   return (start ? '…' : '') + text.slice(start, end).trim() + (end < text.length ? '…' : '');
 }
 
-export function searchArticle({ title, description, labels, body }, query) {
+export function searchArticle({ title, description, labels, body, footnotes = [] }, query) {
+  const passages = [{ text: body }, ...footnotes];
+  const matchedTerms = new Set();
+  let best = null;
+  for (const [number, passage] of passages.entries()) {
+    let first;
+    let coverage = 0;
+    for (const term of query.terms) {
+      const match = term.exec(passage.text);
+      if (!match) continue;
+      matchedTerms.add(term);
+      coverage++;
+      if (!first || match.index < first.index) first = match;
+    }
+    if (!first) continue;
+    const phrase = query.phrase.exec(passage.text);
+    const priority = coverage + (phrase ? 1 : 0);
+    if (!best || priority > best.priority) {
+      best = { passage, number, match: phrase ?? first, phrase, priority };
+    }
+  }
   let score = 0;
-  let firstBodyMatch;
   for (const term of query.terms) {
-    const bodyMatch = term.exec(body);
-    if (bodyMatch && (!firstBodyMatch || bodyMatch.index < firstBodyMatch.index)) firstBodyMatch = bodyMatch;
     if (term.test(title)) score += 12;
     else if (term.test(labels)) score += 6;
     else if (term.test(description)) score += 4;
-    else if (bodyMatch) score += 1;
+    else if (matchedTerms.has(term)) score += 1;
     else return null;
   }
   if (query.phrase.test(title)) score += 10;
-  const bodyPhrase = query.phrase.exec(body);
-  const bodyMatch = bodyPhrase ?? firstBodyMatch;
-  if (bodyPhrase && query.terms.length > 1) score += 2;
+  if (best?.phrase && query.terms.length > 1) score += 2;
   let snippet = description;
-  if (bodyMatch) snippet = excerpt(body, bodyMatch.index, bodyMatch[0].length);
+  if (best) snippet = excerpt(best.passage.text, best.match.index, best.match[0].length);
   else if (query.terms.some(term => term.test(labels))) snippet = [description, labels].filter(Boolean).join(' · ');
-  return { score, snippet };
+  const footnote = best?.passage.id ? { id: best.passage.id, number: best.number } : null;
+  return { score, snippet, footnote };
 }

@@ -143,9 +143,11 @@ const years = [...new Set(posts.map(post => post.data.pubDate.getUTCFullYear()))
     const rows = Array.from(archive.querySelectorAll<HTMLElement>('[data-post]'), row => {
       const heading = row.querySelector('h3')!;
       const summary = row.querySelector('p')!;
+      const noteLink = document.createElement('a');
+      noteLink.className = 'footnote-result';
       const tags: string[] = JSON.parse(row.dataset.tags ?? '[]');
       return {
-        row, tags, heading, summary,
+        row, tags, heading, summary, noteLink,
         id: row.dataset.post!,
         date: Date.parse(row.dataset.date!),
         views: 0,
@@ -174,7 +176,8 @@ const years = [...new Set(posts.map(post => post.data.pubDate.getUTCFullYear()))
     let updatingQuery = false;
     let unavailableTop = false;
     let requestedOrder: string | null = null;
-    let bodies: Map<string, string> | undefined;
+    type SearchEntry = { body: string; footnotes: { id: string; text: string }[] };
+    let bodies: Map<string, SearchEntry> | undefined;
     let indexState: 'idle' | 'loading' | 'error' = 'idle';
 
     async function loadIndex() {
@@ -182,8 +185,10 @@ const years = [...new Set(posts.map(post => post.data.pubDate.getUTCFullYear()))
       try {
         const response = await fetch(`/${archive!.dataset.lang}/search.json`);
         if (!response.ok) throw new Error('Search index unavailable');
-        const data: Record<string, string> = await response.json();
-        if (!rows.every(({ id }) => typeof data[id] === 'string')) throw new Error('Incomplete search index');
+        const data: Record<string, SearchEntry> = await response.json();
+        if (!rows.every(({ id }) => typeof data[id]?.body === 'string' && Array.isArray(data[id].footnotes))) {
+          throw new Error('Incomplete search index');
+        }
         bodies = new Map(Object.entries(data));
         indexState = 'idle';
       } catch {
@@ -215,9 +220,17 @@ const years = [...new Set(posts.map(post => post.data.pubDate.getUTCFullYear()))
       for (const article of rows) {
         const eligible = matchesArticle(article, filters);
         const hit = eligible && query && bodies
-          ? searchArticle({ ...article, body: bodies.get(article.id)! }, query) : null;
+          ? searchArticle({ ...article, ...bodies.get(article.id)! }, query) : null;
         article.score = hit?.score ?? 0;
         article.row.hidden = !eligible || (!!query && !hit);
+        if (hit?.footnote) {
+          const { id, number } = hit.footnote;
+          article.noteLink.href = `/${archive!.dataset.lang}/${article.id}/#${encodeURIComponent(id)}`;
+          article.noteLink.textContent = zh ? `阅读第 ${number} 条脚注` : `Read footnote ${number}`;
+          article.row.append(article.noteLink);
+        } else {
+          article.noteLink.remove();
+        }
         if (hit && query) {
           article.row.dataset.match = '';
           highlight(article.heading, article.title, query.highlight);
@@ -235,7 +248,7 @@ const years = [...new Set(posts.map(post => post.data.pubDate.getUTCFullYear()))
         for (const { row } of ranked) list.append(row);
         lastOrder = order;
       }
-      if (navInput) navInput.value = input.value;
+      if (navInput && document.activeElement !== navInput) navInput.value = input.value;
       const label = [sectionLabels[section] ?? section, topic, yearSelect.value].filter(Boolean).join(' · ');
       const active = !!query || !!topic || !!section || !!yearSelect.value;
       const topLabel = order === 'top' ? (zh ? `近 ${topWindow} 天浏览量` : `Page views over ${topWindow} days`)
@@ -267,13 +280,6 @@ const years = [...new Set(posts.map(post => post.data.pubDate.getUTCFullYear()))
     input.addEventListener('input', () => { filter(true, !updatingQuery); updatingQuery = true; });
     input.addEventListener('blur', () => { updatingQuery = false; });
     archive.querySelector('form')?.addEventListener('submit', event => { event.preventDefault(); filter(true, true); });
-    document.querySelector('.nav-search')?.addEventListener('submit', event => {
-      event.preventDefault();
-      input.value = navInput?.value ?? '';
-      filter(true, true);
-      archive.scrollIntoView({ block: 'start' });
-      input.focus({ preventScroll: true });
-    });
     reset.addEventListener('click', () => {
       input.value = '';
       topic = '';

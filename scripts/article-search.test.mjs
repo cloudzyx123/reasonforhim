@@ -36,6 +36,18 @@ test('title matches outrank body matches and each metadata field contributes', (
   }
 });
 
+test('a footnote excerpt links to its rendered id and displays its list number', () => {
+  const article = { ...testimony, body: '闭上眼睛，唱起了歌。', footnotes: [
+    { id: 'user-content-fn-born-again', text: '你们必须重生。' },
+    { id: 'user-content-fn-fool', text: '问题只在于，要做一个沉默的傻子。' },
+  ] };
+  const hit = searchArticle(article, searchQuery('做一个沉默的傻子'));
+  assert.deepEqual(hit.footnote, { id: article.footnotes[1].id, number: 2 });
+  assert.equal(hit.snippet, article.footnotes[1].text);
+  assert.equal(searchArticle(article, searchQuery('闭上眼睛')).footnote, null);
+  assert.ok(searchArticle(article, searchQuery('闭上眼睛 重生')));
+});
+
 function descendants(node, predicate) {
   if (predicate(node)) return [node];
   return (node.childNodes ?? []).flatMap(child => descendants(child, predicate));
@@ -47,17 +59,19 @@ test('each language index covers its published essays, including rendered paragr
     const bodies = JSON.parse(await readFile(`dist/${lang}/search.json`, 'utf8'));
     const ids = [...archive.matchAll(/data-post="([^"]+)"/g)].map(match => match[1]);
     assert.deepEqual(Object.keys(bodies).sort(), ids.sort());
-    for (const [id, body] of Object.entries(bodies)) {
+    for (const [id, { body, footnotes }] of Object.entries(bodies)) {
       const html = await readFile(`dist/${lang}/${id}/index.html`, 'utf8');
       const [prose] = descendants(parse(html), node => node.tagName === 'article' &&
         node.attrs.some(attr => attr.name === 'class' && attr.value.split(' ').includes('prose')));
       assert.ok(prose, id);
       const notes = descendants(prose, node => node.attrs?.some(attr => attr.name === 'data-footnotes'));
-      for (const section of [prose, ...notes]) {
+      const items = notes.flatMap(section => descendants(section, node => node.tagName === 'li'));
+      assert.deepEqual(footnotes.map(note => note.id), items.map(item => item.attrs.find(attr => attr.name === 'id').value));
+      for (const [section, indexedText] of [[prose, body], ...items.map((item, i) => [item, footnotes[i].text])]) {
         const paragraphs = descendants(section, node => node.tagName === 'p');
         const sample = paragraphs.flatMap(p => descendants(p, node => node.nodeName === '#text'))
           .map(node => node.value.trim().replace(/\s+/g, ' ')).find(text => text.length >= 10);
-        if (sample) assert.ok(body.includes(sample), `${lang}/${id}: ${sample}`);
+        if (sample) assert.ok(indexedText.includes(sample), `${lang}/${id}: ${sample}`);
       }
       assert.doesNotMatch(body, /<!-- footnotes-position -->|data-footnote-backref/);
     }
