@@ -23,7 +23,6 @@ translationId: satirical-poem-modern-people-creed-steve-turner
 by 史蒂夫·特纳  
 云轩 译
 
-&nbsp;
 
 我们信仰马克思弗洛伊德达尔文。
 我们相信一切都可行，
@@ -91,8 +90,6 @@ by 史蒂夫·特纳
 要让个人思想百花齐放。
 
 
-
-&nbsp;
 
 《机运》 – 后记
 
