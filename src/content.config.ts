@@ -9,6 +9,7 @@ const postSchema = z.object({
   urlName: z.string().regex(/^[a-z0-9]+(?:-[a-z0-9]+)*$/).optional(),
   title: z.string(),
   description: z.string(),
+  contentFormat: z.enum(['prose', 'poetry']).default('prose'),
   coverImage: z.preprocess(value => value == null || value === '' ? undefined : value, z.string().regex(coverImagePattern).optional()),
   coverAlt: z.preprocess(value => value == null ? undefined : value, z.string().trim().optional()),
   // 发布日期，写成 2026-07-31 这样的格式即可，Astro 会自动解析

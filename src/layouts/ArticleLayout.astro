@@ -54,7 +54,7 @@ const nextChapter = seriesIndex >= 0 ? others.find(entry => entry.id === seriesI
     </header>
     <div class="reading-layout">
       <div class="reading-column">
-        <article class:list={['prose', { 'has-duplicate-title': duplicateTitle }]} lang={zh ? 'zh-Hans' : 'en'}><slot /></article>
+        <article class:list={['prose', { 'poetry': post.data.contentFormat === 'poetry', 'has-duplicate-title': duplicateTitle }]} lang={zh ? 'zh-Hans' : 'en'}><slot /></article>
         {post.data.tags.length > 0 && <section class="article-topics mobile-topics"><h2>{zh ? '相关主题' : 'Topics'}</h2><div>{post.data.tags.map(tag => <a href={`/${lang}/archive/?topic=${encodeURIComponent(tag)}#articles`}>{tag}</a>)}</div></section>}
         <ShareModule lang={lang} title={post.data.title} description={post.data.description} url={articleUrl} />
         <div class="mobile-signup"><EmailSignup {lang} /></div>
@@ -167,6 +167,16 @@ const nextChapter = seriesIndex >= 0 ? others.find(entry => entry.id === seriesI
 
   .prose :global(p) {
     margin-block:0 1.5em
+  }
+
+  .prose.poetry :global(> p:not(:has(img))) {
+    line-height:1.75;
+    margin-block-end:1em;
+  }
+
+  /* Markdown hard breaks already render as <br> followed by a newline. */
+  .prose.poetry :global(> p:not(:has(img, br))) {
+    white-space:pre-line;
   }
 
   .prose :global(h1),.prose :global(h2),.prose :global(h3),.prose :global(h4),.prose :global(h5),.prose :global(h6) {
