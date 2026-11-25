@@ -1,0 +1,104 @@
+name: Distribute new articles
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - 'src/content/zh/**'
+      - 'src/content/en/**'
+      - 'syndication.config.json'
+      - '.github/workflows/social-distribution.yml'
+  schedule:
+    - cron: '23 */3 * * *'
+  workflow_dispatch:
+    inputs:
+      action:
+        description: '预演 / 列出渠道 / 初始化账本 / 人工单篇发布 / 补发 / 核对帖子'
+        type: choice
+        options: [dry-run, list-channels, initialize-ledger, publish-one, retry-one, reconcile-one]
+        default: dry-run
+      article:
+        description: '文章当前网址名，例如 zh/free-grace'
+        type: string
+      channel_id:
+        description: '人工操作的单一 Buffer 渠道 ID'
+        type: string
+      post_id:
+        description: '核对时使用的 Buffer Post ID。已有记录可留空'
+        type: string
+      confirm:
+        description: '确认此次初始化或人工操作。补发前须在 Buffer 和渠道中核对原帖'
+        type: boolean
+        default: false
+
+permissions:
+  contents: read
+
+concurrency:
+  group: social-distribution
+  cancel-in-progress: false
+
+jobs:
+  inspect:
+    if: github.repository == 'cloudzyx123/reasonforhim' && github.ref == 'refs/heads/main' && github.event_name == 'workflow_dispatch' && (inputs.action == 'dry-run' || inputs.action == 'list-channels')
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: main
+          fetch-depth: 0
+          persist-credentials: false
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+      - run: npm ci --ignore-scripts
+      - name: Preview or inspect Buffer channels
+        env:
+          ACTION: ${{ inputs.action }}
+          ARTICLE: ${{ inputs.article }}
+          BUFFER_API_KEY: ${{ inputs.action == 'list-channels' && secrets.BUFFER_API_KEY || '' }}
+          BUFFER_ORGANIZATION_ID: ${{ vars.BUFFER_ORGANIZATION_ID }}
+          SOCIAL_HASHTAGS: ${{ vars.SOCIAL_HASHTAGS }}
+          MAX_ARTICLES_PER_RUN: ${{ vars.MAX_ARTICLES_PER_RUN }}
+        run: node scripts/distribute-social.mjs
+
+  deliver:
+    if: |
+      github.repository == 'cloudzyx123/reasonforhim' && github.ref == 'refs/heads/main' &&
+      ((github.event_name != 'workflow_dispatch' && vars.SOCIAL_DISTRIBUTION_ENABLED == 'true') ||
+      (github.event_name == 'workflow_dispatch' && inputs.action != 'dry-run' && inputs.action != 'list-channels'))
+    permissions:
+      contents: write
+    runs-on: ubuntu-latest
+    timeout-minutes: 12
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: main
+          fetch-depth: 0
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+      - run: npm ci --ignore-scripts
+      - name: Process persistent distribution ledger
+        env:
+          ACTION: ${{ github.event_name == 'workflow_dispatch' && inputs.action || 'auto' }}
+          ARTICLE: ${{ inputs.article }}
+          CHANNEL_ID: ${{ inputs.channel_id }}
+          POST_ID: ${{ inputs.post_id }}
+          CONFIRM: ${{ inputs.confirm }}
+          SOCIAL_DISTRIBUTION_ENABLED: ${{ vars.SOCIAL_DISTRIBUTION_ENABLED }}
+          SOCIAL_DISTRIBUTION_MANUAL_ENABLED: ${{ vars.SOCIAL_DISTRIBUTION_MANUAL_ENABLED }}
+          BUFFER_API_KEY: ${{ secrets.BUFFER_API_KEY }}
+          BUFFER_ORGANIZATION_ID: ${{ vars.BUFFER_ORGANIZATION_ID }}
+          BUFFER_CHANNEL_IDS: ${{ vars.BUFFER_CHANNEL_IDS }}
+          BUFFER_CHANNEL_IDS_ZH: ${{ vars.BUFFER_CHANNEL_IDS_ZH }}
+          BUFFER_CHANNEL_IDS_EN: ${{ vars.BUFFER_CHANNEL_IDS_EN }}
+          BUFFER_TEST_CHANNEL_IDS: ${{ vars.BUFFER_TEST_CHANNEL_IDS }}
+          BUFFER_MODE: ${{ vars.BUFFER_MODE }}
+          SOCIAL_HASHTAGS: ${{ vars.SOCIAL_HASHTAGS }}
+          MAX_ARTICLES_PER_RUN: ${{ vars.MAX_ARTICLES_PER_RUN }}
+        run: node scripts/distribute-social.mjs

@@ -21,6 +21,8 @@ const postSchema = z.object({
   section: z.enum(SECTION_IDS).optional(),
   // 草稿开关：设为 true 的文章不会出现在列表页和构建产物里
   draft: z.boolean().default(false),
+  // 历史文章迁移时可在源码中明确排除邮件和社交分发。
+  syndicate: z.boolean().optional(),
   // ↓↓↓ 双语配对的关键字段 ↓↓↓
   // 如果这篇文章"确实"是另一篇的翻译，两边填同一个 translationId，
   // hreflang 标签就会自动在两个页面之间互相声明。
