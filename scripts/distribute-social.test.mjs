@@ -278,7 +278,7 @@ function fixture({ items = [article(1)], create, channels = [X, FACEBOOK], histo
         if (stale) for (const item of Object.values(index.revisions)) item.revision = 'older-deployment';
         return Response.json(index);
       }
-      return new Response(`<link rel="canonical" href="${canonical ? target.origin + target.pathname : SITE}">`);
+      return new Response(`<link rel="canonical" href="${canonical ? SITE + target.pathname : SITE}">`);
     },
     request: createBufferClient({ apiKey: 'fake-key', now: () => timestamp, fetchImpl: async (endpoint, options) => {
       assert.equal(endpoint, 'https://api.buffer.com');
@@ -318,6 +318,24 @@ function fixture({ items = [article(1)], create, channels = [X, FACEBOOK], histo
     setPreflight: live => { preflight = live; },
   };
 }
+
+test('a separate production verification origin still publishes the public canonical link', async () => {
+  const f = fixture();
+  const verificationOrigin = 'https://production.example.workers.dev';
+  const originalFetch = f.deps.fetchImpl;
+  const verificationRequests = [];
+  f.deps.fetchImpl = async url => {
+    const target = new URL(url);
+    verificationRequests.push(`${target.origin}${target.pathname}`);
+    return originalFetch(url);
+  };
+  const result = await run(config({ DISTRIBUTION_VERIFY_ORIGIN: verificationOrigin }), f.deps);
+  assert.deepEqual(result.failures, []);
+  assert.deepEqual(verificationRequests, [
+    `${verificationOrigin}/distribution-status.json`, `${verificationOrigin}/zh/article-1/`,
+  ]);
+  assert.ok(f.writes[0].text.endsWith(article(1).url));
+});
 
 test('auto dedupes by stable ID after >50 Buffer posts, renames and repeated schedules; identical titles can publish', async () => {
   const f = fixture({ items: [article(1), article(2)], historyCount: 80 });
