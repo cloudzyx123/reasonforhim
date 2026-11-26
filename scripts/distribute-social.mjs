@@ -127,9 +127,13 @@ export function readConfig(env = process.env) {
   if (!Number.isInteger(maxArticles) || maxArticles < 1 || maxArticles > 10) {
     throw new Error('MAX_ARTICLES_PER_RUN 应为 1–10');
   }
+  const verificationUrl = new URL(env.DISTRIBUTION_VERIFY_ORIGIN || SITE);
+  if (verificationUrl.protocol !== 'https:' || verificationUrl.href !== `${verificationUrl.origin}/`) {
+    throw new Error('DISTRIBUTION_VERIFY_ORIGIN 应为 HTTPS 源站地址');
+  }
   const fallback = splitIds(env.BUFFER_CHANNEL_IDS);
   return {
-    action, mode, article, maxArticles, site: SITE,
+    action, mode, article, maxArticles, site: SITE, verificationOrigin: verificationUrl.origin,
     enabled: env.SOCIAL_DISTRIBUTION_ENABLED === 'true',
     manualEnabled: env.SOCIAL_DISTRIBUTION_MANUAL_ENABLED === 'true',
     confirmed: env.CONFIRM === 'true',
@@ -379,7 +383,8 @@ export async function run(config, deps = {}) {
   const fetchImpl = deps.fetchImpl ?? fetch;
   let index;
   try {
-    index = await (await fetchProduction(new URL(productionIndexPath, config.site), fetchImpl)).json();
+    const indexUrl = new URL(productionIndexPath, config.verificationOrigin);
+    index = await (await fetchProduction(indexUrl, fetchImpl)).json();
     if (index?.baseline !== catalog.baseline || !index.revisions) throw new Error('基线未部署');
   } catch (error) {
     const status = error.status ? `（HTTP ${error.status}）` : '';
@@ -410,7 +415,8 @@ export async function run(config, deps = {}) {
   if (ready.length > config.maxArticles) note(`本轮上限 ${config.maxArticles} 篇，其余将在定时运行中继续处理。`);
   for (const article of ready.slice(0, config.maxArticles)) {
     try {
-      const response = await fetchProduction(article.url, fetchImpl);
+      const verificationUrl = new URL(new URL(article.url).pathname, config.verificationOrigin);
+      const response = await fetchProduction(verificationUrl, fetchImpl);
       if (canonicalFromHtml(await response.text()) !== article.url) throw new Error('canonical 不匹配');
     } catch (error) {
       const status = error.status ? `（HTTP ${error.status}）` : '';
