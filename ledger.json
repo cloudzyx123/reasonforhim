@@ -9,13 +9,17 @@
       "targets": [
         {
           "channelId": "6b05aad08541f09ecb8b43c3",
-          "state": "unknown",
+          "state": "sent",
           "createdAt": 1795702516413,
           "updatedAt": 1795702583795,
           "retryAt": 0,
-          "code": "MUTATION_IN_FLIGHT",
+          "code": null,
           "attemptAt": 1795702583795,
-          "url": "https://reasonforhim.com/zh/rousseau-life-and-legacy/"
+          "url": "https://reasonforhim.com/zh/rousseau-life-and-legacy/",
+          "postId": "6b083f3950a444a712882409",
+          "bufferStatus": "sent",
+          "sentAt": "2026-11-26T14:16:26.473Z",
+          "submittedAt": 1795702583795
         }
       ]
     }
