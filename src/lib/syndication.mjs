@@ -45,7 +45,8 @@ function articleAt(cwd, sha, file, site) {
     throw new Error(`文章分发元数据无效：${file}`);
   }
   return {
-    lang, id, file, revision, pubDate, draft: data.draft === true, excluded: data.syndicate === false,
+    lang, id, file, revision, pubDate, draft: data.draft === true,
+    excluded: data.syndicate === false, explicitlyIncluded: data.syndicate === true,
     title: data.title.trim(), description: data.description.trim(), tags: data.tags ?? [],
     coverImage: data.coverImage, url: canonicalUrl(site, `/${lang}/${id}/`),
   };
@@ -73,8 +74,10 @@ function changesBetween(cwd, before, after) {
 }
 
 function publication(article, firstPublicAt, baselineDay) {
+  const afterBaseline = article.pubDate >= baselineDay;
   return {
-    eligible: !article.excluded && article.pubDate >= baselineDay,
+    eligible: !article.excluded && afterBaseline,
+    recoverable: article.excluded && afterBaseline,
     at: Math.max(firstPublicAt, article.pubDate),
   };
 }
@@ -134,8 +137,13 @@ export function readCatalog({ cwd = process.cwd(), head = 'HEAD', site = SITE, f
       const identityUncertain = previousArticle?.identityUncertain
         || (status === 'A' && !previousArticle && unresolvedRemoval);
       const article = articleAt(cwd, sha, to, site);
-      const release = previousArticle?.release ?? (article.draft ? null : publication(article, Number(timestamp) * 1000, baselineDay));
-      active.set(to, { ...article, stableId: previousArticle?.stableId ?? articleId(sha, to), release, identityUncertain });
+      let release = previousArticle?.release;
+      const reenabled = release?.recoverable && article.explicitlyIncluded
+        && article.pubDate >= baselineDay && !identityUncertain;
+      if (!article.draft && (!release || reenabled)) {
+        release = publication(article, Number(timestamp) * 1000, baselineDay);
+      }
+      active.set(to, { ...article, stableId: previousArticle?.stableId ?? articleId(sha, to), release: release ?? null, identityUncertain });
     }
   }
 

@@ -116,6 +116,43 @@ test('real main history captures drafts and direct publication, excludes migrati
   assert.match(xml, /<enclosure[^>]+cover.webp[^>]+length="17"[^>]+type="image\/webp"/);
 });
 
+test('explicitly re-enabling an excluded new article makes it eligible once without reviving old articles', async t => {
+  const repo = repository(t);
+  repo.setConfig(null);
+  const excluded = 'syndicate: false\n';
+  const included = 'syndicate: true\n';
+  repo.write(file('already-public'), doc('already-public', { fields: excluded }));
+  const baseline = repo.commit('2026-11-01T12:00:00Z');
+  repo.setConfig(baseline);
+  repo.write(file('new'), doc('new', { fields: excluded }));
+  repo.write(file('migration'), doc('migration', { date: '2025-01-01', fields: excluded }));
+  repo.commit('2026-11-02T12:00:00Z');
+  const original = readCatalog(repo).articles.find(item => item.id === 'new');
+
+  repo.write(file('new'), doc('new'));
+  repo.write(file('already-public'), doc('already-public', { fields: included }));
+  repo.write(file('migration'), doc('migration', { fields: included }));
+  repo.commit('2026-11-03T12:00:00Z');
+  assert.deepEqual(eligibleArticles(readCatalog(repo), NOW), []);
+
+  const enabledAt = '2026-11-04T12:00:00Z';
+  repo.write(file('new'), doc('new', { fields: included }));
+  repo.commit(enabledAt);
+  const catalog = readCatalog(repo);
+  const eligible = eligibleArticles(catalog, NOW);
+  assert.deepEqual(eligible.map(item => item.id), ['new']);
+  assert.equal(eligible[0].stableId, original.stableId);
+  assert.equal(eligible[0].release.at, Date.parse(enabledAt));
+  const xml = await (await distributionFeed({ catalog, site: SITE, now: NOW, cwd: repo.cwd })).text();
+  assert.equal((xml.match(/<item>/g) ?? []).length, 1);
+  assert.ok(xml.includes(`urn:reasonforhim:article:${original.stableId}`));
+  assert.match(xml, /<pubDate>Wed, 04 Nov 2026 12:00:00 GMT<\/pubDate>/);
+
+  repo.write(file('new'), doc('new', { fields: included, content: 'Later edit.' }));
+  repo.commit('2026-11-05T12:00:00Z');
+  assert.deepEqual(eligibleArticles(readCatalog(repo), NOW)[0].release, eligible[0].release);
+});
+
 test('ambiguous full rewrite is quarantined until an alias recovers the original identity', t => {
   const repo = repository(t);
   repo.setConfig(null);
