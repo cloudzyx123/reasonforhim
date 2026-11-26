@@ -2,5 +2,19 @@
   "version": 1,
   "baseline": "ba97d07d0b177a337fcad8fdad0f5667fac74b9d",
   "retryAt": 0,
-  "articles": {}
+  "articles": {
+    "e1210bd3d69c3487732b877a14948007": {
+      "url": "https://reasonforhim.com/zh/rousseau-life-and-legacy/",
+      "planned": true,
+      "targets": [
+        {
+          "channelId": "6b05aad08541f09ecb8b43c3",
+          "state": "pending",
+          "createdAt": 1795702516413,
+          "updatedAt": 1795702516413,
+          "retryAt": 0
+        }
+      ]
+    }
+  }
 }
