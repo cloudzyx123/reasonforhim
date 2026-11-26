@@ -1,6 +1,7 @@
 ---
 import EmailSignup from "../components/EmailSignup.astro";
 import { getCollection, type CollectionEntry } from 'astro:content';
+import { publicDir } from 'astro:config/server';
 import Layout from './Layout.astro';
 import Comments from '../components/Comments.astro';
 import ReadingTools from '../components/ReadingTools.astro';
@@ -8,6 +9,7 @@ import ShareModule from '../components/ShareModule.astro';
 import { canonicalUrl } from '../lib/share.mjs';
 import { getAlternateLinks, type Lang } from '../lib/i18n';
 import { EDITORIAL_COVERS, getSection, getShareImage, SECTIONS } from '../lib/editorial';
+import { listCoverResolver } from '../lib/list-covers';
 interface Props {
   post: CollectionEntry<Lang>;
   lang: Lang;
@@ -18,6 +20,9 @@ const zh = lang === 'zh';
 const section = getSection(post);
 const alternates = await getAlternateLinks(lang, post.data.translationId);
 const articleUrl = canonicalUrl(Astro.site, `/${lang}/${post.id}/`);
+const cover = await listCoverResolver(publicDir, lang)(post, 'home');
+const shareImage = cover ? `/share/${lang}/${post.id}.jpg` : getShareImage(post);
+const shareImageAlt = cover?.alt ?? EDITORIAL_COVERS[post.id]?.[lang];
 const date = (value: Date) => value.toLocaleDateString(zh ? 'zh-CN' : 'en-GB', {year:'numeric',month:'long',day:'numeric',timeZone:'UTC'});
 const firstHeading = headings[0];
 const repeatedLennoxTitle = post.id === 'ai-faith-john-lennox'
@@ -42,7 +47,7 @@ const seriesIndex = seriesIds.indexOf(post.id);
 const previousChapter = seriesIndex > 0 ? others.find(entry => entry.id === seriesIds[seriesIndex - 1]) : undefined;
 const nextChapter = seriesIndex >= 0 ? others.find(entry => entry.id === seriesIds[seriesIndex + 1]) : undefined;
 ---
-<Layout title={post.data.title} description={post.data.description} lang={lang} path={`/${lang}/${post.id}/`} alternates={alternates} pubDate={post.data.pubDate} updatedDate={post.data.updatedDate} shareImage={getShareImage(post)} shareImageAlt={EDITORIAL_COVERS[post.id]?.[lang]}>
+<Layout title={post.data.title} description={post.data.description} lang={lang} path={`/${lang}/${post.id}/`} alternates={alternates} pubDate={post.data.pubDate} updatedDate={post.data.updatedDate} {shareImage} {shareImageAlt}>
   <div class="container article-container">
     <nav class="breadcrumbs" aria-label={zh ? '当前位置' : 'Breadcrumb'}><a href={`/${lang}/`}>{zh ? '首页' : 'Home'}</a><span aria-hidden="true">/</span><a href={`/${lang}/archive/#articles`}>{zh ? '文章馆藏' : 'Essays'}</a><span aria-hidden="true">/</span><span>{zh ? '正文' : 'Reading'}</span></nav>
     <header class="article-header">

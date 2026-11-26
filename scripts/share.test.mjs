@@ -2,6 +2,7 @@ import test from 'node:test';
 import assert from 'node:assert/strict';
 import fs from 'node:fs';
 import { parse } from 'parse5';
+import sharp from 'sharp';
 import { canonicalUrl, shareLinks, sharePolicy } from '../src/lib/share.mjs';
 
 const page = 'dist/zh/sam-kamaleson-street-testimony/index.html';
@@ -44,4 +45,23 @@ test('built article uses the same canonical URL throughout, with static links an
   assert.ok(nodes(tree, node => attr(node, 'data-print') !== undefined).length);
   assert.ok(nodes(tree, node => node.tagName === 'a' && attr(node, 'href') === '#reader-comments').length);
   assert.ok(nodes(tree, node => attr(node, 'data-progress-fill') !== undefined).length);
+});
+
+test('articles advertise their own JPEG cover when available and retain the section fallback', async () => {
+  for (const [lang, slug, expectedPath] of [
+    ['zh', 'sam-kamaleson-street-testimony', '/share/zh/sam-kamaleson-street-testimony.jpg'],
+    ['en', 'tea-at-four', '/share/en/tea-at-four.jpg'],
+    ['zh', 'a-painful-letter-of-recovery-rethinking-church-liberalization-and-lgbt-movement', '/share/grace.jpg'],
+  ]) {
+    const tree = parse(fs.readFileSync(`dist/${lang}/${slug}/index.html`, 'utf8'));
+    const meta = (key, value) => attr(nodes(tree, node => node.tagName === 'meta' && attr(node, key) === value)[0], 'content');
+    const image = meta('property', 'og:image');
+    assert.equal(image, `https://reasonforhim.com${expectedPath}`);
+    assert.equal(meta('name', 'twitter:image'), image);
+    const { format, width, height } = await sharp(`dist${expectedPath}`).metadata();
+    assert.equal(format, 'jpeg');
+    assert.equal(meta('property', 'og:image:type'), 'image/jpeg');
+    assert.equal(Number(meta('property', 'og:image:width')), width);
+    assert.equal(Number(meta('property', 'og:image:height')), height);
+  }
 });
