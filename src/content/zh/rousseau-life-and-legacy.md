@@ -13,7 +13,7 @@ tags:
 coverImage: /images/rousseau-life-and-legacy/rousseau-cover.webp
 coverAlt: 让-雅克·卢梭的肖像
 draft: false
-syndicate: false
+syndicate: true
 contentFormat: prose
 ---
 【按】
