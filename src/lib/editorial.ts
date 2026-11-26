@@ -66,6 +66,18 @@ export function getShareImage(post: { id: string; data: { section?: SectionId } 
 }
 
 export const EDITORIAL_COVERS: Record<string, { src: string; zh: string; en: string; share?: string }> = {
+  'rousseau-life-and-legacy': {
+    src: '/images/rousseau-life-and-legacy/rousseau-cover.webp',
+    share: '/share/rousseau.jpg',
+    zh: '让-雅克·卢梭的肖像',
+    en: 'Portrait of Jean-Jacques Rousseau',
+  },
+  'rousseau-social-contract-and-general-will': {
+    src: '/images/rousseau-life-and-legacy/rousseau-cover.webp',
+    share: '/share/rousseau.jpg',
+    zh: '让-雅克·卢梭的肖像',
+    en: 'Portrait of Jean-Jacques Rousseau',
+  },
   'tea-at-four': {
     src: '/images/tea-at-four/tea-cover.webp',
     share: '/share/tea-at-four.jpg',
