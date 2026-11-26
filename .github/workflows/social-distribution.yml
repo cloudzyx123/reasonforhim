@@ -90,7 +90,8 @@ jobs:
           CHANNEL_ID: ${{ inputs.channel_id }}
           POST_ID: ${{ inputs.post_id }}
           CONFIRM: ${{ inputs.confirm }}
-          SOCIAL_DISTRIBUTION_ENABLED: ${{ vars.SOCIAL_DISTRIBUTION_ENABLED }}
+          # GitHub compares variable strings case-insensitively. Pass the script a lowercase value.
+          SOCIAL_DISTRIBUTION_ENABLED: ${{ vars.SOCIAL_DISTRIBUTION_ENABLED == 'true' && 'true' || 'false' }}
           SOCIAL_DISTRIBUTION_MANUAL_ENABLED: ${{ vars.SOCIAL_DISTRIBUTION_MANUAL_ENABLED }}
           BUFFER_API_KEY: ${{ secrets.BUFFER_API_KEY }}
           BUFFER_ORGANIZATION_ID: ${{ vars.BUFFER_ORGANIZATION_ID }}
