@@ -29,10 +29,13 @@
       "targets": [
         {
           "channelId": "6b05aad08541f09ecb8b43c3",
-          "state": "pending",
+          "state": "unknown",
           "createdAt": 1795702583795,
           "updatedAt": 1795702583795,
-          "retryAt": 0
+          "retryAt": 0,
+          "code": "MUTATION_IN_FLIGHT",
+          "attemptAt": 1795702583795,
+          "url": "https://reasonforhim.com/zh/rousseau-social-contract-and-general-will/"
         }
       ]
     }
