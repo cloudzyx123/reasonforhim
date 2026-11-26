@@ -79,6 +79,14 @@ function publication(article, firstPublicAt, baselineDay) {
   };
 }
 
+export function readDeploymentCatalog({ site, cwd, env = process.env } = {}) {
+  const workers = env.WORKERS_CI === '1';
+  const pages = env.CF_PAGES === '1';
+  const branch = workers ? env.WORKERS_CI_BRANCH : env.CF_PAGES_BRANCH;
+  if ((workers || pages) && branch !== 'main') return { baseline: null, articles: [] };
+  return readCatalog({ site, cwd, fetchHistory: workers || pages, includeUnconfigured: false });
+}
+
 export function readCatalog({ cwd = process.cwd(), head = 'HEAD', site = SITE, fetchHistory = false, includeUnconfigured = true } = {}) {
   const config = JSON.parse(readFileSync(join(cwd, 'syndication.config.json'), 'utf8'));
   const { baseline, renames } = config;
