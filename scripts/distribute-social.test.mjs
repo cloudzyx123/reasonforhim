@@ -3,8 +3,9 @@ import assert from 'node:assert/strict';
 import { mkdirSync, mkdtempSync, readFileSync, renameSync, rmSync, writeFileSync } from 'node:fs';
 import { tmpdir } from 'node:os';
 import { dirname, join } from 'node:path';
+import { pathToFileURL } from 'node:url';
 import { distributionFeed } from '../src/lib/distribution-feed.mjs';
-import { eligibleArticles, git, productionIndex, readCatalog, SITE } from '../src/lib/syndication.mjs';
+import { eligibleArticles, git, productionIndex, readCatalog, readDeploymentCatalog, SITE } from '../src/lib/syndication.mjs';
 import { buildCreatePostInput, createBufferClient } from './buffer-client.mjs';
 import { canonicalFromHtml, composePost, hashtagsFrom, readConfig, run, truncateToWeight, xWeightedLength } from './distribute-social.mjs';
 import { openLedger } from './social-ledger.mjs';
@@ -150,6 +151,31 @@ test('ledger survives a fresh Git fetch and rejects a stale writer or second ini
   assert.equal(openLedger({ cwd: repo.cwd, baseline: BASELINE }).data.retryAt, 100);
   assert.throws(() => openLedger({ cwd: repo.cwd, baseline: BASELINE, initialize: true }), /已存在/);
   assert.throws(() => openLedger({ cwd: repo.cwd, baseline: 'b'.repeat(40) }), /基线不一致/);
+});
+
+test('Cloudflare production builds recover shallow history while previews expose no distribution articles', t => {
+  const repo = repository(t);
+  repo.setConfig(null);
+  repo.write(file('old'), doc('old'));
+  const baseline = repo.commit('2026-11-01T12:00:00Z');
+  repo.setConfig(baseline);
+  repo.write(file('new'), doc('new'));
+  repo.commit('2026-11-03T12:00:00Z');
+  const expected = readCatalog(repo);
+
+  for (const [provider, enabled, branch] of [
+    ['workers', 'WORKERS_CI', 'WORKERS_CI_BRANCH'],
+    ['pages', 'CF_PAGES', 'CF_PAGES_BRANCH'],
+  ]) {
+    const cwd = join(repo.cwd, '.git', provider);
+    git(['clone', '--depth=1', pathToFileURL(repo.cwd).href, cwd], repo.cwd);
+    assert.equal(git(['rev-parse', '--is-shallow-repository'], cwd), 'true');
+    assert.deepEqual(readDeploymentCatalog({ cwd, env: { [enabled]: '1', [branch]: 'preview' } }),
+      { baseline: null, articles: [] });
+    assert.throws(() => readDeploymentCatalog({ cwd, env: {} }), /基线不在当前分支/);
+    assert.deepEqual(readDeploymentCatalog({ cwd, env: { [enabled]: '1', [branch]: 'main' } }), expected);
+    assert.equal(git(['rev-parse', '--is-shallow-repository'], cwd), 'false');
+  }
 });
 
 test('public build emits both routes and keeps them empty without a baseline', () => {
