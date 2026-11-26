@@ -8,6 +8,7 @@ on:
       - 'src/content/en/**'
       - 'syndication.config.json'
       - '.github/workflows/social-distribution.yml'
+      - 'scripts/distribute-social.mjs'
   schedule:
     - cron: '23 */3 * * *'
   workflow_dispatch:

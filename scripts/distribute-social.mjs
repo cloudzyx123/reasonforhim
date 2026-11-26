@@ -104,7 +104,9 @@ async function fetchProduction(url, fetchImpl) {
     redirect: 'error',
     signal: AbortSignal.timeout(12_000),
   });
-  if (!response.ok) throw new Error(`生产站返回 HTTP ${response.status}`);
+  if (!response.ok) {
+    throw Object.assign(new Error(`生产站返回 HTTP ${response.status}`), { status: response.status });
+  }
   return response;
 }
 
@@ -379,8 +381,9 @@ export async function run(config, deps = {}) {
   try {
     index = await (await fetchProduction(new URL(productionIndexPath, config.site), fetchImpl)).json();
     if (index?.baseline !== catalog.baseline || !index.revisions) throw new Error('基线未部署');
-  } catch {
-    fail('生产部署尚未提供匹配的分发索引。定时运行会重新检查。');
+  } catch (error) {
+    const status = error.status ? `（HTTP ${error.status}）` : '';
+    fail(`生产部署尚未提供匹配的分发索引${status}。定时运行会重新检查。`);
     return report;
   }
   const ready = candidates.filter(article => {
@@ -409,8 +412,9 @@ export async function run(config, deps = {}) {
     try {
       const response = await fetchProduction(article.url, fetchImpl);
       if (canonicalFromHtml(await response.text()) !== article.url) throw new Error('canonical 不匹配');
-    } catch {
-      fail(`生产页面尚未通过 canonical 检查 · ${article.url}`);
+    } catch (error) {
+      const status = error.status ? `（HTTP ${error.status}）` : '';
+      fail(`生产页面尚未通过 canonical 检查${status} · ${article.url}`);
       continue;
     }
 
@@ -458,6 +462,7 @@ async function main() {
   const output = lines.join('\n');
   if (process.env.GITHUB_STEP_SUMMARY) {
     fs.appendFileSync(process.env.GITHUB_STEP_SUMMARY, `## 社交分发\n\n<pre>${html(output)}</pre>\n`);
+    if (report.failures.length) console.error(report.failures.join('\n'));
   } else {
     console.log(output);
   }
