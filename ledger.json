@@ -49,10 +49,13 @@
       "targets": [
         {
           "channelId": "6b05aad08541f09ecb8b43c3",
-          "state": "pending",
+          "state": "unknown",
           "createdAt": 1795846686917,
           "updatedAt": 1795846686917,
-          "retryAt": 0
+          "retryAt": 0,
+          "code": "MUTATION_IN_FLIGHT",
+          "attemptAt": 1795846686917,
+          "url": "https://reasonforhim.com/zh/science-faith-dialogue/"
         }
       ]
     }
