@@ -1,5 +1,6 @@
 #!/usr/bin/env node
 import fs from 'node:fs';
+import { setTimeout as delay } from 'node:timers/promises';
 import { pathToFileURL } from 'node:url';
 import twitterText from 'twitter-text';
 import { eligibleArticles, isPublic, productionIndexPath, readCatalog, SITE } from '../src/lib/syndication.mjs';
@@ -10,6 +11,8 @@ import { openLedger, validChannelId } from './social-ledger.mjs';
 
 const HOUR = 3_600_000;
 const CHECK_INTERVAL = 3 * HOUR;
+const DEPLOYMENT_CHECKS = 10;
+const DEPLOYMENT_CHECK_INTERVAL = 20_000;
 const ACTIONS = ['auto', 'dry-run', 'list-channels', 'initialize-ledger', 'publish-one', 'retry-one', 'reconcile-one'];
 const MANUAL_ARTICLE = /^(zh|en)\/[a-z0-9]+(?:-[a-z0-9]+)*$/;
 const graphemes = new Intl.Segmenter(undefined, { granularity: 'grapheme' });
@@ -134,6 +137,7 @@ export function readConfig(env = process.env) {
   const fallback = splitIds(env.BUFFER_CHANNEL_IDS);
   return {
     action, mode, article, maxArticles, site: SITE, verificationOrigin: verificationUrl.origin,
+    waitForDeployment: env.GITHUB_EVENT_NAME === 'push',
     enabled: env.SOCIAL_DISTRIBUTION_ENABLED === 'true',
     manualEnabled: env.SOCIAL_DISTRIBUTION_MANUAL_ENABLED === 'true',
     confirmed: env.CONFIRM === 'true',
@@ -381,22 +385,39 @@ export async function run(config, deps = {}) {
   }
 
   const fetchImpl = deps.fetchImpl ?? fetch;
-  let index;
-  try {
-    const indexUrl = new URL(productionIndexPath, config.verificationOrigin);
-    index = await (await fetchProduction(indexUrl, fetchImpl)).json();
-    if (index?.baseline !== catalog.baseline || !index.revisions) throw new Error('基线未部署');
-  } catch (error) {
-    const status = error.status ? `（HTTP ${error.status}）` : '';
+  const indexUrl = new URL(productionIndexPath, config.verificationOrigin);
+  // Pushes start Cloudflare's build too. Scheduled runs still flag revisions
+  // that remain stale after the initial deployment window.
+  const waitForDeployment = !manual && config.waitForDeployment;
+  const checks = waitForDeployment ? DEPLOYMENT_CHECKS : 1;
+  let indexError;
+  let ready = [];
+  for (let attempt = 0; attempt < checks; attempt++) {
+    if (attempt > 0) await (deps.delay ?? delay)(DEPLOYMENT_CHECK_INTERVAL);
+    try {
+      const index = await (await fetchProduction(indexUrl, fetchImpl)).json();
+      if (index?.baseline !== catalog.baseline || !index.revisions || typeof index.revisions !== 'object' || Array.isArray(index.revisions)) {
+        throw new Error('生产分发索引或基线不匹配');
+      }
+      indexError = undefined;
+      ready = candidates.filter(article => {
+        const live = index.revisions[article.stableId];
+        return live?.revision === article.revision && live.url === article.url;
+      });
+      if (ready.length === candidates.length) break;
+    } catch (error) {
+      indexError = error;
+    }
+  }
+  if (indexError) {
+    const status = indexError.status ? `（HTTP ${indexError.status}）` : '';
     fail(`生产部署尚未提供匹配的分发索引${status}。定时运行会重新检查。`);
     return report;
   }
-  const ready = candidates.filter(article => {
-    const live = index.revisions[article.stableId];
-    return live?.revision === article.revision && live.url === article.url;
-  });
   if (ready.length !== candidates.length) {
-    fail(`${candidates.length - ready.length} 篇文章的当前版本尚未部署，定时运行会重新检查。`);
+    const pending = `${candidates.length - ready.length} 篇文章的当前版本尚未部署，定时运行会重新检查。`;
+    if (waitForDeployment) note(pending);
+    else fail(pending);
   }
   if (!ready.length) return report;
 

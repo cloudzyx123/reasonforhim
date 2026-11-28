@@ -379,6 +379,56 @@ test('deployment failure and wrong canonical block only external sends; schedule
   assert.equal(f.targets()[0].state, 'sent');
 });
 
+test('a push waits through an unavailable index and a stale revision before sending once', async () => {
+  const f = fixture();
+  f.setDeployment(false);
+  f.setStale(true);
+  let waits = 0;
+  f.deps.delay = async ms => {
+    assert.equal(ms, 20_000);
+    assert.equal(f.calls.length, 0);
+    if (++waits === 1) f.setDeployment(true);
+    else f.setStale(false);
+  };
+
+  const result = await run(config({ GITHUB_EVENT_NAME: 'push' }), f.deps);
+  assert.deepEqual(result.failures, []);
+  assert.equal(waits, 2);
+  assert.equal(f.targets()[0].state, 'sent');
+  await run(config({ GITHUB_EVENT_NAME: 'schedule' }), f.deps);
+  assert.equal(f.writes.length, 1);
+});
+
+test('a slow deployment is deferred on push and flagged if it is still stale on the scheduled run', async () => {
+  const f = fixture();
+  f.setStale(true);
+  let waits = 0;
+  f.deps.delay = async () => { waits++; };
+
+  const pushed = await run(config({ GITHUB_EVENT_NAME: 'push' }), f.deps);
+  assert.equal(waits, 9);
+  assert.deepEqual(pushed.failures, []);
+  assert.match(pushed.lines.join('\n'), /当前版本尚未部署/);
+  assert.equal(f.calls.length, 0);
+  assert.deepEqual(f.targets(), []);
+
+  const scheduled = config({ GITHUB_EVENT_NAME: 'schedule' });
+  assert.match((await run(scheduled, f.deps)).failures[0], /当前版本尚未部署/);
+  assert.equal(waits, 9);
+  f.setStale(false);
+  await run(scheduled, f.deps);
+  assert.equal(f.writes.length, 1);
+});
+
+test('a push still reports an index that cannot be loaded after waiting', async () => {
+  const f = fixture();
+  f.deps.delay = async () => {};
+  f.setDeployment(false);
+  const result = await run(config({ GITHUB_EVENT_NAME: 'push' }), f.deps);
+  assert.match(result.failures[0], /生产部署.*HTTP 503/);
+  assert.equal(f.calls.length, 0);
+});
+
 test('a temporary API outage on a read check is safe to compensate', async () => {
   const f = fixture();
   f.setPreflight(false);
