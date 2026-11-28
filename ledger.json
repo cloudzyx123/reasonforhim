@@ -49,13 +49,17 @@
       "targets": [
         {
           "channelId": "6b05aad08541f09ecb8b43c3",
-          "state": "unknown",
+          "state": "sent",
           "createdAt": 1795846686917,
           "updatedAt": 1795846686917,
           "retryAt": 0,
-          "code": "MUTATION_IN_FLIGHT",
+          "code": null,
           "attemptAt": 1795846686917,
-          "url": "https://reasonforhim.com/zh/science-faith-dialogue/"
+          "url": "https://reasonforhim.com/zh/science-faith-dialogue/",
+          "postId": "6b0a7221cf6d91773004f4aa",
+          "bufferStatus": "sent",
+          "sentAt": "2026-11-28T06:18:10.451Z",
+          "submittedAt": 1795846686917
         }
       ]
     }
