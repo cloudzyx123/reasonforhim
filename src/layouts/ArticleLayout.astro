@@ -242,6 +242,31 @@ const nextChapter = seriesIndex >= 0 ? others.find(entry => entry.id === seriesI
     margin-bottom:0
   }
 
+  .prose :global(.article-callout) {
+    background:var(--paper);
+    border:1px solid var(--control-line);
+    margin:32px 0;
+    padding:clamp(16px, 4vw, 28px)
+  }
+
+  .prose :global(.article-callout > h3) {
+    margin-block-start:0
+  }
+
+  .prose :global(.article-callout > h4) {
+    font-size:1.1em;
+    margin-block:1.2em .4em
+  }
+
+  .prose :global(.article-callout > h4 ~ h4) {
+    border-top:1px solid var(--line);
+    padding-top:.9em
+  }
+
+  .prose :global(.article-callout > p:last-child) {
+    margin-bottom:0
+  }
+
   .prose :global(img) {
     display:block;
     max-width:100%;

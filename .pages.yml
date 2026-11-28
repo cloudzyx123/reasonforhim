@@ -121,7 +121,7 @@ content:
     filename:
       template: "{fields.urlName}.md"
       field: false
-    exclude: [ai-faith-john-lennox.md, sam-kamaleson-street-testimony.md, how-can-you-say-only-one-true-faith.md, tea-at-four.md, israeli-stamps-isaiah-hope.md, satirical-poem-modern-people-creed-steve-turner.md]
+    exclude: [ai-faith-john-lennox.md, sam-kamaleson-street-testimony.md, how-can-you-say-only-one-true-faith.md, tea-at-four.md, israeli-stamps-isaiah-hope.md, satirical-poem-modern-people-creed-steve-turner.md, science-faith-dialogue.md]
     operations:
       rename: false
       delete: false
@@ -160,6 +160,48 @@ content:
         component: article_content_format
       - name: body
         component: visual_body
+
+  - name: science_faith_dialogue_article
+    label: 科学与信仰对话现状（保留脚注）
+    type: file
+    path: src/content/zh/science-faith-dialogue.md
+    format: yaml-frontmatter
+    operations:
+      create: false
+      rename: false
+      delete: false
+    fields:
+      - name: urlName
+        component: url_name
+        readonly: true
+      - name: title
+        component: article_title
+      - name: description
+        component: article_description
+      - name: coverImage
+        component: article_cover
+      - name: coverAlt
+        component: article_cover_alt
+      - name: pubDate
+        component: publication_date
+      - name: updatedDate
+        component: updated_date
+      - name: section
+        component: article_section
+      - name: tags
+        component: article_tags
+      - name: draft
+        component: article_draft
+      - name: translationId
+        component: translation_id
+      - name: contentFormat
+        component: article_content_format
+      - name: body
+        type: code
+        label: 正文（Markdown，保留脚注）
+        description: 保留正文中的脚注编号和文末对应的脚注定义。
+        options:
+          format: markdown
 
   - name: modern_people_creed_article
     label: （现代人的）信条（诗行保护）
